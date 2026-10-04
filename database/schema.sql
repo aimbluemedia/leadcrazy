@@ -1,0 +1,258 @@
+-- LeadCrazy: full database schema (MySQL 5.7+ / MariaDB 10.3+)
+--
+-- One-shot import for phpMyAdmin: select your database, open the SQL tab,
+-- paste this file, and run it. Safe to run more than once (IF NOT EXISTS).
+--
+-- Written for phpMyAdmin like PromoMonster's: ASCII only, no quoted string spans
+-- a line, no DELIMITER blocks, no triggers.
+--
+-- Lists that belong to one page (services, cities, zip codes, form options) are
+-- stored as JSON in TEXT columns rather than child tables. They are only ever
+-- read and written whole, by one superadmin form, and shared hosts vary in
+-- whether the JSON column type exists at all.
+
+SET NAMES utf8mb4;
+
+-- ------------------------------------------------------------ people
+
+CREATE TABLE IF NOT EXISTS users (
+    id                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    email                VARCHAR(254)    NOT NULL,
+    password_hash        VARCHAR(255)    NOT NULL,
+    first_name           VARCHAR(80)     NULL,
+    last_name            VARCHAR(80)     NULL,
+    is_admin             TINYINT(1)      NOT NULL DEFAULT 0,
+    status               ENUM('active','suspended') NOT NULL DEFAULT 'active',
+    must_change_password TINYINT(1)      NOT NULL DEFAULT 0,
+    password_changed_at  DATETIME        NULL,
+    last_login_at        DATETIME        NULL,
+    created_at           DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY users_email_unique (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    email       VARCHAR(254)    NOT NULL,
+    ip          VARCHAR(45)     NOT NULL,
+    successful  TINYINT(1)      NOT NULL DEFAULT 0,
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY login_attempts_email_index (email, created_at),
+    KEY login_attempts_ip_index (ip, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------ businesses
+
+-- One account per business. plan is what the account may use today; Billing is
+-- the only thing that writes it once Stripe is connected, and superadmin can
+-- set it by hand for an account with no live subscription.
+CREATE TABLE IF NOT EXISTS accounts (
+    id                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    business_name          VARCHAR(160)    NOT NULL,
+    slug                   VARCHAR(80)     NOT NULL,
+    plan                   ENUM('free','pro','premium') NOT NULL DEFAULT 'free',
+    requested_plan         ENUM('pro','premium') NULL,
+    page_status            ENUM('intake','building','live','paused') NOT NULL DEFAULT 'intake',
+    stripe_customer_id     VARCHAR(64)     NULL,
+    stripe_subscription_id VARCHAR(64)     NULL,
+    stripe_price_id        VARCHAR(64)     NULL,
+    stripe_status          VARCHAR(32)     NULL,
+    plan_renews_at         DATETIME        NULL,
+    plan_changed_at        DATETIME        NULL,
+    signup_ip              VARCHAR(45)     NULL,
+    created_at             DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at             DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY accounts_slug_unique (slug),
+    KEY accounts_plan_index (plan, page_status),
+    KEY accounts_stripe_customer_index (stripe_customer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS account_users (
+    account_id  BIGINT UNSIGNED NOT NULL,
+    user_id     BIGINT UNSIGNED NOT NULL,
+    role        ENUM('owner','staff') NOT NULL DEFAULT 'owner',
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (account_id, user_id),
+    KEY account_users_user_index (user_id),
+    CONSTRAINT account_users_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE,
+    CONSTRAINT account_users_user_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- What the business told us at signup. Superadmin builds the page from this; it
+-- is kept, never overwritten, so there is always a record of what was asked for.
+CREATE TABLE IF NOT EXISTS intakes (
+    id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id   BIGINT UNSIGNED NOT NULL,
+    data         MEDIUMTEXT      NOT NULL,
+    submitted_at DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY intakes_account_index (account_id, submitted_at),
+    CONSTRAINT intakes_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- The Million Dollar Lead Form page itself. One row per account.
+CREATE TABLE IF NOT EXISTS pages (
+    account_id       BIGINT UNSIGNED NOT NULL,
+    badge            VARCHAR(80)     NULL,
+    headline         VARCHAR(240)    NULL,
+    subheadline      VARCHAR(240)    NULL,
+    intro            VARCHAR(400)    NULL,
+    about            TEXT            NULL,
+    why_title        VARCHAR(160)    NULL,
+    why_points       TEXT            NULL,
+    closing          TEXT            NULL,
+    form_title       VARCHAR(160)    NULL,
+    form_intro       VARCHAR(400)    NULL,
+    cta_label        VARCHAR(80)     NULL,
+    phone            VARCHAR(40)     NULL,
+    public_email     VARCHAR(254)    NULL,
+    website          VARCHAR(300)    NULL,
+    city             VARCHAR(80)     NULL,
+    state            VARCHAR(40)     NULL,
+    logo_path        VARCHAR(255)    NULL,
+    hero_path        VARCHAR(255)    NULL,
+    video_url        VARCHAR(300)    NULL,
+    stat_rating      VARCHAR(20)     NULL,
+    stat_projects    VARCHAR(20)     NULL,
+    stat_response    VARCHAR(20)     NULL,
+    services         TEXT            NULL,
+    locations        TEXT            NULL,
+    zipcodes         TEXT            NULL,
+    form_services    TEXT            NULL,
+    form_timelines   TEXT            NULL,
+    form_budgets     TEXT            NULL,
+    accent_color     VARCHAR(7)      NULL,
+    published_at     DATETIME        NULL,
+    updated_at       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (account_id),
+    CONSTRAINT pages_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS offers (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id  BIGINT UNSIGNED NOT NULL,
+    label       VARCHAR(40)     NULL,
+    title       VARCHAR(120)    NOT NULL,
+    body        TEXT            NULL,
+    expires_on  DATE            NULL,
+    sort_order  INT             NOT NULL DEFAULT 0,
+    is_active   TINYINT(1)      NOT NULL DEFAULT 1,
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY offers_account_index (account_id, is_active, sort_order),
+    CONSTRAINT offers_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS gallery_images (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id  BIGINT UNSIGNED NOT NULL,
+    path        VARCHAR(255)    NOT NULL,
+    caption     VARCHAR(160)    NULL,
+    sort_order  INT             NOT NULL DEFAULT 0,
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY gallery_account_index (account_id, sort_order),
+    CONSTRAINT gallery_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Testimonials the business supplied. Entered by superadmin from what the
+-- business sent, and labelled on the page as provided by the business: they are
+-- the business's claims, not reviews LeadCrazy collected or verified.
+CREATE TABLE IF NOT EXISTS testimonials (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id  BIGINT UNSIGNED NOT NULL,
+    author      VARCHAR(120)    NOT NULL,
+    location    VARCHAR(120)    NULL,
+    rating      TINYINT UNSIGNED NOT NULL DEFAULT 5,
+    body        TEXT            NOT NULL,
+    sort_order  INT             NOT NULL DEFAULT 0,
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY testimonials_account_index (account_id, sort_order),
+    CONSTRAINT testimonials_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- A member asking for their page to be changed. Superadmin builds pages, so this
+-- is the member's only way to edit one.
+CREATE TABLE IF NOT EXISTS change_requests (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id  BIGINT UNSIGNED NOT NULL,
+    user_id     BIGINT UNSIGNED NULL,
+    body        TEXT            NOT NULL,
+    status      ENUM('open','done') NOT NULL DEFAULT 'open',
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    resolved_at DATETIME        NULL,
+    PRIMARY KEY (id),
+    KEY change_requests_status_index (status, created_at),
+    KEY change_requests_account_index (account_id),
+    CONSTRAINT change_requests_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------ leads
+
+-- A lead is stored whatever the plan. is_locked marks one that arrived past the
+-- Free monthly allowance: kept, counted, and shown the moment the account
+-- upgrades, because a lead thrown away is a customer the business never hears of.
+CREATE TABLE IF NOT EXISTS leads (
+    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_id  BIGINT UNSIGNED NOT NULL,
+    first_name  VARCHAR(80)     NOT NULL,
+    last_name   VARCHAR(80)     NULL,
+    email       VARCHAR(254)    NOT NULL,
+    phone       VARCHAR(40)     NOT NULL,
+    city        VARCHAR(80)     NULL,
+    zip         VARCHAR(10)     NULL,
+    services    TEXT            NULL,
+    timeline    VARCHAR(80)     NULL,
+    budget      VARCHAR(80)     NULL,
+    offer       VARCHAR(120)    NULL,
+    message     TEXT            NULL,
+    source      ENUM('hosted','embed') NOT NULL DEFAULT 'hosted',
+    referrer    VARCHAR(500)    NULL,
+    ip          VARCHAR(45)     NULL,
+    user_agent  VARCHAR(500)    NULL,
+    status      ENUM('new','contacted','quoted','won','lost') NOT NULL DEFAULT 'new',
+    notes       TEXT            NULL,
+    is_locked   TINYINT(1)      NOT NULL DEFAULT 0,
+    created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY leads_account_index (account_id, created_at),
+    KEY leads_status_index (account_id, status),
+    CONSTRAINT leads_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------ plumbing
+
+CREATE TABLE IF NOT EXISTS rate_limits (
+    bucket_key        CHAR(64)  NOT NULL,
+    attempts          INT       NOT NULL DEFAULT 0,
+    window_started_at DATETIME  NOT NULL,
+    PRIMARY KEY (bucket_key),
+    KEY rate_limits_window_index (window_started_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS audit_log (
+    id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    actor_user_id BIGINT UNSIGNED NULL,
+    action        VARCHAR(80)     NOT NULL,
+    target_type   VARCHAR(40)     NULL,
+    target_id     BIGINT UNSIGNED NULL,
+    before_state  TEXT            NULL,
+    after_state   TEXT            NULL,
+    ip            VARCHAR(45)     NULL,
+    created_at    DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY audit_log_created_index (created_at),
+    KEY audit_log_target_index (target_type, target_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Stripe event ids already handled, so a retried webhook is applied once.
+CREATE TABLE IF NOT EXISTS stripe_events (
+    id          VARCHAR(64)  NOT NULL,
+    type        VARCHAR(80)  NOT NULL,
+    received_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
