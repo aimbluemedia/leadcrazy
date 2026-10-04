@@ -21,8 +21,8 @@ use App\Support\View;
   <div class="container hero-band__inner">
     <div class="hero-band__copy">
       <p class="hero-band__eyebrow">The Million Dollar Lead Form</p>
-      <h1 class="hero-band__title">Stop Losing Visitors. Start Getting <em>Leads.</em></h1>
-      <p class="hero-band__sub">Start Free. No Credit Card. Built for You in a Day.</p>
+      <h1 class="hero-band__title">Every Visitor Is Your Potential <em>Next Client.</em></h1>
+      <p class="hero-band__sub">Let Us Show You How to Close Them.</p>
       <p class="hero-band__lede">Most local business websites make customers hunt for a phone number. LeadCrazy gives you a
         lead page that asks the right questions &mdash; services, timeline, budget &mdash; and puts your best offer
         right on top of the form. Every request lands in your dashboard, ready to call.</p>
