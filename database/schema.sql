@@ -1,19 +1,9 @@
--- LeadCrazy: full database schema (MySQL 5.7+ / MariaDB 10.3+)
---
--- One-shot import for phpMyAdmin: select your database, open the SQL tab,
--- paste this file, and run it. Safe to run more than once (IF NOT EXISTS).
---
--- Written for phpMyAdmin like PromoMonster's: ASCII only, no quoted string spans
--- a line, no DELIMITER blocks, no triggers.
---
--- Lists that belong to one page (services, cities, zip codes, form options) are
--- stored as JSON in TEXT columns rather than child tables. They are only ever
--- read and written whole, by one superadmin form, and shared hosts vary in
--- whether the JSON column type exists at all.
+-- LeadCrazy database schema. Import with phpMyAdmin: select the database,
+-- open Import, choose this file, Go. Safe to run more than once.
+-- Table notes live in docs/schema-notes.md (kept out of this file on purpose:
+-- phpMyAdmin misreads apostrophes inside SQL comments).
 
 SET NAMES utf8mb4;
-
--- ------------------------------------------------------------ people
 
 CREATE TABLE IF NOT EXISTS users (
     id                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -42,11 +32,6 @@ CREATE TABLE IF NOT EXISTS login_attempts (
     KEY login_attempts_ip_index (ip, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------ businesses
-
--- One account per business. plan is what the account may use today; Billing is
--- the only thing that writes it once Stripe is connected, and superadmin can
--- set it by hand for an account with no live subscription.
 CREATE TABLE IF NOT EXISTS accounts (
     id                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     business_name          VARCHAR(160)    NOT NULL,
@@ -80,8 +65,6 @@ CREATE TABLE IF NOT EXISTS account_users (
     CONSTRAINT account_users_user_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- What the business told us at signup. Superadmin builds the page from this; it
--- is kept, never overwritten, so there is always a record of what was asked for.
 CREATE TABLE IF NOT EXISTS intakes (
     id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     account_id   BIGINT UNSIGNED NOT NULL,
@@ -92,7 +75,6 @@ CREATE TABLE IF NOT EXISTS intakes (
     CONSTRAINT intakes_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- The Million Dollar Lead Form page itself. One row per account.
 CREATE TABLE IF NOT EXISTS pages (
     account_id       BIGINT UNSIGNED NOT NULL,
     badge            VARCHAR(80)     NULL,
@@ -157,9 +139,6 @@ CREATE TABLE IF NOT EXISTS gallery_images (
     CONSTRAINT gallery_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Testimonials the business supplied. Entered by superadmin from what the
--- business sent, and labelled on the page as provided by the business: they are
--- the business's claims, not reviews LeadCrazy collected or verified.
 CREATE TABLE IF NOT EXISTS testimonials (
     id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     account_id  BIGINT UNSIGNED NOT NULL,
@@ -174,8 +153,6 @@ CREATE TABLE IF NOT EXISTS testimonials (
     CONSTRAINT testimonials_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- A member asking for their page to be changed. Superadmin builds pages, so this
--- is the member's only way to edit one.
 CREATE TABLE IF NOT EXISTS change_requests (
     id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     account_id  BIGINT UNSIGNED NOT NULL,
@@ -190,11 +167,6 @@ CREATE TABLE IF NOT EXISTS change_requests (
     CONSTRAINT change_requests_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------ leads
-
--- A lead is stored whatever the plan. is_locked marks one that arrived past the
--- Free monthly allowance: kept, counted, and shown the moment the account
--- upgrades, because a lead thrown away is a customer the business never hears of.
 CREATE TABLE IF NOT EXISTS leads (
     id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     account_id  BIGINT UNSIGNED NOT NULL,
@@ -224,8 +196,6 @@ CREATE TABLE IF NOT EXISTS leads (
     CONSTRAINT leads_account_fk FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------ plumbing
-
 CREATE TABLE IF NOT EXISTS rate_limits (
     bucket_key        CHAR(64)  NOT NULL,
     attempts          INT       NOT NULL DEFAULT 0,
@@ -249,7 +219,6 @@ CREATE TABLE IF NOT EXISTS audit_log (
     KEY audit_log_target_index (target_type, target_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Stripe event ids already handled, so a retried webhook is applied once.
 CREATE TABLE IF NOT EXISTS stripe_events (
     id          VARCHAR(64)  NOT NULL,
     type        VARCHAR(80)  NOT NULL,
