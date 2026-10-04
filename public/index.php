@@ -66,6 +66,7 @@ use App\Controllers\AuthController;
 use App\Controllers\BillingController;
 use App\Controllers\BusinessController;
 use App\Controllers\FeedController;
+use App\Controllers\InstallController;
 use App\Controllers\MembersController;
 use App\Controllers\PageController;
 use App\Controllers\PasswordController;
@@ -91,6 +92,10 @@ $router->get('/how-it-works', [$pages, 'howItWorks']);
 $router->get('/pricing',      [$pages, 'pricing']);
 $router->get('/privacy',      [$pages, 'privacy']);
 $router->get('/terms',        [$pages, 'terms']);
+
+// First-time setup; guarded by app_key. See InstallController.
+$router->get('/install',  static fn () => (new InstallController())->show());
+$router->post('/install', static fn () => (new InstallController())->run());
 
 // ---------------------------------------------------------------- public pages
 // No session on any of these; see app/bootstrap.php.

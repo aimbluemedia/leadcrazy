@@ -40,12 +40,13 @@ No cookies on public pages. The form uses a signed timing token (rejects bots th
 
 1. Upload the project. Point the document root at `public/` if you can; otherwise the root
    `.htaccess` maps everything into `public/`.
-2. Create a MySQL database and run `database/schema.sql` in phpMyAdmin (safe to re-run).
+2. Create an empty MySQL database.
 3. Copy `app/config.example.php` to `app/config.php` and fill in: `app_url`, `app_key`,
    database, `support_email`, Turnstile keys, Stripe keys and Price ids, and the MonsterList feed key.
 4. Make `public/uploads/` and `storage/logs/` writable.
-5. Create your superadmin login: `php database/make-admin.php you@leadcrazy.com`
-   (no shell? see the comment at the top of that file for the phpMyAdmin route).
+5. Visit **`/install`**, enter your `app_key`, and it creates the tables and your superadmin login.
+   (Alternatives: import `database/schema.sql` with phpMyAdmin's Import tab, and
+   `php database/make-admin.php you@leadcrazy.com` from a shell.)
 
 ### Stripe
 

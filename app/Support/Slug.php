@@ -16,7 +16,7 @@ final class Slug
      */
     public const RESERVED = [
         'admin', 'api', 'assets', 'billing', 'blog', 'contact', 'embed', 'feed',
-        'form', 'help', 'home', 'how-it-works', 'index', 'lead', 'leadcrazy',
+        'form', 'help', 'home', 'how-it-works', 'index', 'install', 'lead', 'leadcrazy',
         'leads', 'login', 'logout', 'members', 'monsterlist', 'pricing', 'privacy',
         'public', 'signup', 'superadmin', 'support', 'terms', 'uploads', 'webhooks',
         'widget', 'www',
