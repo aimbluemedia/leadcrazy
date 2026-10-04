@@ -7,7 +7,6 @@
  * The lead cards are illustrations and are captioned as such. No invented
  * traction numbers either: the panel only carries things a visitor can check.
  */
-use App\Support\Plans;
 use App\Support\View;
 ?>
 <div class="hero-band">
@@ -28,7 +27,7 @@ use App\Support\View;
         right on top of the form. Every request lands in your dashboard, ready to call.</p>
       <div class="hero-band__cta">
         <a class="btn btn--primary btn--xl" href="/members/signup">Get My Free Lead Page &rarr;</a>
-        <a class="btn hero-band__ghost btn--xl" href="/pricing">&#9733; See Plans from $0</a>
+        <a class="btn hero-band__ghost btn--xl" href="/how-it-works">&#9733; See How It Works</a>
       </div>
       <p class="hero-band__note">Takes about two minutes. Our team builds the page.</p>
       <div class="hero-band__chips">
@@ -72,7 +71,7 @@ use App\Support\View;
       <p class="hero-panel__label">What you get</p>
       <div class="hero-panel__grid">
         <?php foreach ([
-          ['&#36;', '$0', 'To start. Free plan forever, ' . Plans::FREE_MONTHLY_LEADS . ' leads a month.'],
+          ['&#10003;', 'Free', 'To start. No credit card, no contract.'],
           ['&#9200;', '1 day', 'Typical build time. Our team writes and designs the page.'],
           ['&lt;/&gt;', '1 line', 'Of code puts it on your own website (Premium).'],
         ] as [$icon, $value, $label]): ?>

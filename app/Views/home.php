@@ -17,7 +17,7 @@
   <div class="container">
     <h2 class="center">How it works</h2>
     <ol class="steps" style="margin-top:28px">
-      <li><h3>Sign up</h3><p>Pick Free, $19 or $49. Takes two minutes.</p></li>
+      <li><h3>Sign up</h3><p>Create your account. Takes two minutes.</p></li>
       <li><h3>Tell us about you</h3><p>Services, areas, offers, photos and reviews &mdash; one short form.</p></li>
       <li><h3>We build it</h3><p>Our team builds your Million Dollar Lead Form page, usually within one business day.</p></li>
       <li><h3>Get leads</h3><p>Requests land in your dashboard. Track each one from new to won.</p></li>
@@ -25,13 +25,6 @@
   </div>
 </section>
 
-<section class="section section--soft" id="pricing">
-  <div class="container">
-    <h2 class="center">Simple pricing</h2>
-    <p class="lede center" style="margin:0 auto 32px">Start free. Upgrade when the leads start rolling in. Cancel any time.</p>
-    <?= View::render('partials/plans') ?>
-  </div>
-</section>
 
 <section class="section">
   <div class="container grid-2" style="align-items:center">
