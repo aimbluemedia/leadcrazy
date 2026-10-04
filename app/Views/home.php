@@ -1,37 +1,5 @@
 <?php use App\Support\View; ?>
-<section class="section">
-  <div class="container hero">
-    <div>
-      <span class="eyebrow">&#9889; The Million Dollar Lead Form</span>
-      <h1>Turn visitors into quote requests &mdash; on autopilot.</h1>
-      <p class="hero__sub">Your page. Your offers. Your leads.</p>
-      <p class="lede">LeadCrazy builds local service businesses a high-converting lead page with a proven quote form, special offers, photos, reviews and service areas. Every request lands in your dashboard.</p>
-      <div class="hero__ctas">
-        <a class="btn btn--primary" href="/members/signup">Get Your Free Page &rarr;</a>
-        <a class="btn btn--ghost" href="/pricing">See plans</a>
-      </div>
-      <p class="hero__note">Free forever plan &middot; $19 hosted on LeadCrazy + MonsterList &middot; $49 on your own website</p>
-    </div>
-    <div class="hero__shot" aria-hidden="true">
-      <div style="padding:22px;border-top:4px solid var(--accent)">
-        <div style="background:var(--green-soft);border:2px solid #7fdc95;border-radius:12px;padding:18px;text-align:center;position:relative;margin-bottom:16px">
-          <span class="plan__tag" style="top:-10px">Limited time</span>
-          <strong style="font:800 17px Archivo,sans-serif;color:var(--ink)">Spring Backyard Special</strong>
-          <p class="muted" style="font-size:12px;margin:6px 0 0">Free design consultation + 10% off any project over $5,000</p>
-        </div>
-        <p style="font:800 20px Archivo,sans-serif;color:var(--ink);text-align:center;margin:0 0 4px">Your Business Name</p>
-        <p class="muted center" style="font-size:12px">Fill out this quick form for a free, detailed quote.</p>
-        <div class="form__row" style="margin-bottom:10px"><div class="field" style="min-height:38px"></div><div class="field" style="min-height:38px"></div></div>
-        <div class="field" style="min-height:38px;margin-bottom:10px"></div>
-        <div class="form__row" style="margin-bottom:10px">
-          <div class="field" style="min-height:38px;font-size:12px">&#9744; Pavers</div><div class="field" style="min-height:38px;font-size:12px">&#9744; Artificial Turf</div>
-          <div class="field" style="min-height:38px;font-size:12px">&#9744; Outdoor Lights</div><div class="field" style="min-height:38px;font-size:12px">&#9744; Fire Pits</div>
-        </div>
-        <div class="btn btn--primary btn--block">Get My Free Quote &amp; Consultation &rarr;</div>
-      </div>
-    </div>
-  </div>
-</section>
+<?= View::render('partials/hero-band') ?>
 
 <section class="section section--soft">
   <div class="container">
