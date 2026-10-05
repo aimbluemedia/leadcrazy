@@ -58,29 +58,63 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section close-band" id="free">
   <div class="container">
-    <h2 class="center">How it works</h2>
-    <ol class="steps" style="margin-top:28px">
-      <li><h3>Sign up</h3><p>Create your account. Takes two minutes.</p></li>
-      <li><h3>Tell us about you</h3><p>Services, areas, offers, photos and reviews &mdash; one short form.</p></li>
-      <li><h3>We build it</h3><p>Our team builds your Million Dollar Lead Form page, usually within one business day.</p></li>
-      <li><h3>Get leads</h3><p>Requests land in your dashboard. Track each one from new to won.</p></li>
-    </ol>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="container grid-2" style="align-items:center">
-    <div>
-      <h2>Listed on MonsterList</h2>
-      <p>Pro and Premium pages are listed on MonsterList automatically, so local customers find you where they are already searching. Every request still comes straight to your LeadCrazy dashboard.</p>
+    <div class="close-head">
+      <p class="close-tag">&#10022; Free account &middot; no credit card</p>
+      <h2 class="close-title">Get leads <em>like a pro</em>.<br>Start free today.</h2>
+      <p class="close-lede">If you run a small service business, leads are not a marketing extra you get to later.
+        They are what keeps the trucks rolling. Every reason below is one you already feel &mdash; the free account
+        is just how you stop letting visitors slip away.</p>
     </div>
-    <div>
-      <h2>On your own website</h2>
-      <p>Premium members paste one line of code to put the full page &mdash; or just the lead form &mdash; on their own site. WordPress, Wix, Squarespace or plain HTML.</p>
-      <pre class="card" style="font-size:12px;white-space:pre-wrap;word-break:break-all;margin:0">&lt;script src="<?= View::e(View::url('/widget/your-business.js')) ?>" async&gt;&lt;/script&gt;</pre>
+    <div class="close-grid">
+      <?php foreach ([
+        ['&#128200;', 'More jobs from the traffic you already have',
+         'Your vans, signs, ads and Google listing already send people your way. A form that asks the right questions turns more of those visitors into quote requests &mdash; without spending another dollar on ads.', false],
+        ['&#127919;', 'Know who to call first',
+         'Services, timeline and budget arrive with every lead, so the big project that wants to start this month gets your call before the tire-kicker does.', false],
+        ['&#127873;', 'Offers that actually get claimed',
+         'Your special sits right on top of the form with a real expiry date. It gives a visitor a reason to ask for a quote today instead of &ldquo;some time&rdquo;.', false],
+        ['&#11088;', 'Look established before they ever call',
+         'Photos of your work, reviews from real customers, your service cities and zip codes. A stranger sees a business that has done this a hundred times.', false],
+        ['&#128176;', 'Stop competing on price alone',
+         'A page that shows your work and your offer gives people a reason to pick your quote, not just the cheapest one. Without it, price is all they have to compare.', false],
+        ['&#128205;', 'Keep up with the shop down the road',
+         'Your competitors are making it easy to ask for a quote. If a customer has to hunt for your phone number, they ask the next business on the list instead.', false],
+        ['&#128229;', 'Never lose a lead in your inbox',
+         'Every request lands in one dashboard. Mark it contacted, quoted, won or lost, add notes and export to CSV &mdash; nothing slips through the cracks.', false],
+        ['&#128279;', 'One link you can share everywhere',
+         'Put it on Google Business, Facebook, Nextdoor, text messages, flyers and truck wraps. Pro and Premium pages are listed on MonsterList too.', false],
+        ['&#9889;', 'Free tools, and a team that builds it',
+         'Your Million Dollar Lead Form page, written and designed for you by our team, with ' . App\Support\Plans::FREE_MONTHLY_LEADS . ' leads a month on the free plan. Free for as long as you want it, no card on file.', true],
+      ] as [$icon, $title, $body, $lead]): ?>
+        <div class="close-card<?= $lead ? ' close-card--lead' : '' ?>">
+          <span class="close-card__tile" aria-hidden="true"><?= $icon ?></span>
+          <h3><?= $title ?></h3>
+          <p><?= $body ?></p>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <div class="close-act">
+      <p class="close-rule">
+        <span class="close-rule__icon" aria-hidden="true">&#128737;</span>
+        <span><strong>And we keep it honest: your leads are yours.</strong>
+          We never sell, share or resell the people who fill in your form, and we never pass them to a competitor.
+          Every request goes to you, and only you, on every plan.</span>
+      </p>
+      <a class="close-btn" href="/members/signup">Create your free account &rarr;</a>
+      <ul class="close-facts">
+        <li>No credit card</li>
+        <li>Free is a plan, not a trial</li>
+        <li>We build your page for you</li>
+      </ul>
+
+      <div class="close-embed">
+        <p><strong>Already have a website?</strong> Premium members paste one line of code to put the full page &mdash;
+          or just the lead form &mdash; on their own site. WordPress, Wix, Squarespace or plain HTML.</p>
+        <pre><code>&lt;script src="<?= View::e(View::url('/widget/your-business.js')) ?>" async&gt;&lt;/script&gt;</code></pre>
+      </div>
     </div>
   </div>
 </section>
