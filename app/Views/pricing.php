@@ -2,7 +2,7 @@
 <section class="section">
   <div class="container">
     <div class="center" style="margin-bottom:36px">
-      <span class="eyebrow">&#9889; The Million Dollar Lead Form</span>
+      <span class="eyebrow">The Million Dollar Lead Form</span>
       <h1>Pick your plan</h1>
       <p class="lede" style="margin:0 auto">Every plan includes a page built for you by our team. Paid plans are monthly &mdash; cancel any time.</p>
     </div>

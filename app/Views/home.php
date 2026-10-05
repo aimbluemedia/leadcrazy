@@ -50,7 +50,7 @@
 <section class="section section--soft" id="calculator">
   <div class="container">
     <div class="center" style="margin-bottom:32px">
-      <span class="eyebrow">&#128176; Lead calculator</span>
+      <span class="eyebrow">Lead calculator</span>
       <h2>What Is a Better Form <span class="accent">Worth to You?</span></h2>
       <p class="lede" style="margin:0 auto">Move the sliders to match your business and see the leads, jobs and profit a form that converts 3&times; better could add.</p>
     </div>
@@ -61,7 +61,7 @@
 <section class="section close-band" id="free">
   <div class="container">
     <div class="close-head">
-      <p class="close-tag">&#10022; Free account &middot; no credit card</p>
+      <p class="close-tag">Free account &middot; no credit card</p>
       <h2 class="close-title">Get leads <em>like a pro</em>.<br>Start free today.</h2>
       <p class="close-lede">If you run a small service business, leads are not a marketing extra you get to later.
         They are what keeps the trucks rolling. Every reason below is one you already feel &mdash; the free account

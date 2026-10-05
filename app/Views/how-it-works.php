@@ -1,7 +1,7 @@
 <?php use App\Support\View; ?>
 <section class="section">
   <div class="container">
-    <span class="eyebrow">&#9889; How it works</span>
+    <span class="eyebrow">How it works</span>
     <h1>From signup to leads in a day.</h1>
     <p class="lede">You tell us about your business. We build a page designed to turn visitors into quote requests. You work the leads.</p>
     <ol class="steps" style="margin-top:32px">

@@ -15,7 +15,7 @@ use App\Support\View;
   <?php endfor; ?>
   <div class="hero-band__strip">
     <div class="container hero-band__strip-inner">
-      <span>&#9889; A lead page built for you &middot; Offers, photos, reviews &amp; service areas &middot; Every lead in one dashboard</span>
+      <span>A lead page built for you &middot; Offers, photos, reviews &amp; service areas &middot; Every lead in one dashboard</span>
       <span class="hero-band__strip-right">Start free. No credit card.</span>
     </div>
   </div>
