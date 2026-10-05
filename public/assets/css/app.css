@@ -377,3 +377,45 @@ code, pre { font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .split__pills { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .split__pills li { border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; font-size: 14px; font-weight: 600; color: var(--ink); }
 .split__note { margin: 20px 0 0; font-size: 14px; color: var(--muted); }
+
+/* ---------------------------------------------------------------- lead calculator */
+.lcalc { display: grid; gap: 20px; }
+@media (min-width: 960px) { .lcalc { grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; } }
+.lcalc__panel { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 26px; }
+.lcalc__panel h3 { font-size: 17px; margin: 0 0 20px; }
+.lcalc__field { margin-bottom: 22px; }
+.lcalc__field:last-child { margin-bottom: 0; }
+.lcalc__label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+.lcalc__label span { font-size: 14px; font-weight: 600; color: var(--ink); }
+.lcalc__label output { font: 800 18px/1 Archivo, Inter, sans-serif; color: var(--accent-dark); font-variant-numeric: tabular-nums; }
+.lcalc__hint { margin: 7px 0 0; font-size: 12.5px; color: var(--muted); }
+.lcalc input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; cursor: pointer; margin: 0; }
+.lcalc input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px;
+  background: linear-gradient(to right, var(--accent) var(--fill, 50%), var(--line) var(--fill, 50%)); }
+.lcalc input[type=range]::-moz-range-track { height: 6px; border-radius: 99px; background: var(--line); }
+.lcalc input[type=range]::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--accent); }
+.lcalc input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -7px;
+  border-radius: 50%; background: #fff; border: 3px solid var(--accent); box-shadow: 0 2px 6px rgba(20, 35, 60, .2); }
+.lcalc input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 3px solid var(--accent); }
+.lcalc input[type=range]:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 4px; }
+
+.lcalc__result { border-radius: 18px; padding: 28px; color: #c7d2e0;
+  background: radial-gradient(600px 300px at 80% 0%, rgba(245, 163, 0, .22), transparent 65%), linear-gradient(160deg, #0d1626, #16243b);
+  box-shadow: 0 18px 44px rgba(13, 22, 38, .25); }
+.lcalc__eyebrow { margin: 0; font-size: 11.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #ffcf66; }
+.lcalc__hero { margin: 8px 0 4px; font: 800 clamp(44px, 7vw, 64px)/1 Archivo, Inter, sans-serif; color: #fff; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.lcalc__unit { margin: 0 0 20px; font-size: 15px; }
+.lcalc__unit strong { color: #ffb31a; }
+.lcalc__table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.lcalc__table th, .lcalc__table td { padding: 9px 10px; text-align: right; border-bottom: 1px solid rgba(255, 255, 255, .09); }
+.lcalc__table th:first-child { text-align: left; font-weight: 500; color: #c7d2e0; }
+.lcalc__table thead th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: #8c9bb0; font-weight: 700; }
+.lcalc__table td { color: #fff; font-weight: 600; }
+.lcalc__table .is-lc { color: #ffb31a; font-weight: 800; background: rgba(245, 163, 0, .08); }
+.lcalc__table thead .is-lc { color: #ffcf66; }
+.lcalc__rows { margin: 18px 0 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lcalc__rows div { background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); border-radius: 12px; padding: 12px 14px; }
+.lcalc__rows dt { font-size: 12px; color: #8c9bb0; }
+.lcalc__rows dd { margin: 2px 0 0; font: 800 19px/1.2 Archivo, Inter, sans-serif; color: #fff; font-variant-numeric: tabular-nums; }
+.lcalc__note { margin: 12px 0 0; font-size: 12px; color: #8c9bb0; text-align: center; }
+@media (max-width: 420px) { .lcalc__rows { grid-template-columns: 1fr; } .lcalc__panel, .lcalc__result { padding: 20px; } }

@@ -47,6 +47,17 @@
   </div>
 </section>
 
+<section class="section section--soft" id="calculator">
+  <div class="container">
+    <div class="center" style="margin-bottom:32px">
+      <span class="eyebrow">&#128176; Lead calculator</span>
+      <h2>What Is a Better Form <span class="accent">Worth to You?</span></h2>
+      <p class="lede" style="margin:0 auto">Move the sliders to match your business and see the leads, jobs and profit a form that converts 3&times; better could add.</p>
+    </div>
+    <?= View::render('partials/lead-calculator') ?>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <h2 class="center">How it works</h2>
