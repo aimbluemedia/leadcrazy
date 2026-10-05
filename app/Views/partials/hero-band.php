@@ -10,6 +10,9 @@
 use App\Support\View;
 ?>
 <div class="hero-band">
+  <?php for ($i = 1; $i <= 6; $i++): ?>
+    <span class="sparkle sparkle--<?= $i ?>" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5-.6-5.6-4.9-9.9-10.5-10.5C7.1 11.4 11.4 7.1 12 1.5z"/></svg></span>
+  <?php endfor; ?>
   <div class="hero-band__strip">
     <div class="container hero-band__strip-inner">
       <span>&#9889; A lead page built for you &middot; Offers, photos, reviews &amp; service areas &middot; Every lead in one dashboard</span>
