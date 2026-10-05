@@ -352,3 +352,28 @@ code, pre { font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .ticker__group span::after { content: "\26A1"; margin-left: 44px; }
 @media (prefers-reduced-motion: no-preference) { .ticker__track { animation: ticker 38s linear infinite; } }
 @keyframes ticker { to { transform: translateX(-50%); } }
+
+/* ---------------------------------------------------------------- photo split (home) */
+.split { display: grid; gap: 40px; align-items: center; }
+@media (min-width: 960px) { .split { grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: stretch; } }
+.split__media { position: relative; }
+.split__media img { width: 100%; height: 100%; min-height: 360px; max-height: 760px; object-fit: cover; border-radius: 18px; box-shadow: var(--shadow); }
+@media (max-width: 959px) { .split__media img { aspect-ratio: 4 / 5; max-height: 560px; } }
+.split__float { position: absolute; left: 16px; right: 16px; bottom: -18px; display: flex; gap: 12px; align-items: flex-start;
+  background: #fff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 14px 34px rgba(20, 35, 60, .18); border: 1px solid var(--line); }
+@media (min-width: 520px) { .split__float { right: auto; max-width: 360px; } }
+.split__dot { flex: none; width: 11px; height: 11px; margin-top: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(47, 179, 90, .18); }
+.split__float strong { display: block; font-size: 14px; color: var(--ink); }
+.split__float small { display: block; font-size: 12.5px; color: var(--muted); }
+.split__title { font-size: clamp(36px, 5vw, 60px); line-height: 1.04; letter-spacing: -.025em; margin-bottom: 16px; }
+.split__title em { font-style: normal; color: var(--accent); }
+.split__cards { display: grid; gap: 14px; margin-top: 28px; }
+@media (min-width: 560px) { .split__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.step-card { border: 1px solid var(--line); border-radius: 14px; padding: 20px 16px; text-align: center; background: #fff; }
+.step-card__icon { display: grid; place-items: center; width: 42px; height: 42px; margin: 0 auto 10px; border-radius: 10px; background: var(--accent-soft); font-size: 19px; }
+.step-card__num { display: block; font: 12px/1 ui-monospace, Menlo, monospace; color: var(--muted); margin-bottom: 6px; }
+.step-card h3 { font-size: 18px; margin: 0 0 6px; }
+.step-card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5; }
+.split__pills { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.split__pills li { border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; font-size: 14px; font-weight: 600; color: var(--ink); }
+.split__note { margin: 20px 0 0; font-size: 14px; color: var(--muted); }

@@ -1,14 +1,48 @@
 <?php use App\Support\View; ?>
 <?= View::render('partials/hero-band') ?>
 
-<section class="section section--soft">
-  <div class="container">
-    <h2 class="center">Everything a lead page needs. Nothing it doesn&rsquo;t.</h2>
-    <p class="lede center" style="margin:0 auto 32px">Built from the layout that wins jobs for contractors, landscapers, remodelers and home-service pros.</p>
-    <div class="grid-3">
-      <div class="card"><div class="feature__icon">&#9997;</div><h3>A form that qualifies</h3><p>Services, timeline, budget and project details on every lead &mdash; so you know who to call first.</p></div>
-      <div class="card"><div class="feature__icon feature__icon--green">&#127873;</div><h3>Offers that convert</h3><p>Limited-time specials with expiry dates, shown right on top of the form where they get claimed.</p></div>
-      <div class="card"><div class="feature__icon feature__icon--purple">&#128205;</div><h3>Local, by design</h3><p>Service cities and zip codes, project photos, reviews and video build trust before they ever call.</p></div>
+<section class="section">
+  <div class="container split">
+    <div class="split__media">
+      <img src="<?= View::e(View::asset('/assets/img/hero.jpg')) ?>" width="1122" height="1402" loading="lazy"
+           alt="A home service professional outside a customer&rsquo;s home, holding a tablet.">
+      <div class="split__float" aria-hidden="true">
+        <span class="split__dot"></span>
+        <span><strong>New lead &middot; Pavers &middot; $10k&ndash;25k</strong>
+          <small>Dana R. &middot; Tempe, AZ &middot; starting in 1&ndash;3 months</small></span>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="split__title">Capture. Qualify. <em>Close.</em></h2>
+      <p class="lede">Everything a lead page needs, nothing it doesn&rsquo;t. Built from the layout that wins jobs for
+        contractors, landscapers, remodelers and home-service pros &mdash; so every visitor knows exactly what to do next.</p>
+
+      <div class="split__cards">
+        <?php foreach ([
+          ['01', '&#9997;', 'Qualify', 'Services, timeline, budget and project details on every lead &mdash; so you know who to call first.'],
+          ['02', '&#127873;', 'Convert', 'Limited-time offers with expiry dates, right on top of the form where they get claimed.'],
+          ['03', '&#128205;', 'Win local', 'Service cities, zip codes, photos, reviews and video build trust before they ever call.'],
+        ] as [$num, $icon, $title, $body]): ?>
+          <div class="step-card">
+            <span class="step-card__icon" aria-hidden="true"><?= $icon ?></span>
+            <span class="step-card__num"><?= $num ?></span>
+            <h3><?= $title ?></h3>
+            <p><?= $body ?></p>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <ul class="split__pills">
+        <li>Services</li><li>Timeline</li><li>Budget</li><li>Offers</li><li>Zip codes</li>
+      </ul>
+
+      <p class="split__note">Every lead lands in your dashboard &mdash; track it from new to won.</p>
+
+      <div class="hero__ctas">
+        <a class="btn btn--primary btn--xl" href="/members/signup">Get My Free Lead Page</a>
+        <a class="btn btn--ghost btn--xl" href="/how-it-works">See How It Works</a>
+      </div>
     </div>
   </div>
 </section>
