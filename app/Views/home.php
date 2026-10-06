@@ -18,24 +18,47 @@
       <p class="lede">Everything a lead page needs, nothing it doesn&rsquo;t. Built from the layout that wins jobs for
         contractors, landscapers, remodelers and home-service pros &mdash; so every visitor knows exactly what to do next.</p>
 
-      <div class="split__cards">
-        <?php foreach ([
-          ['01', '&#9997;', 'Qualify', 'Services, timeline, budget and project details on every lead &mdash; so you know who to call first.'],
-          ['02', '&#127873;', 'Convert', 'Limited-time offers with expiry dates, right on top of the form where they get claimed.'],
-          ['03', '&#128205;', 'Win local', 'Service cities, zip codes, photos, reviews and video build trust before they ever call.'],
-        ] as [$num, $icon, $title, $body]): ?>
-          <div class="step-card">
-            <span class="step-card__icon" aria-hidden="true"><?= $icon ?></span>
-            <span class="step-card__num"><?= $num ?></span>
-            <h3><?= $title ?></h3>
-            <p><?= $body ?></p>
+      <ol class="features">
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8L4 5z"/></svg>
+          </span>
+          <div class="feature__body">
+            <p class="feature__num">01 &middot; Qualify</p>
+            <h3>Know who to call first.</h3>
+            <p>Services, timeline, budget and project details arrive with every lead, so the best jobs get your call before anyone else does.</p>
+            <div class="feature__demo" aria-hidden="true">
+              <span class="chip chip--blue">Pavers</span><span class="chip">$10k&ndash;25k</span><span class="chip">Start ASAP</span>
+            </div>
           </div>
-        <?php endforeach; ?>
-      </div>
-
-      <ul class="split__pills">
-        <li>Services</li><li>Timeline</li><li>Budget</li><li>Offers</li><li>Zip codes</li>
-      </ul>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+          </span>
+          <div class="feature__body">
+            <p class="feature__num">02 &middot; Convert</p>
+            <h3>Give them a reason to ask today.</h3>
+            <p>Limited-time offers with real expiry dates sit right on top of the form, where they actually get claimed.</p>
+            <div class="feature__demo" aria-hidden="true">
+              <span class="offer-chip"><strong>Spring Backyard Special</strong><em>Ends June 30</em></span>
+            </div>
+          </div>
+        </li>
+        <li class="feature">
+          <span class="feature__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          </span>
+          <div class="feature__body">
+            <p class="feature__num">03 &middot; Win local</p>
+            <h3>Look like the obvious local pick.</h3>
+            <p>Service cities, zip codes, project photos and reviews build trust before they ever pick up the phone.</p>
+            <div class="feature__demo" aria-hidden="true">
+              <span class="chip">Tempe</span><span class="chip">Mesa</span><span class="chip">85281</span><span class="chip">85201</span><span class="chip chip--star">&#9733; 4.9</span>
+            </div>
+          </div>
+        </li>
+      </ol>
 
       <p class="split__note">Every lead lands in your dashboard &mdash; track it from new to won.</p>
 

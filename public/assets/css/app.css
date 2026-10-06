@@ -358,7 +358,7 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .split { display: grid; gap: 44px; align-items: center; }
 @media (min-width: 960px) { .split { grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: stretch; } }
 .split__media { position: relative; }
-.split__media img { width: 100%; height: 100%; min-height: 360px; max-height: 760px; object-fit: cover; border-radius: 28px; }
+.split__media img { width: 100%; height: 100%; min-height: 360px; object-fit: cover; border-radius: 28px; }
 @media (max-width: 959px) { .split__media img { aspect-ratio: 4 / 5; max-height: 560px; } }
 .split__float { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 16px;
   background: rgba(255, 255, 255, .85); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 10px 30px rgba(0, 0, 0, .14); }
@@ -368,15 +368,25 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .split__float small { display: block; font-size: 13px; color: var(--muted); }
 .split__title { font-size: clamp(38px, 5.2vw, 60px); line-height: 1.04; letter-spacing: -.035em; margin-bottom: 18px; }
 .split__title em { font-style: normal; color: var(--blue); }
-.split__cards { display: grid; gap: 12px; margin-top: 30px; }
-@media (min-width: 560px) { .split__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.step-card { border-radius: 18px; padding: 22px 16px; text-align: center; background: var(--soft); }
-.step-card__icon { display: grid; place-items: center; width: 42px; height: 42px; margin: 0 auto 10px; border-radius: 12px; background: #fff; font-size: 19px; box-shadow: 0 1px 3px rgba(0, 0, 0, .06); }
-.step-card__num { display: block; font-size: 12px; color: var(--faint); margin-bottom: 6px; }
-.step-card h3 { font-size: 19px; margin: 0 0 6px; }
-.step-card p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.45; }
-.split__pills { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.split__pills li { background: var(--soft); border-radius: 980px; padding: 7px 16px; font-size: 14px; color: var(--ink); }
+.features { list-style: none; margin: 32px 0 0; padding: 0; border-radius: 22px; background: var(--soft); overflow: hidden; }
+.feature { display: flex; gap: 18px; align-items: flex-start; padding: 24px 24px 26px; }
+.feature + .feature { border-top: 1px solid var(--hair); }
+.feature__icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #fff; color: var(--blue);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 0 0 1px rgba(0, 0, 0, .03); }
+.feature__icon svg { width: 22px; height: 22px; }
+.feature__body { min-width: 0; }
+.feature__num { margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0; }
+.feature h3 { font-size: 20px; margin: 0 0 6px; letter-spacing: -.02em; }
+.feature__body > p:not(.feature__num) { margin: 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.feature__demo { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.chip { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 980px; background: #fff; color: var(--ink); font-size: 13px;
+  box-shadow: 0 0 0 1px var(--hair); }
+.chip--blue { background: var(--blue); color: #fff; box-shadow: none; }
+.chip--star { color: var(--ink); font-weight: 600; }
+.offer-chip { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 14px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px var(--hair); font-size: 14px; }
+.offer-chip strong { font-weight: 600; color: var(--ink); }
+.offer-chip em { white-space: nowrap; font-style: normal; font-size: 12px; font-weight: 600; color: var(--green-ink); background: var(--green-soft); padding: 2px 8px; border-radius: 980px; }
+@media (max-width: 420px) { .feature { padding: 20px 18px; gap: 14px; } .feature h3 { font-size: 18px; } }
 .split__note { margin: 20px 0 0; font-size: 15px; color: var(--muted); }
 
 /* ---------------------------------------------------------------- lead calculator */
