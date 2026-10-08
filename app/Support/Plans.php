@@ -23,6 +23,11 @@ final class Plans
     /** Leads a Free account can see per calendar month. More are kept, locked. */
     public const FREE_MONTHLY_LEADS = 10;
 
+    /** What a Free page shows. Anything past these is kept, and appears on upgrade. */
+    public const FREE_OFFERS = 1;
+    public const FREE_CITIES = 5;
+    public const FREE_ZIPS = 5;
+
     /** @var array<string,array{name:string,price:int,tagline:string,features:list<string>}> */
     public const DETAILS = [
         self::FREE => [
@@ -31,8 +36,8 @@ final class Plans
             'tagline' => 'Your own lead page, hosted on LeadCrazy.',
             'features' => [
                 'Million Dollar Lead Form page at leadcrazy.com/your-business',
-                'Services and service-area sections',
-                'Leads in your dashboard',
+                'Your services and 1 special offer',
+                'Up to 5 service cities and 5 zip codes',
                 '10 leads a month (extra leads are saved for when you upgrade)',
                 'LeadCrazy branding on your page',
             ],
@@ -43,8 +48,8 @@ final class Plans
             'tagline' => 'The full page, hosted on LeadCrazy and listed on MonsterList.',
             'features' => [
                 'Everything in Free, with unlimited leads',
-                'Special offers, photo gallery and customer testimonials',
-                'Service zip codes, stats and video button',
+                'Unlimited offers, photo gallery and customer testimonials',
+                'Unlimited service cities and zip codes, stats and video',
                 'Listed on MonsterList',
                 'No LeadCrazy branding',
             ],
@@ -94,6 +99,14 @@ final class Plans
     public static function fullPage(string $plan): bool
     {
         return self::isPaid($plan);
+    }
+
+    /** Limits a plan puts on what the page shows, or null for none. @return array{offers:int,cities:int,zips:int}|null */
+    public static function pageLimits(string $plan): ?array
+    {
+        return $plan === self::FREE
+            ? ['offers' => self::FREE_OFFERS, 'cities' => self::FREE_CITIES, 'zips' => self::FREE_ZIPS]
+            : null;
     }
 
     public static function canEmbed(string $plan): bool

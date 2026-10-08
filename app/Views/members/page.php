@@ -27,7 +27,9 @@ $plan = (string) $account['plan'];
   <dl class="dl">
     <dt>Lead form</dt><dd>Yes</dd>
     <dt>Services &amp; cities</dt><dd>Yes</dd>
-    <dt>Offers, gallery, reviews, zip codes</dt><dd><?= Plans::fullPage($plan) ? 'Yes' : 'No &mdash; <a href="/members/billing">upgrade to Pro</a>' ?></dd>
+    <dt>Special offers</dt><dd><?= Plans::fullPage($plan) ? 'Unlimited' : '1 &mdash; <a href="/members/billing">upgrade for unlimited</a>' ?></dd>
+    <dt>Cities &amp; zip codes</dt><dd><?= Plans::fullPage($plan) ? 'Unlimited' : 'Up to ' . Plans::FREE_CITIES . ' cities and ' . Plans::FREE_ZIPS . ' zip codes' ?></dd>
+    <dt>Gallery, reviews, video</dt><dd><?= Plans::fullPage($plan) ? 'Yes' : 'No &mdash; <a href="/members/billing">upgrade to Pro</a>' ?></dd>
     <dt>MonsterList listing</dt><dd><?= Plans::onMonsterList($plan) ? 'Yes &mdash; listed while your page is live' : 'No &mdash; <a href="/members/billing">upgrade to Pro</a>' ?></dd>
     <dt>On your own website</dt><dd><?= Plans::canEmbed($plan) ? 'Yes &mdash; <a href="/members/embed">get the code</a>' : 'No &mdash; <a href="/members/billing">upgrade to Premium</a>' ?></dd>
   </dl>

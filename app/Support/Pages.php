@@ -51,6 +51,18 @@ final class Pages
             ['id' => $id, 'today' => date('Y-m-d')],
         );
 
+        $locations = self::list($page['locations'] ?? null);
+        $zipcodes = self::list($page['zipcodes'] ?? null);
+
+        // Free pages show a taste: one offer, five cities, five zips. The rest
+        // is stored untouched and appears the moment the account upgrades.
+        $limits = Plans::pageLimits((string) $account['plan']);
+        if ($limits !== null) {
+            $offers = array_slice($offers, 0, $limits['offers']);
+            $locations = array_slice($locations, 0, $limits['cities']);
+            $zipcodes = array_slice($zipcodes, 0, $limits['zips']);
+        }
+
         return [
             'account' => $account,
             'page' => $page,
@@ -58,8 +70,8 @@ final class Pages
             'gallery' => Database::all('SELECT * FROM gallery_images WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
             'testimonials' => Database::all('SELECT * FROM testimonials WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
             'services' => self::list($page['services'] ?? null),
-            'locations' => self::list($page['locations'] ?? null),
-            'zipcodes' => self::list($page['zipcodes'] ?? null),
+            'locations' => $locations,
+            'zipcodes' => $zipcodes,
             'whyPoints' => self::list($page['why_points'] ?? null),
             'formServices' => self::list($page['form_services'] ?? null) ?: self::list($page['services'] ?? null),
             'timelines' => self::list($page['form_timelines'] ?? null) ?: self::DEFAULT_TIMELINES,

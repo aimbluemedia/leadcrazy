@@ -18,11 +18,6 @@ final class PageController
         ]);
     }
 
-    public function howItWorks(): void
-    {
-        echo View::page('how-it-works', ['title' => 'How it works - LeadCrazy', 'current' => 'how']);
-    }
-
     public function pricing(): void
     {
         echo View::page('pricing', [

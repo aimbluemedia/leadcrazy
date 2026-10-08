@@ -17,7 +17,7 @@ use App\Support\View;
 
 $name = (string) $account['business_name'];
 $video = $full ? Pages::videoEmbed($page['video_url'] ?? null) : null;
-$heroOffer = $full ? ($offers[0] ?? null) : null;
+$heroOffer = $offers[0] ?? null;
 $stats = array_filter([
     ['value' => $page['stat_rating'] ?? null, 'label' => 'Average Rating', 'icon' => '&#9733;'],
     ['value' => $page['stat_projects'] ?? null, 'label' => 'Projects Completed', 'icon' => '&#10004;'],
@@ -134,7 +134,7 @@ $showGallery = $full && $gallery !== [];
       </ul>
     <?php endif; ?>
 
-    <?php if ($full && $zipcodes !== []): ?>
+    <?php if ($zipcodes !== []): ?>
       <h2 class="lp-h3">Our Service Zipcodes:</h2>
       <ul class="lp-pills lp-pills--zip">
         <?php foreach ($zipcodes as $item): ?><li><?= View::e($item) ?></li><?php endforeach; ?>
@@ -158,7 +158,7 @@ $showGallery = $full && $gallery !== [];
       <?php endif; ?>
     <?php endif; ?>
 
-    <?php if ($full && $offers !== []): ?>
+    <?php if ($offers !== []): ?>
       <h2 class="lp-h3">Special Offers:</h2>
       <div class="lp-offers" data-offers>
         <?php foreach ($offers as $i => $offer): ?>

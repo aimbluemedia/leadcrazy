@@ -5,11 +5,17 @@ no-Composer style as PromoMonster.
 
 | Plan | Price | What they get |
 |---|---|---|
-| **Free** | $0 | Page at `leadcrazy.com/{business}` with the lead form, services and service cities. 10 leads a month (extra leads are saved, locked until upgrade). LeadCrazy branding. |
+| **Free** | $0 | Page at `leadcrazy.com/{business}` with the lead form, services, 1 special offer, up to 5 cities and 5 zip codes. 10 leads a month (extra leads are saved, locked until upgrade). LeadCrazy branding. |
 | **Pro** | $19/mo | Full page: offers, gallery, testimonials, zip codes, stats, video. Unlimited leads, no branding, **listed on MonsterList** (via the JSON feed). |
 | **Premium** | $49/mo | Everything in Pro, plus **embed code** for the member's own website: full page or form only. |
 
 ## How it works
+
+**Self-serve, live in minutes:** `/how-it-works` is a six-step builder (trade, business, services,
+service area, offer, publish) with a live preview. Publishing creates a Free account and puts the page
+live immediately; staff can polish it later in superadmin.
+
+**Done for you:**
 
 1. A business signs up at `/members/signup` and picks a plan.
 2. They fill in the **intake** (services, cities, zip codes, about, offers, testimonials, logo and photos).

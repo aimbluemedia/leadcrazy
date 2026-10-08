@@ -4,7 +4,9 @@
 
 :root {
   --lp-accent: #f5a300;
-  --lp-accent-dark: #d98a00;
+  --lp-accent-dark: color-mix(in srgb, var(--lp-accent) 82%, #000);
+  --lp-accent-light: color-mix(in srgb, var(--lp-accent) 78%, #fff);
+  --lp-accent-tint: color-mix(in srgb, var(--lp-accent) 9%, #fff);
   --lp-ink: #1d2a3f;
   --lp-text: #3b4658;
   --lp-muted: #6b7686;
@@ -77,7 +79,7 @@ a { color: inherit; }
 .lp-badge {
   display: inline-flex; align-items: center; gap: 6px;
   border: 1.5px solid var(--lp-accent); color: var(--lp-ink);
-  background: #fff8e8; border-radius: 999px; padding: 5px 14px;
+  background: var(--lp-accent-tint); border-radius: 999px; padding: 5px 14px;
   font-size: 12px; font-weight: 600; text-decoration: none; margin-bottom: 14px;
 }
 .lp-h1 {
@@ -107,7 +109,7 @@ a { color: inherit; }
 .lp-hero { width: 100%; border-radius: 10px; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 14px; }
 .lp-pill {
   width: max-content; max-width: 100%; margin: 0 auto 16px;
-  background: #fff4dc; color: var(--lp-ink); border-radius: 999px;
+  background: var(--lp-accent-tint); color: var(--lp-ink); border-radius: 999px;
   padding: 5px 14px; font-size: 12px; font-weight: 600;
 }
 
@@ -156,7 +158,7 @@ a { color: inherit; }
 }
 .lf textarea { resize: vertical; min-height: 96px; }
 .lf input:focus, .lf select:focus, .lf textarea:focus {
-  outline: none; border-color: var(--lp-accent); box-shadow: 0 0 0 3px rgba(245, 163, 0, .18);
+  outline: none; border-color: var(--lp-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lp-accent) 18%, transparent);
 }
 .lf [aria-invalid=true] input, .lf input[aria-invalid=true], .lf select[aria-invalid=true], .lf textarea[aria-invalid=true] {
   border-color: var(--lp-red);
@@ -174,18 +176,18 @@ a { color: inherit; }
 }
 .lf-check:hover { border-color: #c9d0db; }
 .lf-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--lp-accent); flex: none; }
-.lf-check:has(input:checked) { border-color: var(--lp-accent); background: #fffaf0; }
+.lf-check:has(input:checked) { border-color: var(--lp-accent); background: var(--lp-accent-tint); }
 .lf-hp { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
 .cf-turnstile { min-height: 65px; }
 .lf-submit {
   width: 100%; border: 0; cursor: pointer;
-  background: linear-gradient(180deg, #ffb31a, var(--lp-accent));
+  background: linear-gradient(180deg, var(--lp-accent-light), var(--lp-accent));
   color: #fff; font: 700 15px/1.2 Inter, sans-serif;
   border-radius: 10px; padding: 15px 18px;
-  box-shadow: 0 6px 16px rgba(245, 163, 0, .35);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--lp-accent) 35%, transparent);
   transition: transform .1s, box-shadow .15s, filter .15s;
 }
-.lf-submit:hover { filter: brightness(1.04); box-shadow: 0 8px 20px rgba(245, 163, 0, .45); }
+.lf-submit:hover { filter: brightness(1.04); box-shadow: 0 8px 20px color-mix(in srgb, var(--lp-accent) 45%, transparent); }
 .lf-submit:active { transform: translateY(1px); }
 .lf-submit:focus-visible { outline: 3px solid var(--lp-ink); outline-offset: 2px; }
 .lf-trust {

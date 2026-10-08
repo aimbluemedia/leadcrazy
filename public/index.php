@@ -64,6 +64,7 @@ require dirname(__DIR__) . '/app/bootstrap.php';
 
 use App\Controllers\AuthController;
 use App\Controllers\BillingController;
+use App\Controllers\BuilderController;
 use App\Controllers\BusinessController;
 use App\Controllers\FeedController;
 use App\Controllers\InstallController;
@@ -88,7 +89,7 @@ $router = new Router();
 $pages = new PageController();
 
 $router->get('/',             [$pages, 'home']);
-$router->get('/how-it-works', [$pages, 'howItWorks']);
+$router->get('/how-it-works', static fn () => (new BuilderController())->show());
 $router->get('/pricing',      [$pages, 'pricing']);
 $router->get('/privacy',      [$pages, 'privacy']);
 $router->get('/terms',        [$pages, 'terms']);
@@ -143,6 +144,10 @@ $router->post('/members/logout',   static fn () => $auth->logout('members'));
 $router->get('/members/password',  static fn () => (new PasswordController())->show('members'));
 $router->post('/members/password', static fn () => (new PasswordController())->update('members'));
 $router->get('/members/forgot',    static fn () => $auth->forgot());
+
+// The free lead form builder on /how-it-works publishes here. Under /members so
+// it has a session to sign the new owner in; protected by a signed form token.
+$router->post('/members/build', static fn () => (new BuilderController())->publish());
 
 $router->get('/members/signup',  static fn () => (new SignupController())->show());
 $router->post('/members/signup', static fn () => (new SignupController())->store());

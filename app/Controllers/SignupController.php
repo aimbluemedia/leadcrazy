@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Support\Accounts;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Csrf;
-use App\Support\Database;
 use App\Support\Plans;
 use App\Support\RateLimiter;
 use App\Support\Request;
-use App\Support\Slug;
 use App\Support\Validator;
 use App\Support\View;
 
@@ -67,47 +66,16 @@ final class SignupController
         if (empty($_POST['agree'])) {
             $this->fail('Please agree to the terms to continue.');
         }
-        if (Database::first('SELECT id FROM users WHERE email = :e', ['e' => $email]) !== null) {
+        if (Accounts::emailTaken((string) $email)) {
             $this->fail('There is already an account with that email. Sign in instead, or use another address.');
         }
 
-        $pdo = Database::connection();
-        $pdo->beginTransaction();
-        try {
-            Database::run(
-                'INSERT INTO users (email, password_hash, first_name, last_name, password_changed_at)
-                 VALUES (:email, :hash, :first, :last, NOW())',
-                ['email' => $email, 'hash' => password_hash($password, PASSWORD_DEFAULT), 'first' => $first, 'last' => $last],
-            );
-            $userId = (int) $pdo->lastInsertId();
-
-            $slug = Slug::unique((string) $business);
-            Database::run(
-                'INSERT INTO accounts (business_name, slug, plan, requested_plan, signup_ip)
-                 VALUES (:name, :slug, :plan, :requested, :ip)',
-                [
-                    'name' => $business,
-                    'slug' => $slug,
-                    'plan' => Plans::FREE,
-                    'requested' => Plans::isPaid((string) $plan) ? $plan : null,
-                    'ip' => Request::ip(),
-                ],
-            );
-            $accountId = (int) $pdo->lastInsertId();
-
-            Database::run(
-                "INSERT INTO account_users (account_id, user_id, role) VALUES (:a, :u, 'owner')",
-                ['a' => $accountId, 'u' => $userId],
-            );
-            Database::run(
-                'INSERT INTO pages (account_id, phone, public_email) VALUES (:a, :phone, :email)',
-                ['a' => $accountId, 'phone' => $phone, 'email' => $email],
-            );
-            $pdo->commit();
-        } catch (\Throwable $e) {
-            $pdo->rollBack();
-            throw $e;
-        }
+        $created = Accounts::create(
+            ['business' => (string) $business, 'first' => (string) $first, 'last' => $last, 'email' => (string) $email,
+             'password' => $password, 'plan' => (string) $plan],
+            ['phone' => $phone, 'public_email' => $email],
+        );
+        ['user_id' => $userId, 'account_id' => $accountId, 'slug' => $slug] = $created;
 
         Auth::signIn($userId);
         Audit::log('account.created', 'account', $accountId, null, ['plan' => $plan, 'slug' => $slug]);

@@ -118,7 +118,7 @@ $isPreview = $mode === 'preview';
     <?= $err('budget') ?>
   </div>
 
-  <?php if ($full && $offers !== []): ?>
+  <?php if ($offers !== []): ?>
   <fieldset class="lf-field">
     <legend>Choose your Offer</legend>
     <div class="lf-checks lf-checks--one">

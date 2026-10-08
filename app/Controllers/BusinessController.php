@@ -263,7 +263,7 @@ final class BusinessController
         $data['budget'] = $budget;
 
         $offer = (string) ($_POST['offer'] ?? '');
-        $offerTitles = $bundle['full'] ? array_map(static fn ($o) => (string) $o['title'], $bundle['offers']) : [];
+        $offerTitles = array_map(static fn ($o) => (string) $o['title'], $bundle['offers']);
         $data['offer'] = in_array($offer, $offerTitles, true) ? $offer : null;
 
         if ($data['message'] === '') {
