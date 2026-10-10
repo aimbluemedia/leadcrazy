@@ -61,7 +61,7 @@ final class ErrorHandler
             header('Content-Type: text/html; charset=utf-8');
         }
 
-        if (self::$debug) {
+        if (self::$debug || self::viewerIsStaff()) {
             echo '<pre style="font:13px ui-monospace,Menlo,monospace;padding:1.5rem;'
                 . 'background:#fbe6da;color:#7a2d12;white-space:pre-wrap;">';
             echo 'Reference ' . $reference . "\n\n";
@@ -79,6 +79,24 @@ final class ErrorHandler
             . '<p style="color:#5a6b7c;">We have logged it. If you are the site owner, '
             . 'sign in at <code>/superadmin/errors</code> and search for reference '
             . '<strong>' . $reference . '</strong>.</p></div>';
+    }
+
+    /**
+     * True when the person looking at the error is signed in as superadmin.
+     * They get the detail on the page instead of a reference to look up;
+     * everybody else still sees only the reference. Any failure here (the
+     * database may be the very thing that is broken) means "no".
+     */
+    private static function viewerIsStaff(): bool
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE || empty($_SESSION['admin_user_id'])) {
+            return false;
+        }
+        try {
+            return Auth::isStaff();
+        } catch (Throwable) {
+            return false;
+        }
     }
 
     /**

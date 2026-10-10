@@ -565,3 +565,12 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .pv__pills { display: flex; flex-wrap: wrap; gap: 5px; }
 .pv__pill { font-size: 11px; border: 1.5px solid var(--green); border-radius: 980px; padding: 3px 9px; color: var(--ink); }
 .pv__pill--zip { border-color: var(--purple); }
+
+/* Password show / hide */
+.pw-wrap { position: relative; display: block; }
+.pw-wrap input { padding-right: 48px !important; }
+.pw-eye { position: absolute; top: 50%; right: 6px; transform: translateY(-50%); display: grid; place-items: center; width: 36px; height: 36px;
+  border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+.pw-eye:hover { color: var(--ink); background: var(--soft); }
+.pw-eye:focus-visible { outline: 3px solid rgba(0, 113, 227, .4); outline-offset: 0; }
+.pw-eye[aria-pressed=true] { color: var(--blue); }

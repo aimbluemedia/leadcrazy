@@ -65,8 +65,12 @@ final class SuperadminController
         $params = [];
         $where = '1 = 1';
         if ($q !== '') {
-            $where = '(a.business_name LIKE :q OR a.slug LIKE :q OR u.email LIKE :q)';
-            $params['q'] = '%' . $q . '%';
+            // Subqueries rather than GROUP BY: MariaDB with ONLY_FULL_GROUP_BY
+            // (common on shared hosts) refuses a.* grouped by a.id.
+            $where = '(a.business_name LIKE :q1 OR a.slug LIKE :q2 OR EXISTS (
+                SELECT 1 FROM account_users au JOIN users u ON u.id = au.user_id
+                 WHERE au.account_id = a.id AND u.email LIKE :q3))';
+            $params = ['q1' => '%' . $q . '%', 'q2' => '%' . $q . '%', 'q3' => '%' . $q . '%'];
         }
 
         $this->render('superadmin/accounts', [
@@ -74,13 +78,12 @@ final class SuperadminController
             'current' => 'accounts',
             'q' => $q,
             'accounts' => Database::all(
-                "SELECT a.*, MIN(u.email) AS email,
+                "SELECT a.*,
+                        (SELECT MIN(u.email) FROM account_users au JOIN users u ON u.id = au.user_id
+                          WHERE au.account_id = a.id) AS email,
                         (SELECT COUNT(*) FROM leads l WHERE l.account_id = a.id) AS lead_count
                    FROM accounts a
-              LEFT JOIN account_users au ON au.account_id = a.id
-              LEFT JOIN users u ON u.id = au.user_id
                   WHERE {$where}
-               GROUP BY a.id
                ORDER BY a.created_at DESC LIMIT 200",
                 $params,
             ),
