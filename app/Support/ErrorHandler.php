@@ -72,6 +72,19 @@ final class ErrorHandler
             return;
         }
 
+        // Can't reach the database at all: say so, because the fix is in
+        // config.php, not in the code, and the owner can't sign in to read
+        // the log while the database is down. Never includes credentials.
+        $dbHint = self::databaseHint($e);
+        if ($dbHint !== null) {
+            echo '<!doctype html><meta charset="utf-8"><title>Database connection problem</title>'
+                . '<div style="font:16px system-ui,sans-serif;max-width:36rem;margin:12vh auto;padding:0 1.5rem;">'
+                . '<h1 style="font-size:1.4rem;">The site can&rsquo;t reach its database</h1>'
+                . '<p style="color:#5a6b7c;">' . $dbHint . '</p>'
+                . '<p style="color:#5a6b7c;">Reference <strong>' . $reference . '</strong>.</p></div>';
+            return;
+        }
+
         echo '<!doctype html><meta charset="utf-8">'
             . '<title>Something went wrong</title>'
             . '<div style="font:16px system-ui,sans-serif;max-width:34rem;margin:12vh auto;padding:0 1.5rem;">'
@@ -79,6 +92,24 @@ final class ErrorHandler
             . '<p style="color:#5a6b7c;">We have logged it. If you are the site owner, '
             . 'sign in at <code>/superadmin/errors</code> and search for reference '
             . '<strong>' . $reference . '</strong>.</p></div>';
+    }
+
+    /** A plain-language hint for database connection failures, or null. */
+    private static function databaseHint(Throwable $e): ?string
+    {
+        if (!$e instanceof \PDOException) {
+            return null;
+        }
+        $code = (int) ($e->errorInfo[1] ?? 0) ?: (int) preg_replace('/\D.*/', '', (string) preg_replace('/^.*?\[(\d+)\].*$/s', '$1', $e->getMessage()));
+        return match ($code) {
+            1045 => 'The database username or password in <code>app/config.php</code> is wrong. '
+                . 'Copy them exactly from your hosting panel (Databases &rarr; MySQL) &mdash; or reset the password there and paste the new one.',
+            1044, 1049 => 'The database name in <code>app/config.php</code> is wrong, or that user has no access to it. '
+                . 'Check the database name and that the user is assigned to it in your hosting panel.',
+            2002, 2003, 2005 => 'The database server could not be reached. Check <code>host</code> in <code>app/config.php</code> '
+                . '(on most shared hosting it is <code>localhost</code>).',
+            default => null,
+        };
     }
 
     /**
