@@ -57,10 +57,6 @@ final class FormToken
 
     private static function sign(string $slug, int $at): string
     {
-        $key = (string) Config::get('app_key', '');
-        if ($key === '') {
-            throw new \RuntimeException('app_key is not set in app/config.php.');
-        }
-        return hash_hmac('sha256', 'leadform|' . $slug . '|' . $at, $key);
+        return hash_hmac('sha256', 'leadform|' . $slug . '|' . $at, AppKey::get());
     }
 }

@@ -135,6 +135,7 @@ $router->post('/superadmin/testimonial/save',   $sa('saveTestimonial'));
 $router->post('/superadmin/testimonial/delete', $sa('deleteTestimonial'));
 $router->get('/superadmin/leads',               $sa('leads'));
 $router->get('/superadmin/requests',            $sa('requests'));
+$router->get('/superadmin/errors',              $sa('errors'));
 $router->post('/superadmin/requests/done',      $sa('closeRequest'));
 
 // ---------------------------------------------------------------- members

@@ -9,6 +9,7 @@ $nav = [
     'accounts' => ['/superadmin/accounts', 'Accounts & pages'],
     'leads' => ['/superadmin/leads', 'All leads'],
     'requests' => ['/superadmin/requests', 'Change requests'],
+    'errors' => ['/superadmin/errors', 'Errors'],
 ];
 ?>
 <!doctype html>

@@ -406,6 +406,44 @@ final class SuperadminController
         $this->back((int) $account['id'], 'Temporary password: ' . $temp . ' -- give it to the member; they must change it when they sign in.', 'settings');
     }
 
+    /**
+     * The tail of storage/logs/error.log, newest first, so an error reference
+     * shown to a visitor can be looked up from the browser instead of the
+     * host's file manager.
+     */
+    public function errors(): void
+    {
+        $file = BASE_PATH . '/storage/logs/error.log';
+        $entries = [];
+        if (is_file($file)) {
+            $size = (int) filesize($file);
+            $fh = fopen($file, 'rb');
+            if ($fh !== false) {
+                fseek($fh, max(0, $size - 400000));
+                $tail = (string) stream_get_contents($fh);
+                fclose($fh);
+                foreach (preg_split('/\R{2,}/', trim($tail)) ?: [] as $chunk) {
+                    if (preg_match('/^\[[0-9: -]{19}\]/', $chunk)) {
+                        $entries[] = $chunk;
+                    }
+                }
+            }
+        }
+        $ref = strtoupper(preg_replace('/[^A-Fa-f0-9]/', '', (string) ($_GET['ref'] ?? '')) ?? '');
+        if ($ref !== '') {
+            $entries = array_values(array_filter($entries, static fn ($e) => str_contains($e, $ref)));
+        }
+
+        $this->render('superadmin/errors', [
+            'title' => 'Errors',
+            'current' => 'errors',
+            'entries' => array_slice(array_reverse($entries), 0, 50),
+            'ref' => $ref,
+            'exists' => is_file($file),
+            'appKeyMissing' => trim((string) \App\Support\Config::get('app_key', '')) === '',
+        ]);
+    }
+
     public function leads(): void
     {
         $this->render('superadmin/leads', [

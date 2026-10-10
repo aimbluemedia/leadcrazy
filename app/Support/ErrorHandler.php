@@ -77,7 +77,7 @@ final class ErrorHandler
             . '<div style="font:16px system-ui,sans-serif;max-width:34rem;margin:12vh auto;padding:0 1.5rem;">'
             . '<h1 style="font-size:1.4rem;">Something went wrong</h1>'
             . '<p style="color:#5a6b7c;">We have logged it. If you are the site owner, '
-            . 'check <code>storage/logs/error.log</code> for reference '
+            . 'sign in at <code>/superadmin/errors</code> and search for reference '
             . '<strong>' . $reference . '</strong>.</p></div>';
     }
 

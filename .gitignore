@@ -5,3 +5,4 @@ storage/logs/*.log
 public/uploads/*
 !public/uploads/.htaccess
 !public/uploads/index.html
+storage/app.key
