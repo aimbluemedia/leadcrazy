@@ -6,3 +6,4 @@ public/uploads/*
 !public/uploads/.htaccess
 !public/uploads/index.html
 storage/app.key
+storage/schema.version

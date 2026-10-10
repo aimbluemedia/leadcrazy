@@ -39,6 +39,10 @@ final class Database
             ],
         );
 
+        // Fill in any tables a half-finished import left out. Cheap after the
+        // first run: one file read. See Schema.
+        Schema::ensure(self::$pdo);
+
         return self::$pdo;
     }
 
