@@ -71,6 +71,7 @@ use App\Controllers\InstallController;
 use App\Controllers\MembersController;
 use App\Controllers\PageController;
 use App\Controllers\PasswordController;
+use App\Controllers\PasswordResetController;
 use App\Controllers\SignupController;
 use App\Controllers\SuperadminController;
 use App\Support\Router;
@@ -126,6 +127,7 @@ $router->get('/superadmin/preview',             $sa('preview'));
 $router->post('/superadmin/account/page',       $sa('savePage'));
 $router->post('/superadmin/account/settings',   $sa('saveSettings'));
 $router->post('/superadmin/account/approve',    $sa('approve'));
+$router->post('/superadmin/test-email',         $sa('testEmail'));
 $router->post('/superadmin/account/image',      $sa('uploadImage'));
 $router->post('/superadmin/account/password',   $sa('setTempPassword'));
 $router->post('/superadmin/gallery/add',        $sa('addGallery'));
@@ -145,7 +147,13 @@ $router->post('/members/login',    static fn () => $auth->login('members'));
 $router->post('/members/logout',   static fn () => $auth->logout('members'));
 $router->get('/members/password',  static fn () => (new PasswordController())->show('members'));
 $router->post('/members/password', static fn () => (new PasswordController())->update('members'));
-$router->get('/members/forgot',    static fn () => $auth->forgot());
+// Forgotten password. The token is the last path segment of the emailed link;
+// the form posts it back in the body so it stays out of access logs.
+$router->get('/members/forgot',  static fn () => (new PasswordResetController())->showForgot());
+$router->post('/members/forgot', static fn () => (new PasswordResetController())->sendLink());
+$router->getToken('/members/reset', static fn (string $t) => (new PasswordResetController())->showReset($t));
+$router->get('/members/reset',   static fn () => (new PasswordResetController())->showReset(''));
+$router->post('/members/reset',  static fn () => (new PasswordResetController())->reset());
 
 // The free lead form builder on /how-it-works publishes here. Under /members so
 // it has a session to sign the new owner in; protected by a signed form token.

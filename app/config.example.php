@@ -29,6 +29,27 @@ return [
     // Shown on the site and in the members area for help and page changes.
     'support_email' => 'support@leadcrazy.com',
 
+    // Email -- password reset links (and future notifications).
+    //
+    // Hostinger mailbox: hPanel > Emails > your mailbox > "Connect apps & devices"
+    // shows these settings. Use the full mailbox address as the username.
+    //   host smtp.hostinger.com, port 465, encryption ssl
+    // driver: 'smtp' to send, 'log' to write emails to storage/logs/mail.log
+    // instead. Left empty it uses smtp once host and password are filled in.
+    // Test it from superadmin > Overview > "Send test email".
+    'mail' => [
+        'driver'     => '',
+        'from_email' => '',            // defaults to the SMTP username; must be that mailbox on Hostinger
+        'from_name'  => 'LeadCrazy',
+        'smtp' => [
+            'host'       => 'smtp.hostinger.com',
+            'port'       => 465,
+            'encryption' => 'ssl',     // 'ssl' for 465, 'tls' for 587
+            'username'   => '',        // e.g. no-reply@leadcrazy.com
+            'password'   => '',
+        ],
+    ],
+
     // Cloudflare Turnstile -- the "I am not a robot" check on every lead form.
     // Create a widget at dash.cloudflare.com > Turnstile. Add leadcrazy.com as
     // a hostname; for $49 embeds, either list each member's domain or leave the

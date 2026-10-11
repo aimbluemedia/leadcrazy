@@ -48,3 +48,17 @@ use App\Support\View;
 <?php if ($openRequests > 0): ?>
   <div class="panel panel--warn"><h2><?= $openRequests ?> open change request<?= $openRequests === 1 ? '' : 's' ?></h2><a class="btn btn--primary btn--sm" href="/superadmin/requests">Work them</a></div>
 <?php endif; ?>
+
+<div class="panel">
+  <h2>Email</h2>
+  <p class="muted" style="margin-top:0">
+    <?= ($mailDriver ?? 'log') === 'smtp'
+        ? 'Sending through your mailbox (SMTP). Password reset links are emailed to members.'
+        : 'Not set up yet: emails are written to <code>storage/logs/mail.log</code>. Fill in <code>mail &gt; smtp</code> in <code>app/config.php</code>.' ?>
+  </p>
+  <form class="row" method="post" action="/superadmin/test-email">
+    <?= App\Support\Csrf::field() ?>
+    <input class="field" style="max-width:300px" type="email" name="to" required placeholder="you@example.com" value="<?= View::e($user['email'] ?? '') ?>">
+    <button class="btn btn--primary btn--sm" type="submit">Send test email</button>
+  </form>
+</div>

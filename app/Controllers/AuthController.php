@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Support\Auth;
-use App\Support\Config;
 use App\Support\Csrf;
 use App\Support\Request;
 use App\Support\View;
@@ -76,19 +75,6 @@ final class AuthController
             Auth::logout();
         }
         Request::redirect("/{$area}/login");
-    }
-
-    /**
-     * There is no email sending in this version, so a forgotten password is
-     * reset by a person: superadmin sets a temporary one, and the member must
-     * change it on next sign-in.
-     */
-    public function forgot(): void
-    {
-        echo View::render('auth/forgot', [
-            'title' => 'Forgot your password?',
-            'support' => (string) Config::get('support_email', ''),
-        ]);
     }
 
     private function assertArea(string $area): void

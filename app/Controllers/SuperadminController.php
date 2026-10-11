@@ -55,6 +55,7 @@ final class SuperadminController
                 'SELECT * FROM accounts WHERE requested_plan IS NOT NULL ORDER BY updated_at DESC LIMIT 50'
             ),
             'openRequests' => (int) (Database::first("SELECT COUNT(*) AS n FROM change_requests WHERE status = 'open'")['n'] ?? 0),
+            'mailDriver' => \App\Support\Mailer::driver(),
             'mrr' => (int) ($stats['pro'] ?? 0) * Plans::price(Plans::PRO) + (int) ($stats['premium'] ?? 0) * Plans::price(Plans::PREMIUM),
         ]);
     }
@@ -229,6 +230,21 @@ final class SuperadminController
             ['slug' => $account['slug'], 'plan' => $account['plan'], 'status' => $account['page_status']],
             ['slug' => $slug, 'plan' => $plan, 'status' => $status]);
         $this->back($id, 'Settings saved.', 'settings');
+    }
+
+    /** Sends one email through the configured mailbox, to prove the settings work. */
+    public function testEmail(): void
+    {
+        $this->csrf('/superadmin');
+        $to = trim((string) ($_POST['to'] ?? ''));
+        $result = \App\Support\Mailer::send($to, 'LeadCrazy test email',
+            "This is a test email from your LeadCrazy site.\n\nIf you are reading it, password reset emails will be delivered too.\n\nSent " . date('F j, Y g:ia') . " via " . \App\Support\Mailer::driver() . ".\n");
+        $_SESSION['admin_flash'] = $result['ok']
+            ? (\App\Support\Mailer::driver() === 'smtp'
+                ? 'Test email sent to ' . $to . '. Check the inbox (and spam folder).'
+                : 'Email is not set up yet, so the test was written to storage/logs/mail.log. Fill in mail > smtp in app/config.php.')
+            : 'Sending failed: ' . $result['error'];
+        Request::redirect('/superadmin');
     }
 
     /** One click from the build queue: make the page live. */
