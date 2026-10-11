@@ -42,8 +42,8 @@ $config = [
   <div class="container center">
     <span class="eyebrow">Free lead form builder</span>
     <h1>Build your lead form. <span class="accent">Free.</span></h1>
-    <p class="lede" style="margin:0 auto">Click through six quick steps and watch your page take shape. When you like it, publish it &mdash;
-      we host it for free at <strong><?= View::e($config['base']) ?>your-business</strong>.</p>
+    <p class="lede" style="margin:0 auto">Click through six quick steps and watch your page take shape. When you like it, submit it &mdash;
+      once approved we host it for free at <strong><?= View::e($config['base']) ?>your-business</strong>.</p>
   </div>
 </section>
 
@@ -51,7 +51,7 @@ $config = [
   <div class="container builder" data-builder data-config="<?= View::e(json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)) ?>">
     <div class="builder__panel">
       <ol class="builder__steps" aria-label="Steps">
-        <?php foreach (['Trade', 'Business', 'Services', 'Service area', 'Offer', 'Publish'] as $i => $label): ?>
+        <?php foreach (['Trade', 'Business', 'Services', 'Service area', 'Offer', 'Submit'] as $i => $label): ?>
           <li><button type="button" data-goto="<?= $i + 1 ?>"><span><?= $i + 1 ?></span><?= $label ?></button></li>
         <?php endforeach; ?>
       </ol>
@@ -135,10 +135,10 @@ $config = [
           </div>
         </fieldset>
 
-        <!-- 6. Publish -->
+        <!-- 6. Submit -->
         <fieldset class="bstep" data-step="6" hidden>
-          <legend><span class="bstep__n">Step 6 of 6</span>Publish your page &mdash; free</legend>
-          <p class="bstep__hint">Create your free account and your page goes live right away at:</p>
+          <legend><span class="bstep__n">Step 6 of 6</span>Submit your lead form &mdash; free</legend>
+          <p class="bstep__hint">Create your free account. Once our team approves your page, it goes live at:</p>
           <p class="slug-preview" data-slug-preview></p>
           <?php if ($error !== null): ?><div class="alert" role="alert"><?= View::e($error) ?></div><?php endif; ?>
           <div class="form__row">
@@ -148,7 +148,7 @@ $config = [
           <div><label for="p-email">Email</label><input id="p-email" name="email" type="email" maxlength="254" required autocomplete="email" value="<?= $o('email') ?>"><p class="hint">New leads show up in your dashboard; you sign in with this.</p></div>
           <div><label for="p-pass">Password</label><input id="p-pass" name="password" type="password" minlength="10" required autocomplete="new-password"><p class="hint">At least 10 characters.</p></div>
           <label class="check"><input type="checkbox" name="agree" value="1" required> <span>I agree to the <a href="/terms" target="_blank">terms</a> and <a href="/privacy" target="_blank">privacy policy</a>.</span></label>
-          <button class="btn btn--primary btn--xl btn--block" type="submit" data-publish>Publish my free page</button>
+          <button class="btn btn--primary btn--xl btn--block" type="submit" data-publish>Submit my free lead form</button>
           <p class="hint center">Free forever &middot; <?= Plans::FREE_MONTHLY_LEADS ?> leads a month &middot; no credit card &middot; upgrade any time</p>
           <p class="hint center">Already have an account? <a href="/members/login">Sign in</a>.</p>
         </fieldset>
@@ -195,12 +195,13 @@ $config = [
 
 <section class="section section--soft">
   <div class="container">
-    <h2 class="center">What happens after you publish</h2>
+    <h2 class="center">What happens after you submit</h2>
     <ol class="steps" style="margin-top:28px">
-      <li><h3>Your page is live</h3><p>Right away, at your own LeadCrazy address. Share the link anywhere.</p></li>
+      <li><h3>Finish your account</h3><p>Log in and add your logo, photos and a few words about your business.</p></li>
+      <li><h3>We approve it</h3><p>Usually within one business day. Then it is live at your own LeadCrazy address.</p></li>
       <li><h3>Leads come in</h3><p>Each request shows the services, timeline and budget they picked.</p></li>
       <li><h3>Work them in one place</h3><p>Mark leads contacted, quoted, won or lost, and export to CSV.</p></li>
-      <li><h3>Grow when ready</h3><p>Add photos, reviews and more offers, or put the form on your own site.</p></li>
+      
     </ol>
     <p class="center" style="margin-top:28px"><a class="btn btn--ghost" href="/pricing">Compare plans</a></p>
   </div>

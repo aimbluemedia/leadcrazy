@@ -33,6 +33,10 @@ if (!isset($tabs[$tab])) {
   </div>
   <div class="row">
     <a class="btn btn--ghost btn--sm" href="/superadmin/preview?id=<?= $id ?>" target="_blank" rel="noopener">Preview</a>
+    <?php if ($account['page_status'] !== 'live'): ?>
+      <form method="post" action="/superadmin/account/approve" class="inline" data-confirm="Approve and publish this page?"><?= $hidden ?>
+        <button class="btn btn--primary btn--sm" type="submit">Approve &amp; publish</button></form>
+    <?php endif; ?>
     <?php if ($account['page_status'] === 'live'): ?><a class="btn btn--ghost btn--sm" href="/<?= View::e($account['slug']) ?>" target="_blank" rel="noopener">Live page &#8599;</a><?php endif; ?>
   </div>
 </div>

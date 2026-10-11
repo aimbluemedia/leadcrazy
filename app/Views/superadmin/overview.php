@@ -12,16 +12,20 @@ use App\Support\View;
 </div>
 
 <div class="panel">
-  <h2>Build queue (<?= count($queue) ?>)</h2>
+  <h2>Pending approval (<?= count($queue) ?>)</h2>
   <?php if ($queue === []): ?><p class="muted">Nothing waiting. Every page is built.</p><?php else: ?>
   <div class="table-wrap"><table class="table">
-    <thead><tr><th>Business</th><th>Plan</th><th>Status</th><th>Intake sent</th><th>Signed up</th></tr></thead>
+    <thead><tr><th>Business</th><th>Plan</th><th>Status</th><th>Intake sent</th><th>Signed up</th><th></th></tr></thead>
     <tbody><?php foreach ($queue as $a): ?>
       <tr><td><a href="/superadmin/account?id=<?= (int) $a['id'] ?>"><?= View::e($a['business_name']) ?></a></td>
           <td><span class="tag tag--<?= View::e($a['plan']) ?>"><?= View::e(Plans::name((string) $a['plan'])) ?></span><?= $a['requested_plan'] ? ' &rarr; ' . View::e(Plans::name((string) $a['requested_plan'])) : '' ?></td>
           <td><span class="tag tag--<?= View::e($a['page_status']) ?>"><?= View::e($a['page_status']) ?></span></td>
           <td><?= $a['intake_at'] ? View::e(date('M j, g:ia', strtotime((string) $a['intake_at']) ?: 0)) : '<span class="muted">not yet</span>' ?></td>
-          <td><?= View::e(date('M j', strtotime((string) $a['created_at']) ?: 0)) ?></td></tr>
+          <td><?= View::e(date('M j', strtotime((string) $a['created_at']) ?: 0)) ?></td>
+          <td style="white-space:nowrap"><a class="btn btn--ghost btn--sm" href="/superadmin/preview?id=<?= (int) $a['id'] ?>" target="_blank" rel="noopener">Preview</a>
+            <form method="post" action="/superadmin/account/approve" class="inline" data-confirm="Approve and publish <?= View::e($a['business_name']) ?>?"><?= App\Support\Csrf::field() ?>
+              <input type="hidden" name="account_id" value="<?= (int) $a['id'] ?>"><input type="hidden" name="back" value="overview">
+              <button class="btn btn--primary btn--sm" type="submit">Approve &amp; publish</button></form></td></tr>
     <?php endforeach; ?></tbody>
   </table></div>
   <?php endif; ?>

@@ -8,8 +8,8 @@
     <?php if ($notice): ?><div class="alert alert--ok" style="margin-bottom:14px"><?= View::e($notice) ?></div><?php endif; ?>
     <form class="form" method="post" action="/<?= $area ?>/login">
       <?= Csrf::field() ?>
-      <div><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="username" autofocus></div>
-      <div><label for="password">Password</label><input id="password" name="password" type="password" required autocomplete="current-password"></div>
+      <div><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="username" value="<?= View::e(is_string($_GET['email'] ?? null) ? mb_substr($_GET['email'], 0, 254) : '') ?>"<?= empty($_GET['email']) ? ' autofocus' : '' ?>></div>
+      <div><label for="password">Password</label><input id="password" name="password" type="password" required autocomplete="current-password"<?= empty($_GET['email']) ? '' : ' autofocus' ?>></div>
       <button class="btn btn--primary btn--block" type="submit">Sign in</button>
     </form>
     <?php if ($area === 'members'): ?>

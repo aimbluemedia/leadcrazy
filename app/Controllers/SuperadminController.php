@@ -231,6 +231,19 @@ final class SuperadminController
         $this->back($id, 'Settings saved.', 'settings');
     }
 
+    /** One click from the build queue: make the page live. */
+    public function approve(): void
+    {
+        $account = $this->postedAccount();
+        $id = (int) $account['id'];
+        Database::run("UPDATE accounts SET page_status = 'live' WHERE id = :id", ['id' => $id]);
+        Database::run('UPDATE pages SET published_at = COALESCE(published_at, NOW()) WHERE account_id = :id', ['id' => $id]);
+        Audit::log('account.approved', 'account', $id, ['status' => $account['page_status']], ['status' => 'live']);
+        $_SESSION['admin_flash'] = $account['business_name'] . ' is live at ' . Pages::url((string) $account['slug']) . '.';
+        $back = (string) ($_POST['back'] ?? '');
+        Request::redirect($back === 'overview' ? '/superadmin' : '/superadmin/account?id=' . $id . '&tab=settings');
+    }
+
     /** Logo or hero banner. */
     public function uploadImage(): void
     {

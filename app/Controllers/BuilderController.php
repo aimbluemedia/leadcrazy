@@ -6,7 +6,6 @@ namespace App\Controllers;
 
 use App\Support\Accounts;
 use App\Support\Audit;
-use App\Support\Auth;
 use App\Support\Database;
 use App\Support\FormToken;
 use App\Support\Pages;
@@ -19,8 +18,8 @@ use App\Support\View;
 /**
  * The free lead form builder on /how-it-works, and publishing what it built.
  *
- * Publishing creates a Free account and puts the page live immediately: no
- * staff build in between. Staff can still polish it in superadmin later.
+ * Submitting creates a Free account with the page pending approval. The
+ * owner logs in to finish their account; staff approve it and it goes live.
  *
  * The builder page has no session (it is a public marketing page), so the
  * publish form is protected by a signed FormToken rather than a session CSRF
@@ -34,6 +33,17 @@ final class BuilderController
     public function show(): void
     {
         $this->render([], [], null);
+    }
+
+    /** GET /members/pending -- shown once, right after submitting the builder. */
+    public function pending(): void
+    {
+        $info = $_SESSION['builder_pending'] ?? null;
+        unset($_SESSION['builder_pending']);
+        if (!is_array($info)) {
+            Request::redirect('/members/login');
+        }
+        echo View::render('auth/pending', ['title' => 'Your lead form is pending approval'] + $info);
     }
 
     public function publish(): void
@@ -87,7 +97,7 @@ final class BuilderController
         $created = Accounts::create(
             [
                 'business' => $clean['business'], 'first' => $old['first_name'], 'last' => $old['last_name'] ?: null,
-                'email' => $old['email'], 'password' => $password, 'plan' => Plans::FREE, 'status' => 'live',
+                'email' => $old['email'], 'password' => $password, 'plan' => Plans::FREE, 'status' => 'building',
             ],
             [
                 'badge' => 'Free ' . $trade['noun'] . ' Quote',
@@ -106,7 +116,6 @@ final class BuilderController
                 'zipcodes' => $json($clean['zips']),
                 'form_budgets' => $json($trade['budgets']),
                 'accent_color' => '#0071e3',
-                'published_at' => date('Y-m-d H:i:s'),
             ],
         );
 
@@ -118,12 +127,17 @@ final class BuilderController
             );
         }
 
-        Auth::signIn($created['user_id']);
         Audit::log('account.created', 'account', $created['account_id'], null, ['via' => 'builder', 'trade' => $clean['trade'], 'slug' => $created['slug']]);
 
-        $_SESSION['members_flash'] = 'Your page is live at ' . Pages::url($created['slug'])
-            . ' - share the link and leads will land right here.';
-        Request::redirect('/members');
+        // Not signed in on purpose: the next step is to log in and finish the
+        // account, and the page waits for a person to approve it before it goes
+        // live. The pending page reads these once.
+        $_SESSION['builder_pending'] = [
+            'business' => $clean['business'],
+            'url' => Pages::url($created['slug']),
+            'email' => $old['email'],
+        ];
+        Request::redirect('/members/pending');
     }
 
     /**

@@ -125,6 +125,7 @@ $router->get('/superadmin/account',             $sa('account'));
 $router->get('/superadmin/preview',             $sa('preview'));
 $router->post('/superadmin/account/page',       $sa('savePage'));
 $router->post('/superadmin/account/settings',   $sa('saveSettings'));
+$router->post('/superadmin/account/approve',    $sa('approve'));
 $router->post('/superadmin/account/image',      $sa('uploadImage'));
 $router->post('/superadmin/account/password',   $sa('setTempPassword'));
 $router->post('/superadmin/gallery/add',        $sa('addGallery'));
@@ -149,6 +150,7 @@ $router->get('/members/forgot',    static fn () => $auth->forgot());
 // The free lead form builder on /how-it-works publishes here. Under /members so
 // it has a session to sign the new owner in; protected by a signed form token.
 $router->post('/members/build', static fn () => (new BuilderController())->publish());
+$router->get('/members/pending', static fn () => (new BuilderController())->pending());
 
 $router->get('/members/signup',  static fn () => (new SignupController())->show());
 $router->post('/members/signup', static fn () => (new SignupController())->store());
