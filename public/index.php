@@ -77,6 +77,13 @@ use App\Controllers\SuperadminController;
 use App\Support\Router;
 
 header('X-Content-Type-Options: nosniff');
+
+// Never let a CDN or LiteSpeed cache a page: lead forms and the builder carry
+// a time-stamped token, and a cached copy hands every visitor a stale one.
+// Static files in /assets and /uploads are served by the web server, not here.
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, private');
+header('Pragma: no-cache');
+header('X-LiteSpeed-Cache-Control: no-cache');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
 // Everything refuses to be framed except /embed/, which exists to be framed on

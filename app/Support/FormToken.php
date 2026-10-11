@@ -19,7 +19,9 @@ namespace App\Support;
 final class FormToken
 {
     public const MIN_SECONDS = 3;
-    public const MAX_SECONDS = 6 * 3600;
+    // Long on purpose: a page left open in a tab overnight is still a real
+    // visitor. Honeypot, rate limits and Turnstile do the anti-bot work.
+    public const MAX_SECONDS = 7 * 86400;
 
     public static function issue(string $slug, ?int $at = null): string
     {

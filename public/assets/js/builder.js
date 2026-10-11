@@ -246,4 +246,6 @@
   });
 
   go(step);
+  var banner = document.getElementById('builder-error');
+  if (banner) banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 })();

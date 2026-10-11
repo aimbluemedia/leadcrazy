@@ -56,6 +56,9 @@ $config = [
         <?php endforeach; ?>
       </ol>
 
+      <?php if ($error !== null): ?>
+        <div class="alert builder__banner" role="alert" id="builder-error"><strong>Your lead form was not submitted yet.</strong> <?= View::e($error) ?></div>
+      <?php endif; ?>
       <noscript><div class="alert alert--info">The builder needs JavaScript. You can still <a href="/members/signup">create your free account</a> and we will build your page for you.</div></noscript>
 
       <form method="post" action="/members/build" class="builder__form form" novalidate data-builder-form>
@@ -146,7 +149,6 @@ $config = [
           <legend><span class="bstep__n">Step 6 of 6</span>Submit your lead form &mdash; free</legend>
           <p class="bstep__hint">Create your free account. Once our team approves your page, it goes live at:</p>
           <p class="slug-preview" data-slug-preview></p>
-          <?php if ($error !== null): ?><div class="alert" role="alert"><?= View::e($error) ?></div><?php endif; ?>
           <div class="form__row">
             <div><label for="p-first">First name</label><input id="p-first" name="first_name" type="text" maxlength="80" required autocomplete="given-name" value="<?= $o('first_name') ?>"></div>
             <div><label for="p-last">Last name</label><input id="p-last" name="last_name" type="text" maxlength="80" autocomplete="family-name" value="<?= $o('last_name') ?>"></div>

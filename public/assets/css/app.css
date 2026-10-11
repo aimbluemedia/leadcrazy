@@ -590,3 +590,5 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .exists-note { padding: 16px 18px; border-radius: 14px; background: var(--blue-soft); color: var(--ink); }
 .exists-note[hidden] { display: none; }
 .exists-note p { margin: 4px 0 12px; font-size: 15px; color: var(--text); }
+
+.builder__banner { margin-bottom: 20px; }

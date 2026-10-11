@@ -90,7 +90,7 @@ final class BuilderController
 
         $problem = FormToken::problem(self::TOKEN_SCOPE, is_string($_POST['_ft'] ?? null) ? $_POST['_ft'] : null);
         if ($problem !== null && $problem !== 'too fast') {
-            $this->fail($state, $old, 'This page had been open a long time. Please check your details and publish again.');
+            $this->fail($state, $old, 'This page had been open a long time. Please check your details and submit again.');
         }
         if (RateLimiter::tooManyAttempts('build:' . Request::ip(), 5, 3600)) {
             $this->fail($state, $old, 'Too many new pages from your connection. Please try again in an hour.');
@@ -247,6 +247,10 @@ final class BuilderController
             $state['offer'] = $state['offerState'];
             unset($state['offerState']);
         }
+        // Logged so a turned-away submission shows up in superadmin > Errors
+        // instead of vanishing. Business name only; no contact details.
+        \App\Support\ErrorHandler::note('builder', 'submission not accepted ('
+            . mb_substr((string) ($state['business'] ?? '?'), 0, 80) . '): ' . $error);
         http_response_code(422);
         $this->render($state, $old, $error);
         exit;
