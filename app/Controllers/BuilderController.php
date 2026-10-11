@@ -9,6 +9,7 @@ use App\Support\Audit;
 use App\Support\Database;
 use App\Support\Duplicates;
 use App\Support\FormToken;
+use App\Support\Notify;
 use App\Support\Pages;
 use App\Support\Plans;
 use App\Support\RateLimiter;
@@ -155,6 +156,11 @@ final class BuilderController
             );
         }
 
+        Notify::team('New lead form to approve: ' . $clean['business'], $created['account_id'], [
+            'Business' => $clean['business'], 'Trade' => $trade['label'], 'Place' => $place,
+            'Owner' => trim($old['first_name'] . ' ' . $old['last_name']) . ' <' . $old['email'] . '>',
+            'Phone' => $clean['phone'], 'Website' => $clean['website'], 'Address' => Pages::url($created['slug']),
+        ]);
         Audit::log('account.created', 'account', $created['account_id'], null, ['via' => 'builder', 'trade' => $clean['trade'], 'slug' => $created['slug']]);
 
         // Not signed in on purpose: the next step is to log in and finish the

@@ -8,6 +8,7 @@ use App\Support\Config;
 use App\Support\ErrorHandler;
 use App\Support\FormToken;
 use App\Support\Leads;
+use App\Support\Notify;
 use App\Support\Pages;
 use App\Support\Plans;
 use App\Support\RateLimiter;
@@ -152,12 +153,13 @@ final class BusinessController
         }
 
         try {
-            Leads::create($account, $data, $isEmbed ? 'embed' : 'hosted');
+            $leadId = Leads::create($account, $data, $isEmbed ? 'embed' : 'hosted');
         } catch (\Throwable $e) {
             ErrorHandler::note('lead', 'could not store a lead for ' . $slug . ': ' . $e->getMessage());
             throw $e;
         }
 
+        Notify::newLead($account, $leadId);
         Request::redirect($thanks);
     }
 

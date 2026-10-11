@@ -29,6 +29,10 @@ return [
     // Shown on the site and in the members area for help and page changes.
     'support_email' => 'support@leadcrazy.com',
 
+    // Where team alerts go (new builder submissions to approve, new signups).
+    // Empty: support_email.
+    'notify_email' => '',
+
     // Email -- password reset links (and future notifications).
     //
     // Hostinger mailbox: hPanel > Emails > your mailbox > "Connect apps & devices"

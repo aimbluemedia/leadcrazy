@@ -9,6 +9,7 @@ use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Csrf;
 use App\Support\Duplicates;
+use App\Support\Notify;
 use App\Support\Plans;
 use App\Support\RateLimiter;
 use App\Support\Request;
@@ -78,6 +79,10 @@ final class SignupController
         );
         ['user_id' => $userId, 'account_id' => $accountId, 'slug' => $slug] = $created;
 
+        Notify::team('New signup: ' . $business, $accountId, [
+            'Business' => (string) $business, 'Plan' => (string) $plan,
+            'Owner' => trim($first . ' ' . $last) . ' <' . $email . '>', 'Phone' => (string) $phone,
+        ]);
         Auth::signIn($userId);
         Audit::log('account.created', 'account', $accountId, null, ['plan' => $plan, 'slug' => $slug]);
 
