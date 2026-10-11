@@ -88,6 +88,12 @@ $config = [
             <div><label for="b-city">City</label><input id="b-city" type="text" maxlength="80" data-field="city" placeholder="Phoenix" autocomplete="address-level2"></div>
             <div><label for="b-state">State</label><input id="b-state" type="text" maxlength="40" data-field="state" placeholder="AZ" autocomplete="address-level1"></div>
           </div>
+          <div><label for="b-web">Website <span class="count">optional</span></label><input id="b-web" type="text" inputmode="url" maxlength="300" data-field="website" placeholder="stormlandscaping.com" autocomplete="url"></div>
+          <div class="exists-note" data-exists hidden>
+            <strong>Looks like you already have a LeadCrazy profile.</strong>
+            <p>We found a profile matching this business name or website. Log in to view it and pick up where you left off.</p>
+            <a class="btn btn--primary btn--sm" href="/members/login">Log in and view my profile</a>
+          </div>
         </fieldset>
 
         <!-- 3. Services -->

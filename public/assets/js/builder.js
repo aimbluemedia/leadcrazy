@@ -14,7 +14,7 @@
   function inDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
 
   var state = Object.assign({
-    trade: '', business: '', phone: '', city: '', state: '',
+    trade: '', business: '', phone: '', city: '', state: '', website: '',
     services: [], allServices: [], cities: [], zips: [],
     offer: { on: true, title: '', body: '', expires: inDays(30) }
   }, cfg.state || {});
@@ -204,12 +204,33 @@
     render();
   }
 
+  // Before leaving step 2, ask whether this business already has a profile,
+  // so nobody fills in four more steps only to be told at the end.
+  var existsBox = $('[data-exists]');
+  function checkExisting(done) {
+    var body = new URLSearchParams({ business: state.business, website: state.website || '' });
+    fetch('/members/check', { method: 'POST', body: body, credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : { match: false }; })
+      .then(function (j) { done(!!(j && j.match)); })
+      .catch(function () { done(false); });
+  }
+  $$('[data-field="business"], [data-field="website"]').forEach(function (i) {
+    i.addEventListener('input', function () { existsBox.hidden = true; });
+  });
+
   $('[data-next]').addEventListener('click', function () {
     var p = problem(step);
     if (p) { flash(p); return; }
     flash('');
-    go(step + 1);
-    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var advance = function () { go(step + 1); root.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    if (step !== 2) { advance(); return; }
+    var btn = $('[data-next]');
+    btn.disabled = true;
+    checkExisting(function (match) {
+      btn.disabled = false;
+      existsBox.hidden = !match;
+      if (!match) advance();
+    });
   });
   $('[data-back]').addEventListener('click', function () { flash(''); go(step - 1); });
   $$('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { flash(''); go(+b.getAttribute('data-goto')); }); });
@@ -217,7 +238,7 @@
   form.addEventListener('submit', function (e) {
     for (var i = 1; i <= 5; i++) { var p = problem(i); if (p) { e.preventDefault(); go(i); flash(p); return; } }
     $('[data-builder-json]').value = JSON.stringify({
-      trade: state.trade, business: state.business, phone: state.phone, city: state.city, state: state.state,
+      trade: state.trade, business: state.business, phone: state.phone, city: state.city, state: state.state, website: state.website,
       services: state.services, cities: state.cities, zips: state.zips, offer: state.offer
     });
     var btn = $('[data-publish]');

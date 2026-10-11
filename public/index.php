@@ -151,6 +151,7 @@ $router->get('/members/forgot',    static fn () => $auth->forgot());
 // it has a session to sign the new owner in; protected by a signed form token.
 $router->post('/members/build', static fn () => (new BuilderController())->publish());
 $router->get('/members/pending', static fn () => (new BuilderController())->pending());
+$router->post('/members/check',  static fn () => (new BuilderController())->check());
 
 $router->get('/members/signup',  static fn () => (new SignupController())->show());
 $router->post('/members/signup', static fn () => (new SignupController())->store());

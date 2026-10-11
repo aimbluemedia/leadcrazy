@@ -8,6 +8,7 @@ use App\Support\Accounts;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Csrf;
+use App\Support\Duplicates;
 use App\Support\Plans;
 use App\Support\RateLimiter;
 use App\Support\Request;
@@ -66,8 +67,8 @@ final class SignupController
         if (empty($_POST['agree'])) {
             $this->fail('Please agree to the terms to continue.');
         }
-        if (Accounts::emailTaken((string) $email)) {
-            $this->fail('There is already an account with that email. Sign in instead, or use another address.');
+        if (Duplicates::find((string) $email, (string) $business, null) !== []) {
+            BuilderController::exists((string) $email, (string) $business);
         }
 
         $created = Accounts::create(

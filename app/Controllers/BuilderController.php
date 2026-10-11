@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Support\Accounts;
 use App\Support\Audit;
 use App\Support\Database;
+use App\Support\Duplicates;
 use App\Support\FormToken;
 use App\Support\Pages;
 use App\Support\Plans;
@@ -33,6 +34,32 @@ final class BuilderController
     public function show(): void
     {
         $this->render([], [], null);
+    }
+
+    /**
+     * POST /members/check -- the builder asks this when leaving step 2, so a
+     * business that already has a profile finds out before filling in the rest.
+     * Answers only yes or no, and is rate limited.
+     */
+    public function check(): void
+    {
+        header('Content-Type: application/json');
+        if (RateLimiter::tooManyAttempts('dupcheck:' . Request::ip(), 30, 600)) {
+            echo json_encode(['match' => false]);
+            return;
+        }
+        $business = mb_substr(trim((string) ($_POST['business'] ?? '')), 0, 160);
+        $website = mb_substr(trim((string) ($_POST['website'] ?? '')), 0, 300);
+        $email = mb_substr(trim((string) ($_POST['email'] ?? '')), 0, 254);
+        echo json_encode(['match' => Duplicates::find($email, $business, $website) !== []]);
+    }
+
+    /** The "you already have a profile" page. */
+    public static function exists(string $email, string $business): never
+    {
+        http_response_code(409);
+        echo View::render('auth/exists', ['title' => 'You already have a profile', 'email' => $email, 'business' => $business]);
+        exit;
     }
 
     /** GET /members/pending -- shown once, right after submitting the builder. */
@@ -86,8 +113,8 @@ final class BuilderController
         if (empty($_POST['agree'])) {
             $this->fail($clean, $old, 'Please agree to the terms to publish your page.');
         }
-        if (Accounts::emailTaken($old['email'])) {
-            $this->fail($clean, $old, 'There is already an account with that email. Sign in instead, or use another address.');
+        if (Duplicates::find($old['email'], $clean['business'], $clean['website']) !== []) {
+            $this->exists($old['email'], $clean['business']);
         }
 
         $trade = Trades::get($clean['trade']);
@@ -110,6 +137,7 @@ final class BuilderController
                 'public_email' => $old['email'],
                 'city' => $clean['city'],
                 'state' => $clean['state'] ?: null,
+                'website' => $clean['website'] !== '' ? (preg_match('#^https?://#i', $clean['website']) ? $clean['website'] : 'https://' . $clean['website']) : null,
                 'services' => $json($clean['services']),
                 'form_services' => $json($clean['services']),
                 'locations' => $json($clean['cities']),
@@ -165,6 +193,7 @@ final class BuilderController
             'phone' => $str($s['phone'] ?? '', 40),
             'city' => $str($s['city'] ?? '', 80),
             'state' => $str($s['state'] ?? '', 40),
+            'website' => $str($s['website'] ?? '', 300),
             'services' => $list($s['services'] ?? [], 60, 15),
             'cities' => $list($s['cities'] ?? [], 60, Plans::FREE_CITIES),
             // Filter before capping, so a bad entry never pushes out a good one.
@@ -195,6 +224,7 @@ final class BuilderController
             $clean['business'] === '' => 'Enter your business name.',
             strlen((string) preg_replace('/\D+/', '', $clean['phone'])) < 10 => 'Enter a phone number customers can call.',
             $clean['city'] === '' => 'Enter the city you are based in.',
+            $clean['website'] !== '' && Duplicates::host($clean['website']) === '' => 'That website address does not look right. Use something like yourbusiness.com, or leave it blank.',
             $clean['services'] === [] => 'Turn on at least one service.',
             $clean['cities'] === [] && $clean['zips'] === [] => 'Add at least one city or zip code.',
             $offerOn && $offer['title'] === '' => 'Give your offer a title, or switch it off.',
