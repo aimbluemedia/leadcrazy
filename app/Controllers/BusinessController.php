@@ -105,7 +105,8 @@ final class BusinessController
 
         // The honeypot. Hidden from people with CSS and aria-hidden, filled in by
         // bots that complete every field. Told it worked, so it does not adapt.
-        if (trim((string) ($_POST['company_website'] ?? '')) !== '') {
+        if (trim((string) ($_POST['lc_trap'] ?? '')) !== '') {
+            ErrorHandler::note('lead', 'spam trap field was filled on ' . $slug . '; lead dropped');
             Request::redirect($thanks);
         }
 

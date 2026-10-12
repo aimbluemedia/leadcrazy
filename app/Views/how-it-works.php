@@ -65,7 +65,7 @@ $config = [
         <input type="hidden" name="_ft" value="<?= View::e($token) ?>">
         <input type="hidden" name="builder" value="" data-builder-json>
         <div class="lf-hp" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden">
-          <label>Company website <input type="text" name="company_website" tabindex="-1" autocomplete="off"></label>
+          <label>Leave this empty <input type="text" name="lc_trap" value="" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other"></label>
         </div>
 
         <!-- 1. Trade -->

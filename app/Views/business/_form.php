@@ -42,7 +42,7 @@ $isPreview = $mode === 'preview';
   <input type="hidden" name="_ft" value="<?= View::e($form['token']) ?>">
   <input type="hidden" name="via" value="<?= View::e($mode === 'preview' ? 'hosted' : $mode) ?>">
   <div class="lf-hp" aria-hidden="true">
-    <label>Company website <input type="text" name="company_website" tabindex="-1" autocomplete="off"></label>
+    <label>Leave this empty <input type="text" name="lc_trap" value="" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other"></label>
   </div>
 
   <div class="lf-row">

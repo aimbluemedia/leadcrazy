@@ -76,12 +76,19 @@ final class BuilderController
 
     public function publish(): void
     {
-        if (trim((string) ($_POST['company_website'] ?? '')) !== '') {
+        // The trap field is named and labelled so browser autofill leaves it
+        // alone (the old "company_website" got autofilled, silently turning
+        // real people away). Logged, so a false positive is visible.
+        if (trim((string) ($_POST['lc_trap'] ?? '')) !== '') {
+            \App\Support\ErrorHandler::note('builder', 'spam trap field was filled; submission dropped');
             Request::redirect('/how-it-works');
         }
 
         $raw = json_decode((string) ($_POST['builder'] ?? ''), true);
         $state = is_array($raw) ? $raw : [];
+        if ($state === []) {
+            \App\Support\ErrorHandler::note('builder', 'form arrived without the builder details (page script did not run)');
+        }
         $old = [
             'first_name' => mb_substr(trim((string) ($_POST['first_name'] ?? '')), 0, 80),
             'last_name' => mb_substr(trim((string) ($_POST['last_name'] ?? '')), 0, 80),
