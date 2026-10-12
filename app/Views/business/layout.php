@@ -54,9 +54,6 @@ $desc = trim((string) ($page['intro'] ?? '' ?: ($page['subheadline'] ?? '')));
     </a>
     <nav class="lp-nav">
       <a href="#quote" class="lp-nav__cta">Get Quote</a>
-      <?php if (!empty($page['phone'])): ?>
-        <a href="tel:<?= View::e(preg_replace('/[^0-9+]/', '', (string) $page['phone'])) ?>"><?= View::e($page['phone']) ?></a>
-      <?php endif; ?>
     </nav>
   </div>
 </header>

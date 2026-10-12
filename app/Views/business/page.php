@@ -169,5 +169,7 @@ $showGallery = $full && $gallery !== [];
         <p class="lp-center"><button class="lp-more" type="button" data-offers-more>View All Offers</button></p>
       <?php endif; ?>
     <?php endif; ?>
+
+    <?= View::render('business/_profile', get_defined_vars()) ?>
   </section>
 </div>
