@@ -592,3 +592,26 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .exists-note p { margin: 4px 0 12px; font-size: 15px; color: var(--text); }
 
 .builder__banner { margin-bottom: 20px; }
+
+/* ---------------------------------------------------------------- FAQ cards */
+.faq { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1040px; margin: 0 auto; }
+@media (min-width: 760px) { .faq { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.faq__item {
+  background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  transition: border-color .2s, box-shadow .2s, background-color .2s, transform .2s;
+}
+.faq__item:hover { border-color: var(--blue); box-shadow: 0 10px 30px rgba(0, 113, 227, .14); transform: translateY(-2px); }
+.faq__item[open] { background: var(--blue-soft); border-color: var(--blue); }
+.faq__item summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 22px; font-weight: 600; font-size: 17px; line-height: 1.35; color: var(--ink);
+}
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after {
+  content: "+"; flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 20px; font-weight: 500;
+  background: var(--blue-soft); color: var(--blue); transition: transform .2s, background-color .2s, color .2s;
+}
+.faq__item[open] summary::after { transform: rotate(45deg); background: var(--blue); color: #fff; }
+.faq__item summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 18px; }
+.faq__item p { margin: 0; padding: 0 22px 20px; color: #424245; line-height: 1.6; }
