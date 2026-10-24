@@ -153,7 +153,7 @@ $config = [
             <div><label for="p-first">First name</label><input id="p-first" name="first_name" type="text" maxlength="80" required autocomplete="given-name" value="<?= $o('first_name') ?>"></div>
             <div><label for="p-last">Last name</label><input id="p-last" name="last_name" type="text" maxlength="80" autocomplete="family-name" value="<?= $o('last_name') ?>"></div>
           </div>
-          <div><label for="p-email">Email</label><input id="p-email" name="email" type="email" maxlength="254" required autocomplete="email" value="<?= $o('email') ?>"><p class="hint">New leads show up in your dashboard; you sign in with this.</p></div>
+          <div><label for="p-email">Email</label><input id="p-email" name="email" type="email" maxlength="254" required autocomplete="email" value="<?= $o('email') ?>" data-email-check><p class="field-error" data-email-msg<?= empty($old['email_taken']) ? ' hidden' : '' ?>><?= View::e(App\Controllers\BuilderController::EMAIL_TAKEN) ?> <a href="/members/login">Sign in</a></p><p class="hint">New leads show up in your dashboard; you sign in with this.</p></div>
           <div><label for="p-pass">Password</label><input id="p-pass" name="password" type="password" minlength="10" required autocomplete="new-password"><p class="hint">At least 10 characters.</p></div>
           <label class="check"><input type="checkbox" name="agree" value="1" required> <span>I agree to the <a href="/terms" target="_blank">terms</a> and <a href="/privacy" target="_blank">privacy policy</a>.</span></label>
           <button class="btn btn--primary btn--xl btn--block" type="submit" data-publish>Submit my free lead form</button>

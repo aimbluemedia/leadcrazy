@@ -236,6 +236,8 @@
   $$('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { flash(''); go(+b.getAttribute('data-goto')); }); });
 
   form.addEventListener('submit', function (e) {
+    var emailMsg = $('[data-email-msg]');
+    if (emailMsg && !emailMsg.hidden) { e.preventDefault(); $('#p-email').focus(); return; }
     for (var i = 1; i <= 5; i++) { var p = problem(i); if (p) { e.preventDefault(); go(i); flash(p); return; } }
     $('[data-builder-json]').value = JSON.stringify({
       trade: state.trade, business: state.business, phone: state.phone, city: state.city, state: state.state, website: state.website,

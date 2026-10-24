@@ -32,6 +32,8 @@ final class BuilderController
 {
     private const TOKEN_SCOPE = 'builder';
 
+    public const EMAIL_TAKEN = 'That email address is already in use, so it cannot be used for a new account. Sign in with it instead, or use a different email.';
+
     public function show(): void
     {
         $this->render([], [], null);
@@ -52,6 +54,12 @@ final class BuilderController
         $business = mb_substr(trim((string) ($_POST['business'] ?? '')), 0, 160);
         $website = mb_substr(trim((string) ($_POST['website'] ?? '')), 0, 300);
         $email = mb_substr(trim((string) ($_POST['email'] ?? '')), 0, 254);
+        if ($business === '' && $website === '') {
+            // Email only: the email field on the builder and signup forms.
+            $email = mb_strtolower($email);
+            echo json_encode(['match' => filter_var($email, FILTER_VALIDATE_EMAIL) !== false && Accounts::emailTaken($email)]);
+            return;
+        }
         echo json_encode(['match' => Duplicates::find($email, $business, $website) !== []]);
     }
 
@@ -120,6 +128,10 @@ final class BuilderController
         }
         if (empty($_POST['agree'])) {
             $this->fail($clean, $old, 'Please agree to the terms to publish your page.');
+        }
+        if (Accounts::emailTaken($old['email'])) {
+            $old['email_taken'] = '1';
+            $this->fail($clean, $old, self::EMAIL_TAKEN);
         }
         if (Duplicates::find($old['email'], $clean['business'], $clean['website']) !== []) {
             $this->exists($old['email'], $clean['business']);

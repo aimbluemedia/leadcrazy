@@ -32,7 +32,7 @@ $plan = is_string($old['plan'] ?? null) && Plans::isValid($old['plan']) ? $old['
         <div><label for="last_name">Last name</label><input id="last_name" name="last_name" type="text" autocomplete="family-name" value="<?= $o('last_name') ?>"></div>
       </div>
       <div class="form__row">
-        <div><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" value="<?= $o('email') ?>"></div>
+        <div><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email" value="<?= $o('email') ?>" data-email-check><p class="field-error" data-email-msg hidden><?= View::e(App\Controllers\BuilderController::EMAIL_TAKEN) ?> <a href="/members/login">Sign in</a></p></div>
         <div><label for="phone">Business phone</label><input id="phone" name="phone" type="tel" required autocomplete="tel" value="<?= $o('phone') ?>"></div>
       </div>
       <div><label for="password">Password</label><input id="password" name="password" type="password" required minlength="<?= PasswordController::MIN_LENGTH ?>" autocomplete="new-password"><p class="hint">At least <?= PasswordController::MIN_LENGTH ?> characters.</p></div>

@@ -92,3 +92,35 @@
     if (input.form) input.form.addEventListener('submit', function () { input.type = 'password'; });
   });
 })();
+
+/* Email already in use: checked as soon as the field is left, so nobody
+   finishes a signup only to be told at the end. The server checks again. */
+(function () {
+  'use strict';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-email-check]'), function (input) {
+    var msg = input.parentNode.querySelector('[data-email-msg]');
+    if (!msg) return;
+    var last = '';
+    function show(taken) {
+      msg.hidden = !taken;
+      if (taken) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+    }
+    if (!msg.hidden) { last = input.value.trim().toLowerCase(); input.setAttribute('aria-invalid', 'true'); }
+    function check() {
+      var v = input.value.trim().toLowerCase();
+      if (v === last) return;
+      last = v;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { show(false); return; }
+      fetch('/members/check', { method: 'POST', body: new URLSearchParams({ email: v }), credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.json() : { match: false }; })
+        .then(function (j) { if (input.value.trim().toLowerCase() === v) show(!!(j && j.match)); })
+        .catch(function () {});
+    }
+    input.addEventListener('blur', check);
+    input.addEventListener('change', check);
+    input.addEventListener('input', function () { if (input.value.trim().toLowerCase() !== last) show(false); });
+    if (input.form) input.form.addEventListener('submit', function (e) {
+      if (!msg.hidden) { e.preventDefault(); input.focus(); }
+    });
+  });
+})();

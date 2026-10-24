@@ -615,3 +615,9 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .faq__item[open] summary::after { transform: rotate(45deg); background: var(--blue); color: #fff; }
 .faq__item summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 18px; }
 .faq__item p { margin: 0; padding: 0 22px 20px; color: #424245; line-height: 1.6; }
+
+/* Inline field message, e.g. "email already in use" */
+.field-error { margin: 6px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--red-soft); color: var(--red-ink); font-size: 14px; line-height: 1.45; }
+.field-error[hidden] { display: none; }
+.field-error a { color: var(--red-ink); font-weight: 600; text-decoration: underline; }
+input[aria-invalid="true"] { border-color: var(--red-ink) !important; }

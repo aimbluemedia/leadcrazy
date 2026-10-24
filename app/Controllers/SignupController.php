@@ -68,6 +68,9 @@ final class SignupController
         if (empty($_POST['agree'])) {
             $this->fail('Please agree to the terms to continue.');
         }
+        if (Accounts::emailTaken((string) $email)) {
+            $this->fail(BuilderController::EMAIL_TAKEN);
+        }
         if (Duplicates::find((string) $email, (string) $business, null) !== []) {
             BuilderController::exists((string) $email, (string) $business);
         }
