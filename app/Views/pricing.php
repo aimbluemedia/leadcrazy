@@ -21,6 +21,16 @@ $faqs = [
      'You get one line of code. Paste it anywhere on your website and your full page, or just the form, appears there. Leads from your site and from LeadCrazy land in the same dashboard.'],
     ['Can I cancel?',
      'Yes, any time, from your billing page. Your page moves to the Free plan at the end of the period you paid for.'],
+    ['Do I need a credit card to start?',
+     'No. The Free plan needs no card at all. You only add one if you decide to upgrade to Pro or Premium.'],
+    ['How will I know when I get a new lead?',
+     'Every lead lands in your dashboard with the customer\'s name, contact details, services, timeline, budget and project notes, and we email you the moment it comes in.'],
+    ['What is the difference between Pro and Premium?',
+     'Both remove the lead limit and the LeadCrazy branding, and add photos, video, reviews, stats, more offers and unlimited cities and zip codes. Pro is hosted on LeadCrazy and listed on MonsterList. Premium adds the embed code so the form also works on your own website.'],
+    ['How do you keep out spam leads?',
+     'Every form is protected by Cloudflare Turnstile, hidden bot traps and limits on repeat submissions, so the leads in your dashboard come from real people.'],
+    ['Can I upgrade or switch plans later?',
+     'Yes. Upgrade from your dashboard whenever you like. Paid features switch on right away, and any leads held back on the Free plan unlock instantly.'],
 ];
 ?>
 <section class="section section--soft">
