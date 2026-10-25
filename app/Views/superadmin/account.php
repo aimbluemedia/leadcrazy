@@ -120,7 +120,7 @@ if (!isset($tabs[$tab])) {
               <optgroup label="<?= View::e($heading) ?>">
                 <?php foreach (App\Support\Trades::ALL as $key => $tr): ?>
                   <?php if (($tr['group'] ?? 'home') === $group): ?>
-                    <option value="<?= View::e($key) ?>"<?= ($page['trade'] ?? '') === $key ? ' selected' : '' ?>><?= View::e($tr['label']) ?></option>
+                    <option value="<?= View::e($key) ?>"<?= App\Support\Trades::key($page['trade'] ?? null) === $key ? ' selected' : '' ?>><?= View::e($tr['label']) ?></option>
                   <?php endif; ?>
                 <?php endforeach; ?>
               </optgroup>

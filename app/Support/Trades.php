@@ -71,6 +71,34 @@ final class Trades
             'budgets' => ['Under $300', '$300 - $1,500', '$1,500 - $5,000', '$5,000 - $15,000', '$15,000+'],
             'offer' => ['title' => '$50 Off EV Charger Install', 'body' => 'Save $50 on a Level 2 home charger installation.'],
         ],
+        'solar' => [
+            'label' => 'Solar', 'noun' => 'Solar', 'title' => 'Solar', 'phrase' => 'solar',
+            'services' => ['Solar Panel Install', 'Solar + Battery', 'Battery Backup', 'Solar Repair', 'Panel Cleaning', 'EV Charger', 'Commercial Solar'],
+            'budgets' => ['Under $100', '$100 - $200', '$200 - $300', '$300 - $500', '$500+'],
+            'offer' => ['title' => 'Free Solar Savings Report', 'body' => 'See how much you could save with a custom design and savings estimate for your home.'],
+            'copy' => [
+                'badge' => 'Free Solar Quote',
+                'pill' => 'Get Your Savings Report in 24 Hours',
+                'subheadline' => 'Your free solar quote in 24 hours.',
+                'intro' => 'Tell us about your home and get a free, no-obligation solar quote and savings estimate.',
+                'form_intro' => 'Answer a few quick questions and we will design a system for your home and show you the savings - free, with no obligation.',
+                'services_label' => 'What are you interested in?',
+                'timeline_label' => 'When are you looking to go solar?',
+                'timelines' => ['As soon as possible', 'Within 1-3 months', 'Within 3-6 months', 'Just researching'],
+                'budget_label' => 'Average Monthly Electric Bill',
+                'budget_hint' => 'This helps us size your system.',
+                'message_label' => 'Tell us about your home',
+                'message_placeholder' => 'Do you own the home? Roof type and age, shade, or anything else we should know.',
+                'message_required' => false,
+                'phone_hint' => "We'll only use this to contact you about your quote.",
+                'cta' => 'Get My Free Solar Quote',
+                'trust' => [['Custom Design', 'A system sized for your home'], ['Savings Estimate', 'See what you could save'], ['No Obligation', 'Zero pressure'], ['Fast Response', 'Quick turnaround on your quote']],
+                'response' => 'Savings report within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Savings estimates depend on your usage, utility rates, roof and available incentives, and are not guaranteed.',
+            ],
+        ],
         'lawyers' => [
             'label' => 'Lawyers', 'noun' => 'Legal', 'group' => 'pro', 'title' => 'Attorneys', 'phrase' => 'legal',
             'services' => ['Personal Injury', 'Car Accident', 'Family & Divorce', 'Criminal Defense', 'DUI', 'Estate Planning', 'Immigration', "Workers' Compensation", 'Business Law'],
@@ -180,9 +208,9 @@ final class Trades
                 'disclaimer' => 'Quotes are estimates. Coverage is subject to underwriting and the terms of the policy issued.',
             ],
         ],
-        'cosmetic' => [
-            'label' => 'Plastic Surgery & Med Spa', 'noun' => 'Cosmetic', 'group' => 'pro', 'title' => 'Plastic Surgery & Med Spa', 'phrase' => 'cosmetic',
-            'services' => ['Breast Augmentation', 'Tummy Tuck', 'Liposuction', 'Mommy Makeover', 'Rhinoplasty', 'Facelift', 'Botox & Fillers', 'Laser Treatments'],
+        'plastic_surgery' => [
+            'label' => 'Plastic Surgery', 'noun' => 'Cosmetic Surgery', 'group' => 'pro', 'title' => 'Plastic Surgery', 'phrase' => 'cosmetic surgery',
+            'services' => ['Breast Augmentation', 'Breast Lift', 'Tummy Tuck', 'Liposuction', 'Mommy Makeover', 'Rhinoplasty', 'Facelift', 'Eyelid Surgery', 'BBL'],
             'budgets' => [],
             'offer' => ['title' => 'Complimentary Consultation', 'body' => 'Meet with our team, ask every question and get a personal plan, free.'],
             'copy' => [
@@ -192,7 +220,7 @@ final class Trades
                 'intro' => 'Tell us what you are interested in and book a free, no-obligation consultation.',
                 'form_intro' => 'Tell us which treatments interest you and we will reach out to set up your free consultation.',
                 'services_label' => 'What are you interested in?',
-                'timeline_label' => 'When are you hoping to have treatment?',
+                'timeline_label' => 'When are you hoping to have surgery?',
                 'timelines' => ['As soon as possible', 'Within 1-3 months', 'Within 3-6 months', 'Just researching'],
                 'budget_label' => null,
                 'message_label' => 'Any questions for us?',
@@ -201,6 +229,33 @@ final class Trades
                 'phone_hint' => 'We will only use this to schedule your consultation.',
                 'cta' => 'Book My Free Consultation',
                 'trust' => [['Free Consultation', 'A personal plan made for you'], ['Ask Anything', 'Every question answered'], ['No Obligation', 'Decide in your own time'], ['Financing Options', 'Ask us about payment plans']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Individual results vary. Please do not submit medical information through this form.',
+            ],
+        ],
+        'med_spa' => [
+            'label' => 'Med Spa', 'noun' => 'Med Spa', 'group' => 'pro', 'title' => 'Med Spa', 'phrase' => 'med spa',
+            'services' => ['Botox & Dysport', 'Dermal Fillers', 'Laser Hair Removal', 'Microneedling', 'Chemical Peels', 'HydraFacial', 'Body Contouring', 'Medical Weight Loss', 'IV Therapy'],
+            'budgets' => [],
+            'offer' => ['title' => 'First Visit Special', 'body' => 'New clients get a complimentary skin consultation and a special price on their first treatment.'],
+            'copy' => [
+                'badge' => 'Free Consultation',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Book your free consultation.',
+                'intro' => 'Tell us what you are interested in and book a free, no-obligation consultation.',
+                'form_intro' => 'Tell us which treatments interest you and we will reach out to book your free consultation.',
+                'services_label' => 'What are you interested in?',
+                'timeline_label' => 'When would you like to come in?',
+                'timelines' => ['As soon as possible', 'Within 2 weeks', 'Within a month', 'Just researching'],
+                'budget_label' => null,
+                'message_label' => 'Any questions for us?',
+                'message_placeholder' => 'Questions about treatments, pricing, memberships or scheduling. Please do not include medical history here - we will go over it privately at your consultation.',
+                'message_required' => false,
+                'phone_hint' => 'We will only use this to book your consultation.',
+                'cta' => 'Book My Free Consultation',
+                'trust' => [['Free Consultation', 'A treatment plan made for you'], ['Licensed Providers', 'Treatments by trained professionals'], ['No Obligation', 'Decide in your own time'], ['Memberships & Packages', 'Ask us about saving more']],
                 'response' => 'Reply within 24 hours',
                 'license_label' => 'License #',
                 'consent' => true,
@@ -235,29 +290,55 @@ final class Trades
             ],
         ],
         'accounting' => [
-            'label' => 'Accounting & Tax', 'noun' => 'Accounting', 'group' => 'pro', 'title' => 'Accounting & Tax', 'phrase' => 'accounting and tax',
-            'services' => ['Tax Preparation', 'Business Tax', 'Bookkeeping', 'Payroll', 'IRS Problems', 'Business Formation', 'Financial Planning'],
+            'label' => 'Accounting', 'noun' => 'Accounting', 'group' => 'pro', 'title' => 'Accounting', 'phrase' => 'accounting and bookkeeping',
+            'services' => ['Bookkeeping', 'Payroll', 'Monthly Accounting', 'Financial Statements', 'QuickBooks Setup & Cleanup', 'Business Formation', 'CFO Services'],
             'budgets' => [],
-            'offer' => ['title' => 'Free Consultation', 'body' => 'A no-cost conversation about your taxes or books and where we can help.'],
+            'offer' => ['title' => 'Free Books Review', 'body' => 'We look over your books and show you where we can save you time and money, free.'],
             'copy' => [
                 'badge' => 'Free Consultation',
                 'pill' => 'Hear Back Within 24 Hours',
                 'subheadline' => 'Your free consultation starts here.',
-                'intro' => 'Tell us what you need and get a free, no-obligation consultation.',
+                'intro' => 'Tell us about your business and get a free, no-obligation consultation.',
                 'form_intro' => 'Answer a few quick questions and we will reach out to talk through how we can help - free, with no obligation.',
                 'services_label' => 'What do you need help with?',
                 'timeline_label' => 'When do you need help?',
-                'timelines' => ['Right away', 'Within a month', 'Before tax season', 'Just exploring'],
+                'timelines' => ['Right away', 'Within a month', 'Within 1-3 months', 'Just exploring'],
                 'budget_label' => null,
-                'message_label' => 'Tell us a bit about your situation',
-                'message_placeholder' => 'Personal or business, what you need done and any deadlines. Please do not include Social Security or account numbers.',
+                'message_label' => 'Tell us a bit about your business',
+                'message_placeholder' => 'What kind of business, roughly how many transactions or employees, and what you need done. Please do not include account numbers.',
                 'phone_hint' => 'We will only use this to contact you about your request.',
                 'cta' => 'Get My Free Consultation',
                 'trust' => [['Free Consultation', 'Talk it through at no cost'], ['Clear Pricing', 'Know the cost up front'], ['No Obligation', 'Zero pressure'], ['Fast Response', 'We get back to you quickly']],
                 'response' => 'Reply within 24 hours',
-                'license_label' => 'License / PTIN',
+                'license_label' => 'CPA license #',
                 'consent' => true,
                 'disclaimer' => 'This form is for information only and is not tax, legal or financial advice.',
+            ],
+        ],
+        'tax' => [
+            'label' => 'Tax Experts', 'noun' => 'Tax', 'group' => 'pro', 'title' => 'Tax Experts', 'phrase' => 'tax',
+            'services' => ['Personal Tax Return', 'Business Tax Return', 'Back Taxes', 'IRS Letters & Audits', 'Tax Debt Relief', 'Tax Planning', 'Amended Returns', 'Payroll Tax Problems'],
+            'budgets' => [],
+            'offer' => ['title' => 'Free Tax Review', 'body' => 'We review your situation and tell you your options, free and with no obligation.'],
+            'copy' => [
+                'badge' => 'Free Tax Review',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Your free tax review starts here.',
+                'intro' => 'Tell us about your tax situation and get a free, no-obligation review.',
+                'form_intro' => 'Answer a few quick questions and we will reach out to talk through your options - free, with no obligation.',
+                'services_label' => 'What do you need help with?',
+                'timeline_label' => 'How soon do you need help?',
+                'timelines' => ['Right away - I have a deadline or IRS letter', 'Within a month', 'Before tax season', 'Just exploring'],
+                'budget_label' => null,
+                'message_label' => 'Tell us a bit about your situation',
+                'message_placeholder' => 'Personal or business, which tax years, and any letters you have received. Please do not include Social Security or account numbers.',
+                'phone_hint' => 'We will only use this to contact you about your request.',
+                'cta' => 'Get My Free Tax Review',
+                'trust' => [['Free Tax Review', 'Know your options at no cost'], ['Straight Answers', 'Plain-English advice'], ['No Obligation', 'Zero pressure'], ['Fast Response', 'We get back to you quickly']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License / PTIN',
+                'consent' => true,
+                'disclaimer' => 'This form is for information only and is not tax, legal or financial advice. Results depend on your individual situation.',
             ],
         ],
         'other' => [
@@ -299,6 +380,16 @@ final class Trades
         'disclaimer' => null,
     ];
 
+    /** Old keys still stored on some pages, and what they are called now. */
+    private const ALIASES = ['cosmetic' => 'plastic_surgery'];
+
+    /** The current key for a stored one ("cosmetic" -> "plastic_surgery"). */
+    public static function key(?string $key): string
+    {
+        $key = (string) $key;
+        return self::ALIASES[$key] ?? $key;
+    }
+
     public static function exists(string $key): bool
     {
         return isset(self::ALL[$key]);
@@ -307,7 +398,7 @@ final class Trades
     /** @return array<string,mixed> */
     public static function get(string $key): array
     {
-        return self::ALL[$key] ?? self::ALL['other'];
+        return self::ALL[self::ALIASES[$key] ?? $key] ?? self::ALL['other'];
     }
 
     /**
