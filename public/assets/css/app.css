@@ -627,3 +627,7 @@ input[aria-invalid="true"] { border-color: var(--red-ink) !important; }
 .bstep__hint + .trades__group { margin-top: 4px; }
 .pv__fine { margin: 8px 0 0; font-size: 9px; line-height: 1.4; color: var(--muted); }
 .pv__fine[hidden] { display: none; }
+
+/* Superadmin accounts table: Edit / Delete */
+.row-actions { white-space: nowrap; text-align: right; }
+.row-actions .btn + form { margin-left: 6px; }

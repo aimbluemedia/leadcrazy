@@ -523,6 +523,66 @@ final class SuperadminController
         Request::redirect(preg_match('#^/superadmin[a-z/]*(\?id=\d+(&tab=[a-z]+)?)?$#', $back) ? $back : '/superadmin/requests');
     }
 
+    /**
+     * POST /superadmin/account/delete -- removes the account, its page, offers,
+     * photos, reviews, change requests and leads (all ON DELETE CASCADE), its
+     * uploaded files, and any owner login that belongs to no other account.
+     * Refused while a Stripe subscription is still billing, so nobody keeps
+     * being charged for a page that no longer exists.
+     */
+    public function deleteAccount(): void
+    {
+        $this->csrf('/superadmin/accounts');
+        $account = $this->findAccount((int) ($_POST['account_id'] ?? 0));
+        $id = (int) $account['id'];
+
+        if (!empty($account['stripe_subscription_id'])
+            && in_array((string) $account['stripe_status'], ['active', 'trialing', 'past_due', 'unpaid', 'incomplete'], true)) {
+            $_SESSION['admin_flash'] = $account['business_name'] . ' still has a Stripe subscription (status: ' . $account['stripe_status']
+                . '). Cancel it in Stripe first, then delete the account.';
+            Request::redirect('/superadmin/accounts');
+        }
+
+        $page = Database::first('SELECT logo_path, hero_path FROM pages WHERE account_id = :id', ['id' => $id]) ?? [];
+        $files = array_merge(
+            [$page['logo_path'] ?? null, $page['hero_path'] ?? null],
+            array_column(Database::all('SELECT path FROM gallery_images WHERE account_id = :id', ['id' => $id]), 'path'),
+        );
+        // Owner logins to remove with it: never an admin, never someone who
+        // also belongs to another account.
+        $users = array_map('intval', array_column(Database::all(
+            'SELECT u.id FROM account_users au JOIN users u ON u.id = au.user_id
+              WHERE au.account_id = :id AND u.is_admin = 0
+                AND NOT EXISTS (SELECT 1 FROM account_users o WHERE o.user_id = u.id AND o.account_id <> :id2)',
+            ['id' => $id, 'id2' => $id],
+        ), 'id'));
+        $leadCount = (int) (Database::first('SELECT COUNT(*) AS n FROM leads WHERE account_id = :id', ['id' => $id])['n'] ?? 0);
+
+        $pdo = Database::connection();
+        $pdo->beginTransaction();
+        try {
+            Database::run('DELETE FROM accounts WHERE id = :id', ['id' => $id]);
+            foreach ($users as $userId) {
+                Database::run('DELETE FROM users WHERE id = :u', ['u' => $userId]);
+            }
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+
+        foreach (array_unique(array_filter($files)) as $path) {
+            Uploads::delete((string) $path);
+        }
+
+        Audit::log('account.deleted', 'account', $id, null, [
+            'business' => $account['business_name'], 'slug' => $account['slug'], 'plan' => $account['plan'],
+            'leads' => $leadCount, 'users_removed' => count($users),
+        ]);
+        $_SESSION['admin_flash'] = $account['business_name'] . ' was deleted, with its page and ' . $leadCount . ' lead' . ($leadCount === 1 ? '' : 's') . '.';
+        Request::redirect('/superadmin/accounts');
+    }
+
     /* ----------------------------------------------------------- helpers */
 
     /** @return array<string,mixed> */

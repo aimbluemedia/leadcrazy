@@ -1,5 +1,6 @@
 <?php
 /** @var list<array<string,mixed>> $accounts @var string $q */
+use App\Support\Csrf;
 use App\Support\Plans;
 use App\Support\View;
 ?>
@@ -7,7 +8,7 @@ use App\Support\View;
   <form method="get" action="/superadmin/accounts" class="row"><input class="field" style="width:240px" type="search" name="q" value="<?= View::e($q) ?>" placeholder="Name, slug or email"><button class="btn btn--ghost btn--sm" type="submit">Search</button></form>
 </div>
 <div class="panel"><div class="table-wrap"><table class="table">
-  <thead><tr><th>Business</th><th>Page</th><th>Plan</th><th>Status</th><th>Leads</th><th>Owner</th><th>Since</th></tr></thead>
+  <thead><tr><th>Business</th><th>Page</th><th>Plan</th><th>Status</th><th>Leads</th><th>Owner</th><th>Since</th><th><span class="sr-only">Actions</span></th></tr></thead>
   <tbody><?php foreach ($accounts as $a): ?>
     <tr><td><a href="/superadmin/account?id=<?= (int) $a['id'] ?>"><?= View::e($a['business_name']) ?></a></td>
         <td><a href="/<?= View::e($a['slug']) ?>" target="_blank" rel="noopener" style="font-weight:400">/<?= View::e($a['slug']) ?></a></td>
@@ -15,8 +16,16 @@ use App\Support\View;
         <td><span class="tag tag--<?= View::e($a['page_status']) ?>"><?= View::e($a['page_status']) ?></span></td>
         <td><?= (int) $a['lead_count'] ?></td>
         <td><?= View::e($a['email']) ?></td>
-        <td><?= View::e(date('M j, Y', strtotime((string) $a['created_at']) ?: 0)) ?></td></tr>
+        <td><?= View::e(date('M j, Y', strtotime((string) $a['created_at']) ?: 0)) ?></td>
+        <td class="row-actions">
+          <a class="btn btn--ghost btn--sm" href="/superadmin/account?id=<?= (int) $a['id'] ?>">Edit</a>
+          <form method="post" action="/superadmin/account/delete" class="inline"
+                data-confirm="Delete <?= View::e($a['business_name']) ?> for good? This removes the page, its photos, offers, reviews, all <?= (int) $a['lead_count'] ?> leads and the owner's login. It cannot be undone.">
+            <?= Csrf::field() ?><input type="hidden" name="account_id" value="<?= (int) $a['id'] ?>">
+            <button class="btn btn--danger btn--sm" type="submit">Delete</button>
+          </form>
+        </td></tr>
   <?php endforeach; ?>
-  <?php if ($accounts === []): ?><tr><td colspan="7" class="muted">No accounts<?= $q !== '' ? ' match' : ' yet' ?>.</td></tr><?php endif; ?>
+  <?php if ($accounts === []): ?><tr><td colspan="8" class="muted">No accounts<?= $q !== '' ? ' match' : ' yet' ?>.</td></tr><?php endif; ?>
   </tbody>
 </table></div></div>

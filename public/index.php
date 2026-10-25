@@ -134,6 +134,7 @@ $router->get('/superadmin/preview',             $sa('preview'));
 $router->post('/superadmin/account/page',       $sa('savePage'));
 $router->post('/superadmin/account/settings',   $sa('saveSettings'));
 $router->post('/superadmin/account/approve',    $sa('approve'));
+$router->post('/superadmin/account/delete',     $sa('deleteAccount'));
 $router->post('/superadmin/test-email',         $sa('testEmail'));
 $router->post('/superadmin/account/image',      $sa('uploadImage'));
 $router->post('/superadmin/account/password',   $sa('setTempPassword'));
