@@ -24,7 +24,7 @@ final class Trades
             'offer' => ['title' => 'Free Design Consultation', 'body' => 'Book this month and get a free backyard design consultation with any project over $5,000.'],
         ],
         'hvac' => [
-            'label' => 'HVAC', 'noun' => 'HVAC',
+            'label' => 'HVAC', 'noun' => 'HVAC', 'phrase' => 'HVAC',
             'services' => ['AC Repair', 'AC Installation', 'Furnace Repair', 'Heat Pump', 'Duct Cleaning', 'Thermostat Install', 'Maintenance Plan', 'Indoor Air Quality'],
             'budgets' => ['Under $500', '$500 - $2,000', '$2,000 - $7,500', '$7,500 - $15,000', '$15,000+'],
             'offer' => ['title' => '$79 Tune-Up Special', 'body' => 'Full system check, filter change and cleaning before the season starts.'],
@@ -71,12 +71,232 @@ final class Trades
             'budgets' => ['Under $300', '$300 - $1,500', '$1,500 - $5,000', '$5,000 - $15,000', '$15,000+'],
             'offer' => ['title' => '$50 Off EV Charger Install', 'body' => 'Save $50 on a Level 2 home charger installation.'],
         ],
+        'lawyers' => [
+            'label' => 'Lawyers', 'noun' => 'Legal', 'group' => 'pro', 'title' => 'Attorneys', 'phrase' => 'legal',
+            'services' => ['Personal Injury', 'Car Accident', 'Family & Divorce', 'Criminal Defense', 'DUI', 'Estate Planning', 'Immigration', "Workers' Compensation", 'Business Law'],
+            'budgets' => [],
+            'offer' => ['title' => 'Free Case Review', 'body' => 'Talk with an attorney about your situation at no cost and with no obligation.'],
+            'copy' => [
+                'badge' => 'Free Case Review',
+                'pill' => 'Free, Confidential Case Review',
+                'subheadline' => 'Your free case review starts here.',
+                'intro' => 'Tell us what happened and an attorney will review your situation for free.',
+                'form_intro' => 'Answer a few quick questions and we will get back to you to talk through your options - free and with no obligation.',
+                'services_label' => 'What do you need help with?',
+                'timeline_label' => 'When did this happen?',
+                'timelines' => ['Within the last week', 'Within the last month', '1-6 months ago', 'More than 6 months ago', 'Planning ahead'],
+                'budget_label' => null,
+                'message_label' => 'Briefly describe your situation',
+                'message_placeholder' => 'A few sentences is plenty. Please do not include confidential details yet - we will go over them with you privately.',
+                'phone_hint' => 'We will only use this to contact you about your case.',
+                'cta' => 'Get My Free Case Review',
+                'trust' => [['Free Case Review', 'Talk through your options at no cost'], ['Straight Answers', 'Plain-English advice on where you stand'], ['No Obligation', 'You decide what happens next'], ['Fast Response', 'We get back to you quickly']],
+                'response' => 'Free case review',
+                'license_label' => 'Bar number',
+                'consent' => true,
+                'disclaimer' => 'Attorney advertising. Submitting this form does not create an attorney-client relationship. Please do not send confidential information until an attorney-client relationship has been established. Prior results do not guarantee a similar outcome.',
+            ],
+        ],
+        'mortgage' => [
+            'label' => 'Mortgage', 'noun' => 'Mortgage', 'group' => 'pro', 'title' => 'Mortgage Loans', 'phrase' => 'mortgage',
+            'services' => ['Home Purchase', 'Refinance', 'Cash-Out Refinance', 'First-Time Buyer', 'FHA Loan', 'VA Loan', 'Jumbo Loan', 'HELOC'],
+            'budgets' => ['Under $200,000', '$200,000 - $400,000', '$400,000 - $750,000', '$750,000 - $1,000,000', '$1,000,000+'],
+            'offer' => ['title' => 'Free Rate Review', 'body' => 'See what you could qualify for today. A quick review with no obligation.'],
+            'copy' => [
+                'badge' => 'Free Rate Quote',
+                'pill' => 'Get Your Rate Quote in 24 Hours',
+                'subheadline' => 'Your free rate quote in 24 hours.',
+                'intro' => 'Tell us what you are looking for and get a free, no-obligation rate quote.',
+                'form_intro' => 'Answer a few quick questions and we will put together your options and rates - free, with no obligation.',
+                'services_label' => 'What are you looking for?',
+                'timeline_label' => 'When are you looking to buy or refinance?',
+                'timelines' => ['As soon as possible', 'Within 1-3 months', 'Within 3-6 months', 'Just exploring options'],
+                'budget_label' => 'Estimated Loan Amount',
+                'budget_hint' => 'A rough figure is fine.',
+                'message_label' => 'Anything else we should know?',
+                'message_placeholder' => 'For example: the kind of home you want, your current rate, or questions you have. Please do not include your Social Security number or account numbers.',
+                'message_required' => false,
+                'phone_hint' => 'We will only use this to contact you about your quote.',
+                'cta' => 'Get My Free Rate Quote',
+                'trust' => [['Free Rate Quote', 'See your options side by side'], ['No Obligation', 'Compare with zero pressure'], ['Clear Numbers', 'Rates and costs explained plainly'], ['Fast Response', 'Quick turnaround on your quote']],
+                'response' => 'Rate quote within 24 hours',
+                'license_label' => 'NMLS #',
+                'license_required' => true,
+                'consent' => true,
+                'disclaimer' => 'Equal Housing Lender. This is not a commitment to lend. Rates, terms and programs are subject to credit approval and may change without notice.',
+            ],
+        ],
+        'real_estate' => [
+            'label' => 'Real Estate', 'noun' => 'Real Estate', 'group' => 'pro', 'title' => 'Real Estate', 'phrase' => 'real estate',
+            'services' => ['Buying a Home', 'Selling a Home', 'Free Home Valuation', 'Buying & Selling', 'First-Time Buyer', 'Relocating', 'Investment Property'],
+            'budgets' => ['Under $300,000', '$300,000 - $500,000', '$500,000 - $750,000', '$750,000 - $1,000,000', '$1,000,000+'],
+            'offer' => ['title' => 'Free Home Valuation', 'body' => 'Find out what your home is worth in today\'s market, with a full report and no obligation.'],
+            'copy' => [
+                'badge' => 'Free Home Valuation',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Buying or selling? Let\'s talk.',
+                'intro' => 'Tell us about your move and get a free, no-obligation consultation.',
+                'form_intro' => 'Answer a few quick questions and we will reach out to talk through your plans - free, with no obligation.',
+                'services_label' => 'How can we help?',
+                'timeline_label' => 'When are you looking to buy or sell?',
+                'timelines' => ['As soon as possible', 'Within 1-3 months', 'Within 3-6 months', '6+ months', 'Just exploring'],
+                'budget_label' => 'Price Range',
+                'budget_hint' => 'A rough range is fine.',
+                'message_label' => 'Tell us about your plans',
+                'message_placeholder' => 'Neighborhoods you like, the home you are selling, must-haves, anything that helps.',
+                'phone_hint' => 'We will only use this to contact you about your move.',
+                'cta' => 'Get My Free Consultation',
+                'trust' => [['Local Expertise', 'Know the market before you move'], ['Free Home Valuation', 'See what your home is worth'], ['No Obligation', 'Talk it through with zero pressure'], ['Fast Response', 'We get back to you quickly']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Equal Housing Opportunity. Home values are estimates and are not appraisals.',
+            ],
+        ],
+        'insurance' => [
+            'label' => 'Insurance', 'noun' => 'Insurance', 'group' => 'pro', 'title' => 'Insurance', 'phrase' => 'insurance',
+            'services' => ['Auto', 'Home', 'Renters', 'Life', 'Health', 'Business', 'Umbrella', 'Motorcycle'],
+            'budgets' => [],
+            'offer' => ['title' => 'Free Coverage Review', 'body' => 'We compare your current policy and show you where you could save.'],
+            'copy' => [
+                'badge' => 'Free Insurance Quote',
+                'pill' => 'Get Your Quote in 24 Hours',
+                'subheadline' => 'Your free insurance quote in 24 hours.',
+                'intro' => 'Tell us what you need covered and get a free, no-obligation quote.',
+                'form_intro' => 'Answer a few quick questions and we will shop your coverage and get back to you - free, with no obligation.',
+                'services_label' => 'What coverage do you need?',
+                'timeline_label' => 'When do you need coverage?',
+                'timelines' => ['Right away', 'Within 30 days', 'Within 1-3 months', 'Just comparing'],
+                'budget_label' => null,
+                'message_label' => 'Anything else we should know?',
+                'message_placeholder' => 'For example: what you have now, when it renews, or what you want covered. Please do not include policy or Social Security numbers.',
+                'message_required' => false,
+                'phone_hint' => 'We will only use this to contact you about your quote.',
+                'cta' => 'Get My Free Quote',
+                'trust' => [['Free Quote', 'Compare your options'], ['Coverage Review', 'Make sure you are protected'], ['No Obligation', 'Zero pressure to switch'], ['Fast Response', 'Quick turnaround on your quote']],
+                'response' => 'Quote within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Quotes are estimates. Coverage is subject to underwriting and the terms of the policy issued.',
+            ],
+        ],
+        'cosmetic' => [
+            'label' => 'Plastic Surgery & Med Spa', 'noun' => 'Cosmetic', 'group' => 'pro', 'title' => 'Plastic Surgery & Med Spa', 'phrase' => 'cosmetic',
+            'services' => ['Breast Augmentation', 'Tummy Tuck', 'Liposuction', 'Mommy Makeover', 'Rhinoplasty', 'Facelift', 'Botox & Fillers', 'Laser Treatments'],
+            'budgets' => [],
+            'offer' => ['title' => 'Complimentary Consultation', 'body' => 'Meet with our team, ask every question and get a personal plan, free.'],
+            'copy' => [
+                'badge' => 'Free Consultation',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Book your free consultation.',
+                'intro' => 'Tell us what you are interested in and book a free, no-obligation consultation.',
+                'form_intro' => 'Tell us which treatments interest you and we will reach out to set up your free consultation.',
+                'services_label' => 'What are you interested in?',
+                'timeline_label' => 'When are you hoping to have treatment?',
+                'timelines' => ['As soon as possible', 'Within 1-3 months', 'Within 3-6 months', 'Just researching'],
+                'budget_label' => null,
+                'message_label' => 'Any questions for us?',
+                'message_placeholder' => 'Questions about the procedure, recovery, financing or scheduling. Please do not include medical history here - we will go over it privately at your consultation.',
+                'message_required' => false,
+                'phone_hint' => 'We will only use this to schedule your consultation.',
+                'cta' => 'Book My Free Consultation',
+                'trust' => [['Free Consultation', 'A personal plan made for you'], ['Ask Anything', 'Every question answered'], ['No Obligation', 'Decide in your own time'], ['Financing Options', 'Ask us about payment plans']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Individual results vary. Please do not submit medical information through this form.',
+            ],
+        ],
+        'dental' => [
+            'label' => 'Dental', 'noun' => 'Dental', 'group' => 'pro', 'title' => 'Dentist', 'phrase' => 'dental',
+            'services' => ['Dental Implants', 'Invisalign', 'Veneers', 'Teeth Whitening', 'Cleanings & Checkups', 'Crowns', 'Dentures', 'Emergency Dental'],
+            'budgets' => [],
+            'offer' => ['title' => 'New Patient Special', 'body' => 'Exam, X-rays and cleaning for new patients at a special price.'],
+            'copy' => [
+                'badge' => 'New Patient Consultation',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Book your visit today.',
+                'intro' => 'Tell us what you need and we will get you scheduled.',
+                'form_intro' => 'Tell us what you are looking for and we will reach out to schedule your visit.',
+                'services_label' => 'What are you interested in?',
+                'timeline_label' => 'When would you like to come in?',
+                'timelines' => ['As soon as possible', 'Within 2 weeks', 'Within a month', 'Just researching'],
+                'budget_label' => null,
+                'message_label' => 'Any questions for us?',
+                'message_placeholder' => 'Questions about treatment, insurance or scheduling. Please do not include medical history here.',
+                'message_required' => false,
+                'phone_hint' => 'We will only use this to schedule your visit.',
+                'cta' => 'Request My Appointment',
+                'trust' => [['Gentle Care', 'Comfort-first dentistry'], ['Clear Pricing', 'Know the cost before treatment'], ['No Obligation', 'Ask questions first'], ['Fast Response', 'We get back to you quickly']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License #',
+                'consent' => true,
+                'disclaimer' => 'Individual results vary. Please do not submit medical information through this form.',
+            ],
+        ],
+        'accounting' => [
+            'label' => 'Accounting & Tax', 'noun' => 'Accounting', 'group' => 'pro', 'title' => 'Accounting & Tax', 'phrase' => 'accounting and tax',
+            'services' => ['Tax Preparation', 'Business Tax', 'Bookkeeping', 'Payroll', 'IRS Problems', 'Business Formation', 'Financial Planning'],
+            'budgets' => [],
+            'offer' => ['title' => 'Free Consultation', 'body' => 'A no-cost conversation about your taxes or books and where we can help.'],
+            'copy' => [
+                'badge' => 'Free Consultation',
+                'pill' => 'Hear Back Within 24 Hours',
+                'subheadline' => 'Your free consultation starts here.',
+                'intro' => 'Tell us what you need and get a free, no-obligation consultation.',
+                'form_intro' => 'Answer a few quick questions and we will reach out to talk through how we can help - free, with no obligation.',
+                'services_label' => 'What do you need help with?',
+                'timeline_label' => 'When do you need help?',
+                'timelines' => ['Right away', 'Within a month', 'Before tax season', 'Just exploring'],
+                'budget_label' => null,
+                'message_label' => 'Tell us a bit about your situation',
+                'message_placeholder' => 'Personal or business, what you need done and any deadlines. Please do not include Social Security or account numbers.',
+                'phone_hint' => 'We will only use this to contact you about your request.',
+                'cta' => 'Get My Free Consultation',
+                'trust' => [['Free Consultation', 'Talk it through at no cost'], ['Clear Pricing', 'Know the cost up front'], ['No Obligation', 'Zero pressure'], ['Fast Response', 'We get back to you quickly']],
+                'response' => 'Reply within 24 hours',
+                'license_label' => 'License / PTIN',
+                'consent' => true,
+                'disclaimer' => 'This form is for information only and is not tax, legal or financial advice.',
+            ],
+        ],
         'other' => [
-            'label' => 'Other', 'noun' => 'Service',
+            'label' => 'Other', 'noun' => 'Service', 'group' => 'other',
             'services' => ['Installation', 'Repair', 'Maintenance', 'Consultation'],
             'budgets' => ['Under $500', '$500 - $2,500', '$2,500 - $10,000', '$10,000+'],
             'offer' => ['title' => 'Free Estimate', 'body' => 'Tell us about your project and get a free, no-obligation estimate.'],
         ],
+    ];
+
+    /** Group headings for the builder's trade picker. */
+    public const GROUPS = ['home' => 'Home services', 'pro' => 'Professional services', 'other' => 'Something else'];
+
+    /**
+     * How the lead form reads for contractors. Professional trades replace
+     * any of these in their 'copy'. {noun} is filled in from the trade.
+     */
+    public const DEFAULT_COPY = [
+        'badge' => 'Free {noun} Quote',
+        'pill' => 'Get Your Quote in 24 Hours',
+        'subheadline' => 'Your free quote in 24 hours.',
+        'intro' => 'Tell us about your project and get a free, no-obligation quote.',
+        'form_intro' => "Fill out this quick form and we'll provide a detailed quote and design consultation - completely free, no strings attached.",
+        'services_label' => 'Choose Your Services',
+        'timeline_label' => 'When are you looking to start?',
+        'timelines' => null,
+        'budget_label' => 'Estimated Budget Range',
+        'budget_hint' => 'This helps us provide accurate recommendations.',
+        'message_label' => 'Tell us about your project',
+        'message_placeholder' => 'What is your vision? Any specific features you want? Current pain points with your space? The more details, the better we can help!',
+        'message_required' => true,
+        'phone_hint' => "We'll only use this to contact you about your quote.",
+        'cta' => 'Get My Free Quote & Consultation',
+        'trust' => [['Free Design Consultation', 'Expert advice tailored to your vision'], ['Detailed Quote', 'Transparent pricing with no hidden fees'], ['No Obligation', 'Get expert insights with zero pressure'], ['Fast Response', 'Quick turnaround on your quote']],
+        'response' => 'Free quote within 24 hours',
+        'license_label' => null,
+        'license_required' => false,
+        'consent' => false,
+        'disclaimer' => null,
     ];
 
     public static function exists(string $key): bool
@@ -88,5 +308,48 @@ final class Trades
     public static function get(string $key): array
     {
         return self::ALL[$key] ?? self::ALL['other'];
+    }
+
+    /**
+     * The form wording for a trade: the defaults with the trade's own copy on
+     * top. An unknown or empty key (pages made before trades were stored)
+     * reads as a contractor form, which is what those pages always were.
+     *
+     * @return array<string,mixed>
+     */
+    public static function copy(?string $key): array
+    {
+        $trade = self::get((string) $key);
+        $copy = array_replace(self::DEFAULT_COPY, $trade['copy'] ?? []);
+        $copy['badge'] = str_replace('{noun}', (string) $trade['noun'], (string) $copy['badge']);
+        return $copy;
+    }
+
+    /** For the builder: each trade with its copy resolved. @return array<string,array<string,mixed>> */
+    public static function forBuilder(): array
+    {
+        $out = [];
+        foreach (self::ALL as $key => $trade) {
+            $out[$key] = $trade + ['group' => 'home'];
+            $out[$key]['copy'] = self::copy($key);
+        }
+        return $out;
+    }
+
+    /**
+     * The contact consent a lead agrees to on industries that call and text
+     * leads back (TCPA). Stored word for word with the lead.
+     */
+    public static function consentText(string $business): string
+    {
+        return 'I agree that ' . $business . ' may contact me at the phone number and email I provided, including by calls '
+            . 'and text messages sent using automated technology or prerecorded voice, about my request. Consent is not a '
+            . 'condition of any purchase. Message and data rates may apply; reply STOP to opt out.';
+    }
+
+    /** "provides {phrase} services in Phoenix" @param array<string,mixed> $trade */
+    public static function phrase(array $trade): string
+    {
+        return (string) ($trade['phrase'] ?? mb_strtolower((string) $trade['label']));
     }
 }

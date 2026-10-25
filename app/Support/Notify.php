@@ -76,20 +76,21 @@ final class Notify
                     'Email' => $lead['email'],
                     'City / Zip' => trim(($lead['city'] ?? '') . ' ' . ($lead['zip'] ?? '')),
                     'Services' => implode(', ', $services),
-                    'Start' => $lead['timeline'],
+                    'Timing' => $lead['timeline'],
                     'Budget' => $lead['budget'],
                     'Offer' => $lead['offer'],
+                    'Consent' => !empty($lead['consent_at']) ? 'Agreed to calls & texts' : '',
                 ];
-                $text = $account['business_name'] . " has a new quote request.\n\n";
+                $text = $account['business_name'] . " has a new lead.\n\n";
                 foreach ($rows as $label => $value) {
                     if (trim((string) $value) !== '') {
                         $text .= str_pad($label . ':', 12) . ' ' . $value . "\n";
                     }
                 }
                 if (trim((string) $lead['message']) !== '') {
-                    $text .= "\nProject:\n" . trim((string) $lead['message']) . "\n";
+                    $text .= "\nDetails:\n" . trim((string) $lead['message']) . "\n";
                 }
-                $text .= "\nThe sooner you call, the more likely you win the job.\n"
+                $text .= "\nThe sooner you reach out, the more likely you win the business.\n"
                     . "View and track this lead: " . $link . "\n\n- LeadCrazy\n";
             }
             foreach (self::ownerEmails((int) $account['id']) as $to) {

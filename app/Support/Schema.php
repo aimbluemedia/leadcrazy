@@ -21,6 +21,16 @@ use PDO;
  */
 final class Schema
 {
+    /**
+     * Columns added after launch. CREATE TABLE IF NOT EXISTS never changes a
+     * table that is already there, so these are added to existing tables here.
+     * Only ever add to this list; each entry is nullable so old rows are fine.
+     */
+    private const ADDED_COLUMNS = [
+        'pages' => ['trade' => 'VARCHAR(40) NULL', 'license_number' => 'VARCHAR(80) NULL'],
+        'leads' => ['consent_at' => 'DATETIME NULL', 'consent_text' => 'VARCHAR(700) NULL'],
+    ];
+
     private static bool $done = false;
 
     public static function ensure(PDO $pdo): void
@@ -35,7 +45,7 @@ final class Schema
             return;
         }
         $sql = (string) file_get_contents($file);
-        $version = substr(hash('sha256', $sql), 0, 16);
+        $version = substr(hash('sha256', $sql . json_encode(self::ADDED_COLUMNS)), 0, 16);
         $marker = BASE_PATH . '/storage/schema.version';
 
         if (is_file($marker) && trim((string) @file_get_contents($marker)) === $version) {
@@ -57,6 +67,16 @@ final class Schema
                 $pdo->exec($statement);
             }
             ErrorHandler::note('schema', 'created missing tables: ' . implode(', ', $missing));
+        }
+
+        foreach (self::ADDED_COLUMNS as $table => $columns) {
+            $existing = array_map('strtolower', $pdo->query('SHOW COLUMNS FROM `' . $table . '`')->fetchAll(PDO::FETCH_COLUMN) ?: []);
+            foreach ($columns as $column => $definition) {
+                if (!in_array($column, $existing, true)) {
+                    $pdo->exec('ALTER TABLE `' . $table . '` ADD COLUMN `' . $column . '` ' . $definition);
+                    ErrorHandler::note('schema', 'added column ' . $table . '.' . $column);
+                }
+            }
         }
 
         @file_put_contents($marker, $version, LOCK_EX);

@@ -258,9 +258,12 @@ final class BusinessController
         }
         $data['timeline'] = $timeline;
 
+        $copy = $bundle['copy'];
         $budget = (string) ($_POST['budget'] ?? '');
-        if (!in_array($budget, $bundle['budgets'], true)) {
-            $errors['budget'] = 'Choose a budget range.';
+        if (!$bundle['askBudget']) {
+            $budget = '';
+        } elseif (!in_array($budget, $bundle['budgets'], true)) {
+            $errors['budget'] = 'Choose ' . (str_contains(mb_strtolower((string) $copy['budget_label']), 'budget') ? 'a budget range' : 'an option') . '.';
             $budget = '';
         }
         $data['budget'] = $budget;
@@ -269,11 +272,22 @@ final class BusinessController
         $offerTitles = array_map(static fn ($o) => (string) $o['title'], $bundle['offers']);
         $data['offer'] = in_array($offer, $offerTitles, true) ? $offer : null;
 
-        if ($data['message'] === '') {
-            $errors['message'] = 'Tell us a little about your project.';
+        if ($data['message'] === '' && $copy['message_required']) {
+            $errors['message'] = 'Tell us a little about ' . (str_contains(mb_strtolower((string) $copy['message_label']), 'project') ? 'your project' : 'what you need') . '.';
         }
 
-        foreach (['last_name', 'city', 'zip', 'timeline', 'budget'] as $optional) {
+        // Consent to calls and texts, on industries that need it. The exact
+        // wording agreed to is kept with the lead.
+        $data['consent_text'] = null;
+        if ($copy['consent']) {
+            if (empty($_POST['consent'])) {
+                $errors['consent'] = 'Please tick the box so we are allowed to contact you.';
+            } else {
+                $data['consent_text'] = \App\Support\Trades::consentText((string) $bundle['account']['business_name']);
+            }
+        }
+
+        foreach (['last_name', 'city', 'zip', 'timeline', 'budget', 'message'] as $optional) {
             if ($data[$optional] === '') {
                 $data[$optional] = null;
             }

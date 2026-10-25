@@ -621,3 +621,9 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .field-error[hidden] { display: none; }
 .field-error a { color: var(--red-ink); font-weight: 600; text-decoration: underline; }
 input[aria-invalid="true"] { border-color: var(--red-ink) !important; }
+
+/* Builder: industry groups and fine print in the preview */
+.trades__group { margin: 18px 0 10px; font-size: 13px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; color: var(--muted); }
+.bstep__hint + .trades__group { margin-top: 4px; }
+.pv__fine { margin: 8px 0 0; font-size: 9px; line-height: 1.4; color: var(--muted); }
+.pv__fine[hidden] { display: none; }

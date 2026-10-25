@@ -5,7 +5,7 @@
  *
  * @var array<string,mixed> $account @var array<string,mixed> $page
  * @var list<string> $services @var list<string> $locations @var list<string> $zipcodes
- * @var bool $full
+ * @var bool $full @var array<string,mixed> $copy
  */
 use App\Support\View;
 
@@ -49,7 +49,10 @@ $since = !empty($account['created_at']) ? date('Y', strtotime((string) $account[
     <?php if ($areas > 0): ?>
       <div><dt>Service area</dt><dd><?= View::e(implode(', ', array_slice($locations, 0, 3)) ?: $areas . ' zip codes') ?><?= count($locations) > 3 ? ' +' . (count($locations) - 3) . ' more' : '' ?></dd></div>
     <?php endif; ?>
-    <div><dt>Response</dt><dd><?= View::e($response !== '' ? $response : 'Free quote within 24 hours') ?></dd></div>
+    <div><dt>Response</dt><dd><?= View::e($response !== '' ? $response : (string) $copy['response']) ?></dd></div>
+    <?php if (trim((string) ($page['license_number'] ?? '')) !== '' && $copy['license_label'] !== null): ?>
+      <div><dt><?= View::e($copy['license_label']) ?></dt><dd><?= View::e((string) $page['license_number']) ?></dd></div>
+    <?php endif; ?>
     <?php if ($websiteHost !== ''): ?>
       <div><dt>Website</dt><dd><a href="<?= View::e($website) ?>" target="_blank" rel="noopener nofollow"><?= View::e($websiteHost) ?></a></dd></div>
     <?php endif; ?>

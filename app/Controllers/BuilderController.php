@@ -138,6 +138,7 @@ final class BuilderController
         }
 
         $trade = Trades::get($clean['trade']);
+        $copy = Trades::copy($clean['trade']);
         $place = trim($clean['city'] . ($clean['state'] !== '' ? ', ' . $clean['state'] : ''));
         $json = static fn (array $list): string => json_encode(array_values($list), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]';
 
@@ -147,12 +148,14 @@ final class BuilderController
                 'email' => $old['email'], 'password' => $password, 'plan' => Plans::FREE, 'status' => 'building',
             ],
             [
-                'badge' => 'Free ' . $trade['noun'] . ' Quote',
-                'headline' => $clean['business'] . ' - ' . $trade['label'] . ' in ' . $place,
-                'subheadline' => 'Your free quote in 24 hours.',
-                'intro' => 'Tell us about your project and get a free, no-obligation quote.',
-                'about' => $clean['business'] . ' provides ' . mb_strtolower($trade['label']) . ' services in ' . $place
-                    . ' and nearby areas. Fill in the quick form and we will get back to you with a free, detailed quote.',
+                'trade' => $clean['trade'],
+                'license_number' => $clean['license'] !== '' ? $clean['license'] : null,
+                'badge' => $copy['badge'],
+                'headline' => $clean['business'] . ' - ' . ($trade['title'] ?? $trade['label']) . ' in ' . $place,
+                'subheadline' => $copy['subheadline'],
+                'intro' => $copy['intro'],
+                'about' => $clean['business'] . ' provides ' . Trades::phrase($trade) . ' services in ' . $place
+                    . ' and nearby areas. Fill in the quick form and we will get back to you quickly.',
                 'phone' => $clean['phone'],
                 'public_email' => $old['email'],
                 'city' => $clean['city'],
@@ -162,7 +165,7 @@ final class BuilderController
                 'form_services' => $json($clean['services']),
                 'locations' => $json($clean['cities']),
                 'zipcodes' => $json($clean['zips']),
-                'form_budgets' => $json($trade['budgets']),
+                'form_budgets' => $trade['budgets'] !== [] ? $json($trade['budgets']) : null,
                 'accent_color' => '#0071e3',
             ],
         );
@@ -219,6 +222,7 @@ final class BuilderController
             'city' => $str($s['city'] ?? '', 80),
             'state' => $str($s['state'] ?? '', 40),
             'website' => $str($s['website'] ?? '', 300),
+            'license' => $str($s['license'] ?? '', 80),
             'services' => $list($s['services'] ?? [], 60, 15),
             'cities' => $list($s['cities'] ?? [], 60, Plans::FREE_CITIES),
             // Filter before capping, so a bad entry never pushes out a good one.
@@ -249,6 +253,7 @@ final class BuilderController
             $clean['business'] === '' => 'Enter your business name.',
             strlen((string) preg_replace('/\D+/', '', $clean['phone'])) < 10 => 'Enter a phone number customers can call.',
             $clean['city'] === '' => 'Enter the city you are based in.',
+            $clean['license'] === '' && Trades::copy($clean['trade'])['license_required'] => 'Enter your ' . Trades::copy($clean['trade'])['license_label'] . ' - it must be shown on your page.',
             $clean['website'] !== '' && Duplicates::host($clean['website']) === '' => 'That website address does not look right. Use something like yourbusiness.com, or leave it blank.',
             $clean['services'] === [] => 'Turn on at least one service.',
             $clean['cities'] === [] && $clean['zips'] === [] => 'Add at least one city or zip code.',

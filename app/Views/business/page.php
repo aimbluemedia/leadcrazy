@@ -42,7 +42,7 @@ $showGallery = $full && $gallery !== [];
       <?php if (!empty($page['hero_path'])): ?>
         <img class="lp-hero" src="<?= View::e($page['hero_path']) ?>" alt="<?= View::e($name) ?>" loading="eager">
       <?php endif; ?>
-      <p class="lp-pill">&#9889; Get Your Quote in 24 Hours</p>
+      <p class="lp-pill">&#9889; <?= View::e($copy['pill']) ?></p>
       <?php if ($heroOffer !== null): ?>
         <?= View::render('business/_offer', ['offer' => $heroOffer]) ?>
       <?php endif; ?>

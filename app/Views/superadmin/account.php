@@ -113,6 +113,23 @@ if (!isset($tabs[$tab])) {
     <h2>Lead form</h2>
     <div class="stack">
       <div class="form__row">
+        <div><label>Industry</label>
+          <select name="trade">
+            <option value="">Contractor (default wording)</option>
+            <?php foreach (App\Support\Trades::GROUPS as $group => $heading): ?>
+              <optgroup label="<?= View::e($heading) ?>">
+                <?php foreach (App\Support\Trades::ALL as $key => $tr): ?>
+                  <?php if (($tr['group'] ?? 'home') === $group): ?>
+                    <option value="<?= View::e($key) ?>"<?= ($page['trade'] ?? '') === $key ? ' selected' : '' ?>><?= View::e($tr['label']) ?></option>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </optgroup>
+            <?php endforeach; ?>
+          </select>
+          <p class="hint">Sets the form wording, the budget question, the consent checkbox and the disclaimer.</p></div>
+        <div><label>License number</label><input type="text" name="license_number" value="<?= $p('license_number') ?>" placeholder="NMLS #, bar number, license #"><p class="hint">Shown in the fine print and on the profile card, for industries that use one.</p></div>
+      </div>
+      <div class="form__row">
         <div><label>Form title</label><input type="text" name="form_title" value="<?= $p('form_title') ?>" placeholder="<?= View::e($account['business_name']) ?>"></div>
         <div><label>Button text</label><input type="text" name="cta_label" value="<?= $p('cta_label') ?>" placeholder="Get My Free Quote & Consultation"></div>
       </div>

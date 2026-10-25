@@ -330,3 +330,15 @@ a { color: inherit; }
   border-radius: 999px; padding: 12px 18px;
 }
 .lp-profile__cta:hover { background: var(--lp-accent-dark); }
+
+/* ---------------------------------------------------------------- consent + fine print */
+.lf-field .lf-consent {
+  display: flex; gap: 10px; align-items: flex-start; cursor: pointer;
+  font-size: 12px; line-height: 1.5; color: var(--lp-text); font-weight: 400;
+  background: var(--lp-soft); border: 1px solid var(--lp-line); border-radius: 10px; padding: 12px;
+}
+.lf-field .lf-consent input { margin: 2px 0 0; width: 16px; height: 16px; flex: none; accent-color: var(--lp-accent); }
+.lf-field .lf-consent[aria-invalid="true"] { border-color: var(--lp-red); }
+.lf-optional { font-style: normal; font-weight: 400; color: var(--lp-muted); font-size: 12px; }
+.lf-disclaimer { margin-top: 6px !important; font-size: 11px !important; }
+.lf-field .lf-consent span { color: var(--lp-text); font-weight: 400; font-size: 12px; }

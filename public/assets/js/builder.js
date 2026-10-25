@@ -14,7 +14,7 @@
   function inDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
 
   var state = Object.assign({
-    trade: '', business: '', phone: '', city: '', state: '', website: '',
+    trade: '', business: '', phone: '', city: '', state: '', website: '', license: '',
     services: [], allServices: [], cities: [], zips: [],
     offer: { on: true, title: '', body: '', expires: inDays(30) }
   }, cfg.state || {});
@@ -144,9 +144,10 @@
     var url = cfg.base + slugify(state.business);
     pv('url').textContent = url;
     $('[data-slug-preview]').textContent = url;
-    pv('badge').textContent = 'Free ' + t.noun + ' Quote';
-    pv('headline').textContent = name + (place ? ' – ' + t.label + ' in ' + place : '');
-    pv('serving').textContent = 'Get your free quote in 24 hours' + (state.phone.trim() ? ' · ' + state.phone.trim() : '');
+    var copy = t.copy;
+    pv('badge').textContent = copy.badge;
+    pv('headline').textContent = name + (place ? ' – ' + (t.title || t.label) + ' in ' + place : '');
+    pv('serving').textContent = copy.subheadline;
     pv('form-title').textContent = name;
 
     var offer = pv('offer');
@@ -158,7 +159,23 @@
     var checks = pv('services');
     checks.innerHTML = '';
     (state.services.length ? state.services : ['Your services']).slice(0, 8).forEach(function (s) { checks.appendChild(el('i', '', s)); });
-    pv('budget').textContent = (t.budgets && t.budgets[0] ? 'e.g. ' + t.budgets[2 % t.budgets.length] : 'Select a range');
+    pv('services-label').textContent = copy.services_label;
+    pv('budget-wrap').hidden = !copy.budget_label;
+    pv('budget-label').textContent = copy.budget_label || '';
+    pv('budget').textContent = (t.budgets && t.budgets.length ? 'e.g. ' + t.budgets[2 % t.budgets.length] : 'Select a range');
+    pv('cta').textContent = copy.cta;
+    var lic = state.license.trim();
+    var fine = [];
+    if (copy.license_label && lic) fine.push(copy.license_label + ' ' + lic);
+    if (copy.disclaimer) fine.push(copy.disclaimer);
+    if (copy.consent) fine.push('Includes a consent-to-contact checkbox.');
+    pv('fine').textContent = fine.join(' · ');
+    pv('fine').hidden = !fine.length;
+
+    // License number: asked only for industries that show one.
+    $('[data-license]').hidden = !copy.license_label;
+    $('[data-license-label]').textContent = copy.license_label || 'License #';
+    $('[data-license-note]').textContent = copy.license_required ? 'required' : 'optional';
 
     var area = pv('area');
     area.innerHTML = '';
@@ -181,6 +198,7 @@
     if (n === 2) {
       if (!state.business.trim()) return 'Enter your business name.';
       if (state.phone.replace(/\D/g, '').length < 10) return 'Enter a phone number customers can call.';
+      if (trade().copy.license_required && !state.license.trim()) return 'Enter your ' + trade().copy.license_label + ' - it must be shown on your page.';
       if (!state.city.trim()) return 'Enter the city you are based in.';
     }
     if (n === 3 && !state.services.length) return 'Turn on at least one service.';
@@ -240,7 +258,7 @@
     if (emailMsg && !emailMsg.hidden) { e.preventDefault(); $('#p-email').focus(); return; }
     for (var i = 1; i <= 5; i++) { var p = problem(i); if (p) { e.preventDefault(); go(i); flash(p); return; } }
     $('[data-builder-json]').value = JSON.stringify({
-      trade: state.trade, business: state.business, phone: state.phone, city: state.city, state: state.state, website: state.website,
+      trade: state.trade, business: state.business, phone: state.phone, city: state.city, state: state.state, website: state.website, license: state.license,
       services: state.services, cities: state.cities, zips: state.zips, offer: state.offer
     });
     var btn = $('[data-publish]');

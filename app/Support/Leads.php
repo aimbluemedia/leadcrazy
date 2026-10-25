@@ -24,10 +24,10 @@ final class Leads
 
         Database::run(
             'INSERT INTO leads (account_id, first_name, last_name, email, phone, city, zip, services,
-                                timeline, budget, offer, message, source, referrer, ip, user_agent,
+                                timeline, budget, offer, message, consent_at, consent_text, source, referrer, ip, user_agent,
                                 is_locked, created_at)
              VALUES (:account_id, :first_name, :last_name, :email, :phone, :city, :zip, :services,
-                     :timeline, :budget, :offer, :message, :source, :referrer, :ip, :user_agent,
+                     :timeline, :budget, :offer, :message, :consent_at, :consent_text, :source, :referrer, :ip, :user_agent,
                      :is_locked, :created_at)',
             [
                 'account_id' => (int) $account['id'],
@@ -42,6 +42,8 @@ final class Leads
                 'budget' => $data['budget'],
                 'offer' => $data['offer'],
                 'message' => $data['message'],
+                'consent_at' => ($data['consent_text'] ?? null) !== null ? date('Y-m-d H:i:s') : null,
+                'consent_text' => $data['consent_text'] ?? null,
                 'source' => $source === 'embed' ? 'embed' : 'hosted',
                 'referrer' => Request::referer(),
                 'ip' => Request::ip(),

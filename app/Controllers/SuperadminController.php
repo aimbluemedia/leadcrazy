@@ -142,7 +142,10 @@ final class SuperadminController
         $t = static fn (string $k, int $max = 240): ?string => ($v = mb_substr(trim((string) ($_POST[$k] ?? '')), 0, $max)) === '' ? null : $v;
 
         $accent = (string) ($_POST['accent_color'] ?? '');
+        $trade = (string) ($_POST['trade'] ?? '');
         $fields = [
+            'trade' => \App\Support\Trades::exists($trade) ? $trade : null,
+            'license_number' => $t('license_number', 80),
             'badge' => $t('badge', 80),
             'headline' => $t('headline'),
             'subheadline' => $t('subheadline'),

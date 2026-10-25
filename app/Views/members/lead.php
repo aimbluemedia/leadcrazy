@@ -30,14 +30,17 @@ $services = Leads::services($lead['services']);
     </dl>
   </div>
   <div class="panel">
-    <h2>Project</h2>
+    <h2>Request</h2>
     <dl class="dl">
       <dt>Services</dt><dd><?= View::e($services ? implode(', ', $services) : '-') ?></dd>
-      <dt>Start</dt><dd><?= View::e($lead['timeline'] ?? '-') ?></dd>
-      <dt>Budget</dt><dd><?= View::e($lead['budget'] ?? '-') ?></dd>
+      <dt>Timing</dt><dd><?= View::e($lead['timeline'] ?? '-') ?></dd>
+      <?php if (($lead['budget'] ?? null) !== null): ?><dt>Budget</dt><dd><?= View::e($lead['budget']) ?></dd><?php endif; ?>
       <dt>Offer</dt><dd><?= View::e($lead['offer'] ?? '-') ?></dd>
+      <?php if (!empty($lead['consent_at'])): ?>
+        <dt>Consent</dt><dd title="<?= View::e((string) $lead['consent_text']) ?>">Agreed to calls &amp; texts, <?= View::e(date('M j, Y g:ia', strtotime((string) $lead['consent_at']) ?: 0)) ?></dd>
+      <?php endif; ?>
     </dl>
-    <p style="margin-top:12px;white-space:pre-wrap" class="<?= $visible ? '' : 'locked' ?>"><?= $visible ? View::e($lead['message']) : 'Upgrade to read the project details.' ?></p>
+    <p style="margin-top:12px;white-space:pre-wrap" class="<?= $visible ? '' : 'locked' ?>"><?= $visible ? View::e((string) $lead['message']) : 'Upgrade to read the details.' ?></p>
   </div>
 </div>
 

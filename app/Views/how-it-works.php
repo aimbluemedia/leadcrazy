@@ -26,11 +26,18 @@ $icons = [
     'painting' => '<rect x="3" y="3" width="15" height="6" rx="1.5"/><path d="M18 6h3v5h-9v3"/><path d="M12 14v7"/>',
     'pools' => '<path d="M2 7c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 13c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 19c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/>',
     'electrical' => '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+    'lawyers' => '<path d="M12 3v18M7 21h10"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0L5 7zM19 7l-3 7a3 3 0 0 0 6 0l-3-7z"/>',
+    'mortgage' => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M14 12.5c-.5-.7-1.3-1-2-1-1.1 0-2 .6-2 1.5s.9 1.3 2 1.5 2 .6 2 1.5-.9 1.5-2 1.5c-.8 0-1.5-.3-2-1M12 10.5v1M12 17v1"/>',
+    'real_estate' => '<path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M15 3h4v4"/>',
+    'insurance' => '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/>',
+    'cosmetic' => '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><circle cx="12" cy="10" r="1"/>',
+    'dental' => '<path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4.5 2 7 .4 2.3 1 6.5 2.5 6.5S9 18 10 16c.6-1.2 1.4-1.2 2-1.2s1.4 0 2 1.2c1 2 1 5 2.5 5S18.6 16.8 19 14.5c.5-2.5 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>',
+    'accounting' => '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/>',
     'other' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
 ];
 $o = static fn (string $k): string => View::e($old[$k] ?? '');
 $config = [
-    'trades' => Trades::ALL,
+    'trades' => Trades::forBuilder(),
     'limits' => ['cities' => Plans::FREE_CITIES, 'zips' => Plans::FREE_ZIPS, 'services' => 15],
     'timelines' => Pages::DEFAULT_TIMELINES,
     'base' => rtrim(preg_replace('#^https?://#', '', View::url('/')), '/') . '/',
@@ -71,15 +78,19 @@ $config = [
         <!-- 1. Trade -->
         <fieldset class="bstep" data-step="1">
           <legend><span class="bstep__n">Step 1 of 6</span>What kind of business are you?</legend>
-          <p class="bstep__hint">We will fill in common services, budgets and an offer for your trade. You can change all of it.</p>
-          <div class="trades">
-            <?php foreach (Trades::ALL as $key => $t): ?>
-              <button type="button" class="trade" data-trade="<?= $key ?>" aria-pressed="false">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?= $icons[$key] ?></svg>
-                <span><?= View::e($t['label']) ?></span>
-              </button>
-            <?php endforeach; ?>
-          </div>
+          <p class="bstep__hint">We will fill in common services, wording and an offer for your industry. You can change all of it.</p>
+          <?php foreach (Trades::GROUPS as $group => $heading): ?>
+            <p class="trades__group"><?= View::e($heading) ?></p>
+            <div class="trades">
+              <?php foreach (Trades::ALL as $key => $t): ?>
+                <?php if (($t['group'] ?? 'home') !== $group) { continue; } ?>
+                <button type="button" class="trade" data-trade="<?= $key ?>" aria-pressed="false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?= $icons[$key] ?? $icons['other'] ?></svg>
+                  <span><?= View::e($t['label']) ?></span>
+                </button>
+              <?php endforeach; ?>
+            </div>
+          <?php endforeach; ?>
         </fieldset>
 
         <!-- 2. Business -->
@@ -91,6 +102,7 @@ $config = [
             <div><label for="b-city">City</label><input id="b-city" type="text" maxlength="80" data-field="city" placeholder="Phoenix" autocomplete="address-level2"></div>
             <div><label for="b-state">State</label><input id="b-state" type="text" maxlength="40" data-field="state" placeholder="AZ" autocomplete="address-level1"></div>
           </div>
+          <div data-license hidden><label for="b-license"><span data-license-label>License #</span> <span class="count" data-license-note>optional</span></label><input id="b-license" type="text" maxlength="80" data-field="license" placeholder="Shown on your page"><p class="hint">Shown on your page and in the form's fine print.</p></div>
           <div><label for="b-web">Website <span class="count">optional</span></label><input id="b-web" type="text" inputmode="url" maxlength="300" data-field="website" placeholder="stormlandscaping.com" autocomplete="url"></div>
           <div class="exists-note" data-exists hidden>
             <strong>Looks like you already have a LeadCrazy profile.</strong>
@@ -188,11 +200,12 @@ $config = [
             <div class="pv__row"><i>First name</i><i>Last name</i></div>
             <i class="pv__line">Phone</i>
             <i class="pv__line">Email</i>
-            <p class="pv__label">Choose your services</p>
+            <p class="pv__label" data-pv="services-label">Choose your services</p>
             <div class="pv__checks" data-pv="services"></div>
-            <p class="pv__label">Budget</p>
-            <i class="pv__line pv__select" data-pv="budget"></i>
-            <span class="pv__btn">Get My Free Quote &rarr;</span>
+            <div data-pv="budget-wrap"><p class="pv__label" data-pv="budget-label">Budget</p>
+            <i class="pv__line pv__select" data-pv="budget"></i></div>
+            <span class="pv__btn"><span data-pv="cta">Get My Free Quote</span> &rarr;</span>
+            <p class="pv__fine" data-pv="fine" hidden></p>
           </div>
           <div class="pv__area" data-pv="area"></div>
         </div>

@@ -63,9 +63,16 @@ final class Pages
             $zipcodes = array_slice($zipcodes, 0, $limits['zips']);
         }
 
+        // Wording, consent and disclaimers for the page's industry. Pages made
+        // before industries were stored read as contractor pages.
+        $copy = Trades::copy(isset($page['trade']) ? (string) $page['trade'] : null);
+        $askBudget = $copy['budget_label'] !== null;
+
         return [
             'account' => $account,
             'page' => $page,
+            'copy' => $copy,
+            'askBudget' => $askBudget,
             'offers' => $offers,
             'gallery' => Database::all('SELECT * FROM gallery_images WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
             'testimonials' => Database::all('SELECT * FROM testimonials WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
@@ -74,8 +81,8 @@ final class Pages
             'zipcodes' => $zipcodes,
             'whyPoints' => self::list($page['why_points'] ?? null),
             'formServices' => self::list($page['form_services'] ?? null) ?: self::list($page['services'] ?? null),
-            'timelines' => self::list($page['form_timelines'] ?? null) ?: self::DEFAULT_TIMELINES,
-            'budgets' => self::list($page['form_budgets'] ?? null) ?: self::DEFAULT_BUDGETS,
+            'timelines' => self::list($page['form_timelines'] ?? null) ?: ($copy['timelines'] ?? null) ?: self::DEFAULT_TIMELINES,
+            'budgets' => $askBudget ? (self::list($page['form_budgets'] ?? null) ?: self::DEFAULT_BUDGETS) : [],
             'full' => Plans::fullPage((string) $account['plan']),
         ];
     }

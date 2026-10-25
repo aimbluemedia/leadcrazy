@@ -7,6 +7,8 @@
  * @var array<string,mixed> $form   @var list<array<string,mixed>> $offers
  * @var list<string> $formServices @var list<string> $timelines @var list<string> $budgets
  * @var bool $full @var string $mode
+ * @var array<string,mixed> $copy  Wording for the page's industry (Trades::copy).
+ * @var bool $askBudget
  */
 use App\Support\Turnstile;
 use App\Support\View;
@@ -20,6 +22,7 @@ $chosen = array_map('strval', (array) ($old['services'] ?? []));
 $name = (string) $account['business_name'];
 $slug = (string) $account['slug'];
 $isPreview = $mode === 'preview';
+$license = trim((string) ($page['license_number'] ?? ''));
 ?>
 <?php if ($form['thanks']): ?>
   <div class="lf-thanks" role="status">
@@ -29,7 +32,7 @@ $isPreview = $mode === 'preview';
   </div>
 <?php else: ?>
 <h2 class="lf-title"><?= View::e($page['form_title'] ?? '' ?: $name) ?></h2>
-<p class="lf-intro"><?= View::e($page['form_intro'] ?? '' ?: 'Fill out this quick form and we\'ll provide a detailed quote and design consultation - completely free, no strings attached.') ?></p>
+<p class="lf-intro"><?= View::e($page['form_intro'] ?? '' ?: (string) $copy['form_intro']) ?></p>
 
 <?php if (isset($e['_form'])): ?>
   <div class="lf-alert" role="alert"><?= View::e($e['_form']) ?></div>
@@ -67,7 +70,7 @@ $isPreview = $mode === 'preview';
   <div class="lf-field">
     <label for="lf-phone">Phone Number <span>*</span></label>
     <input id="lf-phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567" required value="<?= $val('phone') ?>"<?= $inv('phone') ?>>
-    <p class="lf-hint">We'll only use this to contact you about your quote.</p>
+    <p class="lf-hint"><?= View::e($copy['phone_hint']) ?></p>
     <?= $err('phone') ?>
   </div>
 
@@ -86,7 +89,7 @@ $isPreview = $mode === 'preview';
 
   <?php if ($formServices !== []): ?>
   <fieldset class="lf-field"<?= $inv('services') ?>>
-    <legend>Choose Your Services <span>*</span></legend>
+    <legend><?= View::e($copy['services_label']) ?> <span>*</span></legend>
     <div class="lf-checks">
       <?php foreach ($formServices as $i => $service): ?>
         <label class="lf-check"><input type="checkbox" name="services[]" value="<?= View::e($service) ?>"<?= in_array($service, $chosen, true) ? ' checked' : '' ?>><span><?= View::e($service) ?></span></label>
@@ -97,7 +100,7 @@ $isPreview = $mode === 'preview';
   <?php endif; ?>
 
   <fieldset class="lf-field"<?= $inv('timeline') ?>>
-    <legend>When are you looking to start? <span>*</span></legend>
+    <legend><?= View::e($copy['timeline_label']) ?> <span>*</span></legend>
     <div class="lf-checks lf-checks--one">
       <?php foreach ($timelines as $option): ?>
         <label class="lf-check"><input type="radio" name="timeline" value="<?= View::e($option) ?>"<?= ($old['timeline'] ?? null) === $option ? ' checked' : '' ?>><span><?= View::e($option) ?></span></label>
@@ -106,17 +109,19 @@ $isPreview = $mode === 'preview';
     <?= $err('timeline') ?>
   </fieldset>
 
+  <?php if ($askBudget): ?>
   <div class="lf-field">
-    <label for="lf-budget">Estimated Budget Range <span>*</span></label>
+    <label for="lf-budget"><?= View::e($copy['budget_label']) ?> <span>*</span></label>
     <select id="lf-budget" name="budget" required<?= $inv('budget') ?>>
       <option value="">Select a range...</option>
       <?php foreach ($budgets as $option): ?>
         <option value="<?= View::e($option) ?>"<?= ($old['budget'] ?? null) === $option ? ' selected' : '' ?>><?= View::e($option) ?></option>
       <?php endforeach; ?>
     </select>
-    <p class="lf-hint">This helps us provide accurate recommendations.</p>
+    <p class="lf-hint"><?= View::e($copy['budget_hint']) ?></p>
     <?= $err('budget') ?>
   </div>
+  <?php endif; ?>
 
   <?php if ($offers !== []): ?>
   <fieldset class="lf-field">
@@ -130,8 +135,8 @@ $isPreview = $mode === 'preview';
   <?php endif; ?>
 
   <div class="lf-field">
-    <label for="lf-message">Tell us about your project <span>*</span></label>
-    <textarea id="lf-message" name="message" rows="4" placeholder="What is your vision? Any specific features you want? Current pain points with your space? The more details, the better we can help!"<?= $inv('message') ?>><?= $val('message') ?></textarea>
+    <label for="lf-message"><?= View::e($copy['message_label']) ?><?= $copy['message_required'] ? ' <span>*</span>' : ' <em class="lf-optional">(optional)</em>' ?></label>
+    <textarea id="lf-message" name="message" rows="4" maxlength="4000" placeholder="<?= View::e($copy['message_placeholder']) ?>"<?= $inv('message') ?>><?= $val('message') ?></textarea>
     <?= $err('message') ?>
   </div>
 
@@ -139,14 +144,26 @@ $isPreview = $mode === 'preview';
     <div class="cf-turnstile" data-sitekey="<?= View::e(Turnstile::siteKey()) ?>" data-theme="light"></div>
   <?php endif; ?>
 
-  <button class="lf-submit" type="submit"><?= View::e($page['cta_label'] ?? '' ?: 'Get My Free Quote & Consultation') ?> &rarr;</button>
+  <?php if ($copy['consent']): ?>
+  <div class="lf-field">
+    <label class="lf-consent"<?= $inv('consent') ?>>
+      <input type="checkbox" name="consent" value="1" required<?= !empty($old['consent']) ? ' checked' : '' ?>>
+      <span><?= View::e(App\Support\Trades::consentText($name)) ?></span>
+    </label>
+    <?= $err('consent') ?>
+  </div>
+  <?php endif; ?>
+
+  <button class="lf-submit" type="submit"><?= View::e($page['cta_label'] ?? '' ?: $copy['cta']) ?> &rarr;</button>
 
   <ul class="lf-trust">
-    <li><strong>Free Design Consultation:</strong> Expert advice tailored to your vision</li>
-    <li><strong>Detailed Quote:</strong> Transparent pricing with no hidden fees</li>
-    <li><strong>No Obligation:</strong> Get expert insights with zero pressure</li>
-    <li><strong>Fast Response:</strong> Quick turnaround on your quote</li>
+    <?php foreach ($copy['trust'] as [$head, $text]): ?>
+      <li><strong><?= View::e($head) ?>:</strong> <?= View::e($text) ?></li>
+    <?php endforeach; ?>
   </ul>
-  <p class="lf-legal">&#128274; Your information is secure and will never be sold. By submitting, you agree to be contacted by <?= View::e($name) ?> about your project.</p>
+  <p class="lf-legal">&#128274; Your information is secure and will never be sold. By submitting, you agree to be contacted by <?= View::e($name) ?> about your request.</p>
+  <?php if ($copy['disclaimer'] !== null || ($license !== '' && $copy['license_label'] !== null)): ?>
+    <p class="lf-legal lf-disclaimer"><?= View::e($name) ?><?= $license !== '' && $copy['license_label'] !== null ? ' &middot; ' . View::e($copy['license_label'] . ' ' . $license) : '' ?>. <?= View::e((string) $copy['disclaimer']) ?></p>
+  <?php endif; ?>
 </form>
 <?php endif; ?>
