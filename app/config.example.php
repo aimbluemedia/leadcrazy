@@ -29,6 +29,13 @@ return [
     // Shown on the site and in the members area for help and page changes.
     'support_email' => 'support@leadcrazy.com',
 
+    // Shown in the privacy policy and terms. 'state' sets the governing law.
+    'legal' => [
+        'company' => 'LeadCrazy',
+        'state'   => 'Arizona',
+        'address' => '',
+    ],
+
     // Where team alerts go (new builder submissions to approve, new signups).
     // Empty: support_email.
     'notify_email' => '',
