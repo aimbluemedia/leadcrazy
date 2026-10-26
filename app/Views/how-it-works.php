@@ -31,6 +31,7 @@ $icons = [
     'finance' => '<path d="M3 20h18"/><path d="M5 16l5-5 3 3 6-7"/><path d="M15 7h4v4"/>',
     'medical' => '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>',
     'lawyers' => '<path d="M12 3v18M7 21h10"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0L5 7zM19 7l-3 7a3 3 0 0 0 6 0l-3-7z"/>',
+    'estate_planning' => '<path d="M6 2h9l4 4v16H6z"/><path d="M15 2v4h4"/><path d="M9 10h6M9 13h6"/><path d="M9 18c1-1.5 2-1.5 2.5 0s1.5 1.5 2.5 0 1.5-1 2 0"/>',
     'mortgage' => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M14 12.5c-.5-.7-1.3-1-2-1-1.1 0-2 .6-2 1.5s.9 1.3 2 1.5 2 .6 2 1.5-.9 1.5-2 1.5c-.8 0-1.5-.3-2-1M12 10.5v1M12 17v1"/>',
     'real_estate' => '<path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M15 3h4v4"/>',
     'insurance' => '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/>',
