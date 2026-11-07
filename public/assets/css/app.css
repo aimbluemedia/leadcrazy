@@ -93,8 +93,11 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
   -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--hair); }
 .site-header__in { display: flex; align-items: center; justify-content: space-between; min-height: 56px; gap: 16px; }
 .logo { display: inline-flex; align-items: center; gap: 8px; text-decoration: none !important; color: var(--ink); font: 600 20px/1 var(--font); letter-spacing: -.02em; }
-.logo__mark { width: 28px; height: 28px; border-radius: 7px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 15px; }
+.logo__mark { width: 36px; height: 36px; border-radius: 9px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 18px; }
 .logo__accent { color: var(--blue); }
+.logo__text { display: flex; flex-direction: column; gap: 3px; }
+.logo__name { line-height: 1; }
+.logo__by { font-size: 12px; font-weight: 500; letter-spacing: 0; color: var(--muted); line-height: 1; }
 .nav { display: flex; align-items: center; gap: 26px; font-size: 13px; }
 .nav a { color: var(--ink); opacity: .85; }
 .nav a:hover { opacity: 1; text-decoration: none; }

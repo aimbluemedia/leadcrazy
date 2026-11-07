@@ -1,1 +1,1 @@
-<a class="logo" href="/"><span class="logo__mark" aria-hidden="true">&#9889;</span><span>Lead<span class="logo__accent">Crazy</span></span></a>
+<a class="logo" href="/" aria-label="LeadCrazy by Toutify"><span class="logo__mark" aria-hidden="true">&#9889;</span><span class="logo__text"><span class="logo__name">Lead<span class="logo__accent">Crazy</span></span><span class="logo__by">by Toutify</span></span></a>
