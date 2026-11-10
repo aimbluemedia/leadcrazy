@@ -44,7 +44,7 @@ use App\Support\View;
     <div class="hero-band__art">
       <div class="hero-photo">
         <div class="hero-photo__frame">
-          <img src="<?= View::e(View::asset('/assets/img/hero-bakery.webp')) ?>" width="1536" height="1024" fetchpriority="high"
+          <img src="<?= View::e(View::asset('/assets/img/hero-bakery.webp')) ?>" width="1448" height="1086" fetchpriority="high"
                alt="A smiling bakery owner at her laptop in her shop">
         </div>
 
