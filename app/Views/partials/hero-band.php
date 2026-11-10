@@ -1,11 +1,11 @@
 <?php
 /**
- * Dark hero band at the top of the homepage. Same structure as PromoMonster's
- * (strip, headline, two calls to action, chips, illustration, fact panel), but
- * the illustration is the product: a lead form with new leads arriving.
+ * Hero band at the top of the homepage: headline and calls to action on the
+ * left; on the right, like ContentVendor's, a photo of a business owner with
+ * lead activity floating around it, and the sister products a membership
+ * includes underneath.
  *
- * The lead cards are illustrations and are captioned as such. No invented
- * traction numbers either: the panel only carries things a visitor can check.
+ * The floating cards are illustrations and are captioned as such.
  */
 use App\Support\View;
 ?>
@@ -42,30 +42,68 @@ use App\Support\View;
     </div>
 
     <div class="hero-band__art">
-      <div class="lead-stage" aria-hidden="true">
-        <div class="lead-glow"></div>
-        <div class="lead-form">
-          <div class="lead-form__offer"><span>Limited time</span><strong>Spring Backyard Special</strong><em>Free design + 10% off</em></div>
-          <p class="lead-form__title">Get Your Free Quote</p>
-          <div class="lead-form__row"><i></i><i></i></div>
-          <i class="lead-form__line"></i>
-          <div class="lead-form__checks"><b>&#10003; Pavers</b><b>Turf</b><b>&#10003; Lighting</b><b>Fire pit</b></div>
-          <i class="lead-form__line"></i>
-          <div class="lead-form__btn">Get My Free Quote &rarr;</div>
+      <div class="hero-photo">
+        <div class="hero-photo__frame">
+          <img src="<?= View::e(View::asset('/assets/img/hero-bakery.webp')) ?>" width="1536" height="1024" fetchpriority="high"
+               alt="A smiling bakery owner at her laptop in her shop">
         </div>
-        <?php foreach ([
-          ['n1', 'New lead', 'Dana R. &middot; Tempe', 'Pavers &middot; $10k&ndash;25k'],
-          ['n2', 'New lead', 'Marcus T. &middot; Mesa', 'Artificial turf &middot; ASAP'],
-          ['n3', 'Offer claimed', 'Priya S. &middot; Gilbert', 'Spring Backyard Special'],
-          ['n4', 'New lead', 'Jordan L. &middot; Chandler', 'Lighting &middot; 1&ndash;3 months'],
-        ] as [$pos, $kind, $who, $what]): ?>
-          <div class="lead-pop lead-pop--<?= $pos ?>">
-            <span class="lead-pop__dot"></span>
-            <span><strong><?= $kind ?></strong><em><?= $who ?></em><small><?= $what ?></small></span>
+
+        <div class="hcard hcard--pill hcard--c1" aria-hidden="true">
+          <span class="hcard__ico hcard__ico--dark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+          New lead &middot; Wedding cake
+        </div>
+
+        <div class="hcard hcard--c2" aria-hidden="true">
+          <p class="hcard__head"><span class="hcard__ico hcard__ico--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></span>Offer claimed</p>
+          <div class="hcard__offer">
+            <span class="hcard__thumb"></span>
+            <span><strong>Free dozen cookies</strong> with any catering order this month!</span>
           </div>
-        <?php endforeach; ?>
+          <p class="hcard__meta"><span>Limited time</span><span>Expires Dec 31</span></p>
+        </div>
+
+        <div class="hcard hcard--c3" aria-hidden="true">
+          <p class="hcard__head"><span class="hcard__ico hcard__ico--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 2h3v16H5V5h3z"/><path d="M9 12l2 2 4-4"/></svg></span>Quote request</p>
+          <p class="hcard__q">&ldquo;What do you need?&rdquo;</p>
+          <p class="hcard__a"><b>&#10003; Custom cake</b><b>&#10003; Catering</b></p>
+          <p class="hcard__q">Budget <strong>$250 &ndash; $500</strong> &middot; Date <strong>Dec 14</strong></p>
+        </div>
+
+        <div class="hcard hcard--pill hcard--c4" aria-hidden="true">
+          <span class="hcard__ico hcard__ico--red"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+          Gilbert, AZ &middot; 85234
+        </div>
+
+        <div class="hcard hcard--c5" aria-hidden="true">
+          <span class="hcard__g">G</span>
+          <span><strong>New 5-star Google review</strong><small><em>&#9733;&#9733;&#9733;&#9733;&#9733;</em> 4.9 &middot; Just now</small></span>
+        </div>
+
+        <div class="hcard hcard--c6" aria-hidden="true">
+          <span class="hcard__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span>
+          <span><strong>New lead: quote request</strong><small>From your website &middot; 2 min ago</small></span>
+        </div>
       </div>
-      <p class="hero-band__art-note">Example leads, for illustration</p>
+
+      <div class="hero-members">
+        <p class="hero-members__label"><span class="hcard__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span>Membership includes access to</p>
+        <div class="hero-members__grid">
+          <?php foreach ([
+            ['Search<wbr>Monster', 'AI search &amp; free listing', '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>'],
+            ['Monster<wbr>List', 'Free listings everywhere', '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>'],
+            ['Promo<wbr>Monster', 'Reviews &amp; reputation', '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1-4.5-4.2 6.1-.8z"/>'],
+            ['Content<wbr>Vendor', 'AI posts &amp; content', '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>'],
+            ['Official Directories', 'Free state directory listings', '<path d="M3 21h18M4 10h16M12 3 3 8v2h18V8z"/><path d="M6 10v8M10 10v8M14 10v8M18 10v8"/>'],
+          ] as [$name, $what, $icon]): ?>
+            <div class="hero-member">
+              <span class="hero-member__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?= $icon ?></svg></span>
+              <strong><?= $name ?></strong>
+              <small><?= $what ?></small>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <p class="hero-band__art-note">Example activity, for illustration</p>
     </div>
   </div>
 
