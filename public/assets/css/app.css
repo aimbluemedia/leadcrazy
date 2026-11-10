@@ -383,14 +383,6 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 }
 .hero-band__art-note { margin: 12px 0 0; font-size: 12px; color: var(--faint); text-align: right; }
 
-.hero-panel { margin-bottom: 56px; padding: 26px; background: #fff; border-radius: 22px; box-shadow: 0 0 0 1px var(--hair); }
-.hero-panel__label { margin: 0 0 20px; text-align: center; font-size: 13px; font-weight: 600; color: var(--faint); }
-.hero-panel__grid { display: grid; gap: 20px; }
-@media (min-width: 760px) { .hero-panel__grid { grid-template-columns: repeat(3, 1fr); gap: 26px; } }
-.hero-stat { display: flex; align-items: center; gap: 14px; }
-.hero-stat__tile { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-weight: 600; font-size: 17px; color: var(--blue); background: var(--blue-soft); }
-.hero-stat__v { display: block; color: var(--ink); font: 700 26px/1.1 var(--font); letter-spacing: -.025em; }
-.hero-stat__l { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); line-height: 1.45; }
 
 .ticker { background: #fff; color: var(--muted); overflow: hidden; font-size: 15px; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
 .ticker__track { display: flex; width: max-content; }
