@@ -36,7 +36,7 @@ return [
     // app_url + /auth/toutify/callback).
     'toutify' => [
         'issuer'         => 'https://toutify.com',
-        'client_id'      => 'LeadCrazy',
+        'client_id'      => 'leadcrazy',
         'client_secret'  => '',
         'webhook_secret' => '',
     ],

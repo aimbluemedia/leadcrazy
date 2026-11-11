@@ -11,7 +11,7 @@ Set as environment variables, or in the `toutify` block of `app/config.php`
 | Setting | Value |
 |---|---|
 | `TOUTIFY_ISSUER` | `https://toutify.com` |
-| `TOUTIFY_CLIENT_ID` | `LeadCrazy` |
+| `TOUTIFY_CLIENT_ID` | `leadcrazy` (exactly as registered on Toutify; capitals matter) |
 | `TOUTIFY_CLIENT_SECRET` | client secret from Toutify |
 | `TOUTIFY_WEBHOOK_SECRET` | webhook secret from Toutify |
 
