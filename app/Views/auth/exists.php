@@ -7,8 +7,7 @@
     </span>
     <h1>You already have a LeadCrazy profile</h1>
     <p class="lede" style="font-size:17px">We found an existing profile that matches your email, business name or website<?= $business !== '' ? ' for <strong>' . View::e($business) . '</strong>' : '' ?>. Log in to view it and pick up where you left off.</p>
-    <a class="btn btn--primary btn--xl btn--block" href="/members/login<?= $email !== '' ? '?email=' . View::e(rawurlencode($email)) : '' ?>">Log in and view my profile</a>
-    <p class="form__note center" style="margin-top:14px"><a href="/members/forgot">Forgot your password?</a></p>
+    <a class="btn btn--primary btn--xl btn--block" href="/auth/toutify/login">Log in and view my profile</a>
     <p class="form__note center">Not your business? <a href="mailto:<?= View::e((string) App\Support\Config::get('support_email', '')) ?>">Contact us</a> and we will sort it out.</p>
   </div>
 <?= View::render('auth/_close') ?>

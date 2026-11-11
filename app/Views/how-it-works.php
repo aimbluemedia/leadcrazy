@@ -7,7 +7,6 @@
  * (BuilderController::publish), so nothing typed here is trusted as-is.
  *
  * @var array<string,mixed> $state  Builder state to restore after a failed publish.
- * @var array<string,string> $old   Account fields to restore (never the password).
  * @var ?string $error
  * @var string $token               Signed form token (FormToken, slug "builder").
  */
@@ -43,7 +42,6 @@ $icons = [
     'accounting' => '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/>',
     'other' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
 ];
-$o = static fn (string $k): string => View::e($old[$k] ?? '');
 $config = [
     'trades' => Trades::forBuilder(),
     'limits' => ['cities' => Plans::FREE_CITIES, 'zips' => Plans::FREE_ZIPS, 'services' => 15],
@@ -74,7 +72,7 @@ $config = [
       <?php if ($error !== null): ?>
         <div class="alert builder__banner" role="alert" id="builder-error"><strong>Your lead form was not submitted yet.</strong> <?= View::e($error) ?></div>
       <?php endif; ?>
-      <noscript><div class="alert alert--info">The builder needs JavaScript. You can still <a href="/members/signup">create your free account</a> and we will build your page for you.</div></noscript>
+      <noscript><div class="alert alert--info">The builder needs JavaScript. You can still <a href="/signup">create your free account</a> and we will build your page for you.</div></noscript>
 
       <form method="post" action="/members/build" class="builder__form form" novalidate data-builder-form>
         <input type="hidden" name="_ft" value="<?= View::e($token) ?>">
@@ -115,7 +113,7 @@ $config = [
           <div class="exists-note" data-exists hidden>
             <strong>Looks like you already have a LeadCrazy profile.</strong>
             <p>We found a profile matching this business name or website. Log in to view it and pick up where you left off.</p>
-            <a class="btn btn--primary btn--sm" href="/members/login">Log in and view my profile</a>
+            <a class="btn btn--primary btn--sm" href="/auth/toutify/login">Log in and view my profile</a>
           </div>
         </fieldset>
 
@@ -167,18 +165,12 @@ $config = [
         <!-- 6. Submit -->
         <fieldset class="bstep" data-step="6" hidden>
           <legend><span class="bstep__n">Step 6 of 6</span>Submit your lead form &mdash; free</legend>
-          <p class="bstep__hint">Create your free account. Once our team approves your page, it goes live at:</p>
+          <p class="bstep__hint">Next you create your free account on Toutify, LeadCrazy's parent site &mdash; one login for all its sites. Then you come straight back and your lead form is saved. Once our team approves it, it goes live at:</p>
           <p class="slug-preview" data-slug-preview></p>
-          <div class="form__row">
-            <div><label for="p-first">First name</label><input id="p-first" name="first_name" type="text" maxlength="80" required autocomplete="given-name" value="<?= $o('first_name') ?>"></div>
-            <div><label for="p-last">Last name</label><input id="p-last" name="last_name" type="text" maxlength="80" autocomplete="family-name" value="<?= $o('last_name') ?>"></div>
-          </div>
-          <div><label for="p-email">Email</label><input id="p-email" name="email" type="email" maxlength="254" required autocomplete="email" value="<?= $o('email') ?>" data-email-check><p class="field-error" data-email-msg<?= empty($old['email_taken']) ? ' hidden' : '' ?>><?= View::e(App\Controllers\BuilderController::EMAIL_TAKEN) ?> <a href="/members/login">Sign in</a></p><p class="hint">New leads show up in your dashboard; you sign in with this.</p></div>
-          <div><label for="p-pass">Password</label><input id="p-pass" name="password" type="password" minlength="10" required autocomplete="new-password"><p class="hint">At least 10 characters.</p></div>
           <label class="check"><input type="checkbox" name="agree" value="1" required> <span>I agree to the <a href="/terms" target="_blank">terms</a> and <a href="/privacy" target="_blank">privacy policy</a>.</span></label>
-          <button class="btn btn--primary btn--xl btn--block" type="submit" data-publish>Submit my free lead form</button>
+          <button class="btn btn--primary btn--xl btn--block" type="submit" data-publish>Create my free account &amp; submit</button>
           <p class="hint center">Free forever &middot; <?= Plans::FREE_MONTHLY_LEADS ?> leads a month &middot; no credit card &middot; upgrade any time</p>
-          <p class="hint center">Already have an account? <a href="/members/login">Sign in</a>.</p>
+          <p class="hint center">Already have an account? <a href="/auth/toutify/login">Log in</a>.</p>
         </fieldset>
 
         <p class="builder__error" role="alert" data-step-error hidden></p>

@@ -260,7 +260,7 @@ if (!isset($tabs[$tab])) {
     <tbody><?php foreach ($users as $u): ?>
       <tr><td><?= View::e($u['email']) ?></td><td><?= View::e(trim($u['first_name'] . ' ' . $u['last_name'])) ?></td>
           <td><?= $u['last_login_at'] ? View::e(date('M j, Y g:ia', strtotime((string) $u['last_login_at']) ?: 0)) : 'never' ?></td>
-          <td><form method="post" action="/superadmin/account/password" data-confirm="Set a temporary password for <?= View::e($u['email']) ?>?"><?= $hidden ?><input type="hidden" name="user_id" value="<?= (int) $u['id'] ?>"><button class="btn btn--ghost btn--sm" type="submit">Temporary password</button></form></td></tr>
+          <td><?php if (!empty($u['toutify_sub'])): ?><span class="muted" title="Toutify member <?= View::e((string) $u['toutify_sub']) ?>">Toutify login<?= ($u['toutify_status'] ?? 'active') !== 'active' ? ' (' . View::e((string) $u['toutify_status']) . ')' : '' ?></span><?php else: ?><span class="muted">Not linked to Toutify yet</span><?php endif; ?></td></tr>
     <?php endforeach; ?></tbody>
   </table></div>
 </div>

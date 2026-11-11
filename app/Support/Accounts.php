@@ -17,7 +17,10 @@ final class Accounts
     }
 
     /**
-     * @param array{business:string,first:string,last:?string,email:string,password:string,plan:string,status?:string} $owner
+     * $owner['user_id'] attaches the new business to an existing login (a
+     * Toutify member signing in for the first time) instead of creating one.
+     *
+     * @param array{business:string,plan:string,status?:string,user_id?:int,first?:string,last?:?string,email?:string,password?:?string} $owner
      * @param array<string,mixed> $page Columns for the pages row.
      * @return array{user_id:int,account_id:int,slug:string}
      */
@@ -26,17 +29,21 @@ final class Accounts
         $pdo = Database::connection();
         $pdo->beginTransaction();
         try {
-            Database::run(
-                'INSERT INTO users (email, password_hash, first_name, last_name, password_changed_at)
-                 VALUES (:email, :hash, :first, :last, NOW())',
-                [
-                    'email' => $owner['email'],
-                    'hash' => password_hash($owner['password'], PASSWORD_DEFAULT),
-                    'first' => $owner['first'],
-                    'last' => $owner['last'],
-                ],
-            );
-            $userId = (int) $pdo->lastInsertId();
+            if (isset($owner['user_id'])) {
+                $userId = (int) $owner['user_id'];
+            } else {
+                Database::run(
+                    'INSERT INTO users (email, password_hash, first_name, last_name, password_changed_at)
+                     VALUES (:email, :hash, :first, :last, NOW())',
+                    [
+                        'email' => $owner['email'],
+                        'hash' => ($owner['password'] ?? null) === null ? '' : password_hash($owner['password'], PASSWORD_DEFAULT),
+                        'first' => $owner['first'],
+                        'last' => $owner['last'],
+                    ],
+                );
+                $userId = (int) $pdo->lastInsertId();
+            }
 
             $slug = Slug::unique($owner['business']);
             Database::run(

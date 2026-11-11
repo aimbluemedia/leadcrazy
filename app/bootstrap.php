@@ -59,10 +59,24 @@ if (str_starts_with($requestPath, '/public/')) {
 }
 define('REQUEST_PATH', $requestPath);
 
+// Toutify sign-in needs the session to carry state, nonce and PKCE verifier
+// across the trip to Toutify; /signup remembers a chosen plan. The back-channel
+// logout and webhook routes are server-to-server and get no session.
 $needsSession = PHP_SAPI !== 'cli'
-    && (preg_match('#^/(members|superadmin)(/|$)#', $requestPath) === 1);
+    && (preg_match('#^/(members|superadmin)(/|$)#', $requestPath) === 1
+        || preg_match('#^/auth/toutify/(login|callback|initiate|logout)$#', $requestPath) === 1
+        || $requestPath === '/signup');
 
 if ($needsSession) {
+    // Sessions live in storage/sessions with a two-hour idle lifetime: long
+    // enough for sign-up on Toutify (30+ minutes), and out of the shared temp
+    // directory where other sites' cleanup could delete them early.
+    $sessionDir = BASE_PATH . '/storage/sessions';
+    if ((is_dir($sessionDir) || @mkdir($sessionDir, 0700, true)) && is_writable($sessionDir)) {
+        session_save_path($sessionDir);
+    }
+    ini_set('session.gc_maxlifetime', '7200');
+    ini_set('session.use_strict_mode', '1');
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',

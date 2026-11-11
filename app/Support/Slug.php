@@ -15,7 +15,7 @@ final class Slug
      * page that looks like the login.
      */
     public const RESERVED = [
-        'admin', 'api', 'assets', 'billing', 'blog', 'contact', 'embed', 'feed',
+        'admin', 'api', 'assets', 'auth', 'billing', 'blog', 'contact', 'embed', 'feed',
         'form', 'help', 'home', 'how-it-works', 'index', 'install', 'lead', 'leadcrazy',
         'leads', 'login', 'logout', 'members', 'monsterlist', 'pricing', 'privacy',
         'public', 'signup', 'superadmin', 'support', 'terms', 'uploads', 'webhooks',

@@ -29,6 +29,15 @@ final class Schema
     private const ADDED_COLUMNS = [
         'pages' => ['trade' => 'VARCHAR(40) NULL', 'license_number' => 'VARCHAR(80) NULL'],
         'leads' => ['consent_at' => 'DATETIME NULL', 'consent_text' => 'VARCHAR(700) NULL'],
+        'users' => [
+            'toutify_sub' => 'CHAR(26) NULL', 'name' => 'VARCHAR(160) NULL', 'business_name' => 'VARCHAR(160) NULL',
+            'phone' => 'VARCHAR(40) NULL', 'toutify_status' => 'VARCHAR(20) NULL', 'toutify_updated_at' => 'INT UNSIGNED NULL',
+        ],
+    ];
+
+    /** Unique indexes added after launch, as table => [index name => column]. */
+    private const ADDED_UNIQUE = [
+        'users' => ['users_toutify_sub_unique' => 'toutify_sub'],
     ];
 
     private static bool $done = false;
@@ -45,7 +54,7 @@ final class Schema
             return;
         }
         $sql = (string) file_get_contents($file);
-        $version = substr(hash('sha256', $sql . json_encode(self::ADDED_COLUMNS)), 0, 16);
+        $version = substr(hash('sha256', $sql . json_encode(self::ADDED_COLUMNS) . json_encode(self::ADDED_UNIQUE)), 0, 16);
         $marker = BASE_PATH . '/storage/schema.version';
 
         if (is_file($marker) && trim((string) @file_get_contents($marker)) === $version) {
@@ -75,6 +84,16 @@ final class Schema
                 if (!in_array($column, $existing, true)) {
                     $pdo->exec('ALTER TABLE `' . $table . '` ADD COLUMN `' . $column . '` ' . $definition);
                     ErrorHandler::note('schema', 'added column ' . $table . '.' . $column);
+                }
+            }
+        }
+
+        foreach (self::ADDED_UNIQUE as $table => $indexes) {
+            $existing = array_map('strtolower', array_column($pdo->query('SHOW INDEX FROM `' . $table . '`')->fetchAll(PDO::FETCH_ASSOC) ?: [], 'Key_name'));
+            foreach ($indexes as $index => $column) {
+                if (!in_array(strtolower($index), $existing, true)) {
+                    $pdo->exec('ALTER TABLE `' . $table . '` ADD UNIQUE KEY `' . $index . '` (`' . $column . '`)');
+                    ErrorHandler::note('schema', 'added unique index ' . $table . '.' . $index);
                 }
             }
         }

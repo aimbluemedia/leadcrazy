@@ -63,7 +63,7 @@
       <p class="split__note">Every lead lands in your dashboard &mdash; track it from new to won.</p>
 
       <div class="hero__ctas">
-        <a class="btn btn--primary btn--xl" href="/members/signup">Get My Free Lead Page</a>
+        <a class="btn btn--primary btn--xl" href="/signup">Get My Free Lead Page</a>
         <a class="btn btn--ghost btn--xl" href="/how-it-works">See How It Works</a>
       </div>
     </div>
@@ -126,7 +126,7 @@
           We never sell, share or resell the people who fill in your form, and we never pass them to a competitor.
           Every request goes to you, and only you, on every plan.</span>
       </p>
-      <a class="close-btn" href="/members/signup">Create your free account &rarr;</a>
+      <a class="close-btn" href="/signup">Create your free account &rarr;</a>
       <ul class="close-facts">
         <li>No credit card</li>
         <li>Free is a plan, not a trial</li>
@@ -146,6 +146,6 @@
   <div class="container">
     <h2>Ready for more quote requests?</h2>
     <p class="lede" style="margin:0 auto 22px">Your free page is a few minutes away.</p>
-    <a class="btn btn--primary" href="/members/signup">Get Your Free Page &rarr;</a>
+    <a class="btn btn--primary" href="/signup">Get Your Free Page &rarr;</a>
   </div>
 </section>

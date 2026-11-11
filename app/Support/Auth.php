@@ -41,7 +41,8 @@ final class Auth
         }
 
         $user = Database::first(
-            'SELECT id, email, first_name, last_name, is_admin, status, must_change_password
+            'SELECT id, email, name, first_name, last_name, business_name, phone, is_admin, status, must_change_password,
+                    toutify_sub, toutify_status
                FROM users WHERE id = :id LIMIT 1',
             ['id' => (int) $id],
         );
@@ -51,6 +52,23 @@ final class Auth
         if ($user === null || $user['status'] !== 'active') {
             self::logout();
             return null;
+        }
+
+        // Members sign in through Toutify. Their session is only good while its
+        // toutify_sessions row exists (back-channel logout, suspension and
+        // deletion remove it) and while Toutify says the account is active.
+        // Staff keep their LeadCrazy password login and skip this.
+        if ((int) $user['is_admin'] !== 1) {
+            $t = $_SESSION['toutify'] ?? null;
+            $live = is_array($t)
+                && is_string($t['key'] ?? null)
+                && ($t['sub'] ?? null) === $user['toutify_sub']
+                && $user['toutify_status'] === 'active'
+                && Toutify\Members::sessionValid($t['key'], (string) $user['toutify_sub']);
+            if (!$live) {
+                self::logout();
+                return null;
+            }
         }
 
         return self::$cached = $user;
@@ -132,7 +150,7 @@ final class Auth
     public static function requireMember(): void
     {
         if (self::account() === null) {
-            Request::redirect('/members/login');
+            Request::redirect('/auth/toutify/login');
         }
         self::enforcePasswordChange('members');
     }
@@ -283,7 +301,10 @@ final class Auth
 
     public static function logout(): void
     {
-        unset($_SESSION[self::SESSION_KEY]);
+        if (is_string($_SESSION['toutify']['key'] ?? null)) {
+            Toutify\Members::closeSession($_SESSION['toutify']['key']);
+        }
+        unset($_SESSION[self::SESSION_KEY], $_SESSION['toutify']);
         self::$cached = null;
         self::$account = null;
         session_regenerate_id(true);

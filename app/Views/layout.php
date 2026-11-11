@@ -13,8 +13,8 @@
       <a href="/" <?= ($current ?? '') === 'home' ? 'aria-current="page"' : '' ?>>Home</a>
       <a href="/how-it-works" <?= ($current ?? '') === 'how' ? 'aria-current="page"' : '' ?>>How it works</a>
       <a href="/pricing" <?= ($current ?? '') === 'pricing' ? 'aria-current="page"' : '' ?>>Pricing</a>
-      <a href="/members/login">Sign in</a>
-      <a class="btn btn--primary btn--sm" href="/members/signup">Get Your Free Page</a>
+      <a href="/auth/toutify/login">Log in</a>
+      <a class="btn btn--primary btn--sm" href="/signup">Get Your Free Page</a>
     </nav>
   </div>
 </header>
@@ -22,7 +22,7 @@
 <footer class="site-footer">
   <div class="container site-footer__in">
     <div><?= View::render('partials/logo') ?><p class="muted" style="margin-top:8px">The Million Dollar Lead Form for local service businesses.</p></div>
-    <div><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/members/login">Sign in</a></div>
+    <div><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/auth/toutify/login">Log in</a></div>
   </div>
   <div class="container"><p class="muted" style="font-size:12px;margin-top:16px">&copy; <?= date('Y') ?> LeadCrazy. Pages listed on MonsterList.</p></div>
 </footer>

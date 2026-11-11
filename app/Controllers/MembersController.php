@@ -34,6 +34,17 @@ final class MembersController
         $this->account = Auth::account() ?? [];
     }
 
+    /** GET /members/profile -- the member's details, kept on Toutify and shown here read-only. */
+    public function profile(): void
+    {
+        $this->render('members/profile', [
+            'title' => 'Profile',
+            'current' => 'profile',
+            'editUrl' => \App\Support\Toutify\Client::issuer() . '/members/profile.php?client_id='
+                . rawurlencode(\App\Support\Toutify\Client::clientId()) . '&return_to=' . rawurlencode(\App\Support\Toutify\Client::site() . '/'),
+        ]);
+    }
+
     public function overview(): void
     {
         $id = (int) $this->account['id'];

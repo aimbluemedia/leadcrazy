@@ -29,6 +29,18 @@ return [
     // Shown on the site and in the members area for help and page changes.
     'support_email' => 'support@leadcrazy.com',
 
+    // Members sign in through Toutify (OpenID Connect). Environment variables
+    // TOUTIFY_ISSUER, TOUTIFY_CLIENT_ID, TOUTIFY_CLIENT_SECRET and
+    // TOUTIFY_WEBHOOK_SECRET win over these when set. app_url above must be
+    // exactly the address registered on Toutify (redirect URI is
+    // app_url + /auth/toutify/callback).
+    'toutify' => [
+        'issuer'         => 'https://toutify.com',
+        'client_id'      => 'LeadCrazy',
+        'client_secret'  => '',
+        'webhook_secret' => '',
+    ],
+
     // Shown in the privacy policy and terms. 'state' sets the governing law.
     'legal' => [
         'company' => 'LeadCrazy',

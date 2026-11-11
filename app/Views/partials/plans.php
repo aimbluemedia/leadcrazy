@@ -7,7 +7,7 @@
       <p class="plan__price">$<?= (int) $d['price'] ?><small><?= $d['price'] > 0 ? '/month' : ' forever' ?></small></p>
       <p class="plan__tagline"><?= View::e($d['tagline']) ?></p>
       <ul><?php foreach ($d['features'] as $f): ?><li><?= View::e($f) ?></li><?php endforeach; ?></ul>
-      <a class="btn <?= $featured ? 'btn--primary' : 'btn--ghost' ?> btn--block" href="/members/signup?plan=<?= $plan ?>">
+      <a class="btn <?= $featured ? 'btn--primary' : 'btn--ghost' ?> btn--block" href="/signup?plan=<?= $plan ?>">
         <?= $plan === Plans::FREE ? 'Start free' : 'Choose ' . View::e($d['name']) ?>
       </a>
     </div>

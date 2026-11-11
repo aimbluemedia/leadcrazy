@@ -7,3 +7,5 @@ public/uploads/*
 !public/uploads/index.html
 storage/app.key
 storage/schema.version
+storage/sessions/
+storage/cache/

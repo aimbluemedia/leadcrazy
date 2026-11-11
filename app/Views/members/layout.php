@@ -1,6 +1,5 @@
 <?php
 /** @var string $content @var string $current @var array<string,mixed> $account @var array<string,mixed> $user @var ?string $flash */
-use App\Support\Csrf;
 use App\Support\Pages;
 use App\Support\Plans;
 use App\Support\View;
@@ -10,6 +9,7 @@ $nav = [
     'page' => ['/members/page', 'Your page'],
     'embed' => ['/members/embed', 'Embed on your site'],
     'billing' => ['/members/billing', 'Plan & billing'],
+    'profile' => ['/members/profile', 'Profile'],
 ];
 ?>
 <!doctype html>
@@ -34,8 +34,7 @@ $nav = [
       <strong style="color:#fff"><?= View::e($account['business_name']) ?></strong><br>
       <?= View::e(Plans::name((string) $account['plan'])) ?> plan &middot; <?= View::e($user['email'] ?? '') ?>
       <div class="row" style="margin-top:8px">
-        <a href="/members/password" style="color:#cdd5e1;font-size:12px">Change password</a>
-        <form method="post" action="/members/logout" class="inline"><?= Csrf::field() ?><button type="submit">Sign out</button></form>
+        <a href="/auth/toutify/logout" class="app__signout">Sign out</a>
       </div>
     </div>
   </aside>

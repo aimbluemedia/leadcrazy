@@ -71,9 +71,10 @@ use App\Controllers\InstallController;
 use App\Controllers\MembersController;
 use App\Controllers\PageController;
 use App\Controllers\PasswordController;
-use App\Controllers\PasswordResetController;
 use App\Controllers\SignupController;
 use App\Controllers\SuperadminController;
+use App\Controllers\ToutifyController;
+use App\Support\Request;
 use App\Support\Router;
 
 header('X-Content-Type-Options: nosniff');
@@ -116,6 +117,19 @@ $router->get('/feed/monsterlist', static fn () => (new FeedController())->monste
 // Stripe. The signature header is the authorisation; no CSRF, no session.
 $router->post('/webhooks/stripe', static fn () => (new BillingController())->webhook());
 
+// ---------------------------------------------------------------- Toutify
+// Members sign in through Toutify, the parent site (OpenID Connect). The
+// back-channel logout and webhook are server-to-server: their signed token or
+// signature is the authorisation, no CSRF, no session.
+$toutify = new ToutifyController();
+$router->get('/auth/toutify/login',               [$toutify, 'login']);
+$router->get('/auth/toutify/callback',            [$toutify, 'callback']);
+$router->get('/auth/toutify/initiate',            [$toutify, 'initiate']);
+$router->get('/auth/toutify/logout',              [$toutify, 'logout']);
+$router->post('/auth/toutify/backchannel-logout', [$toutify, 'backchannelLogout']);
+$router->post('/auth/toutify/webhook',            [$toutify, 'webhook']);
+$router->get('/signup',                           static fn () => (new SignupController())->show());
+
 // ---------------------------------------------------------------- superadmin
 // Controllers whose constructor demands a login are built inside each closure,
 // so building them never redirects a public request.
@@ -150,18 +164,19 @@ $router->get('/superadmin/errors',              $sa('errors'));
 $router->post('/superadmin/requests/done',      $sa('closeRequest'));
 
 // ---------------------------------------------------------------- members
-$router->get('/members/login',     static fn () => $auth->showLogin('members'));
-$router->post('/members/login',    static fn () => $auth->login('members'));
-$router->post('/members/logout',   static fn () => $auth->logout('members'));
-$router->get('/members/password',  static fn () => (new PasswordController())->show('members'));
-$router->post('/members/password', static fn () => (new PasswordController())->update('members'));
-// Forgotten password. The token is the last path segment of the emailed link;
-// the form posts it back in the body so it stays out of access logs.
-$router->get('/members/forgot',  static fn () => (new PasswordResetController())->showForgot());
-$router->post('/members/forgot', static fn () => (new PasswordResetController())->sendLink());
-$router->getToken('/members/reset', static fn (string $t) => (new PasswordResetController())->showReset($t));
-$router->get('/members/reset',   static fn () => (new PasswordResetController())->showReset(''));
-$router->post('/members/reset',  static fn () => (new PasswordResetController())->reset());
+// Members' logins live on Toutify: signing in, out, and passwords all go there.
+// The old addresses still work and point to the new places.
+$toToutifyLogin = static fn () => Request::redirect('/auth/toutify/login');
+$router->get('/members/login',     $toToutifyLogin);
+$router->post('/members/login',    $toToutifyLogin);
+$router->post('/members/logout',   static fn () => Request::redirect('/auth/toutify/logout'));
+$router->get('/members/password',  static fn () => Request::redirect('/members/profile'));
+$router->post('/members/password', static fn () => Request::redirect('/members/profile'));
+$router->get('/members/forgot',    $toToutifyLogin);
+$router->post('/members/forgot',   $toToutifyLogin);
+$router->getToken('/members/reset', static fn (string $t) => Request::redirect('/auth/toutify/login'));
+$router->get('/members/reset',     $toToutifyLogin);
+$router->post('/members/reset',    $toToutifyLogin);
 
 // The free lead form builder on /how-it-works publishes here. Under /members so
 // it has a session to sign the new owner in; protected by a signed form token.
@@ -169,11 +184,12 @@ $router->post('/members/build', static fn () => (new BuilderController())->publi
 $router->get('/members/pending', static fn () => (new BuilderController())->pending());
 $router->post('/members/check',  static fn () => (new BuilderController())->check());
 
-$router->get('/members/signup',  static fn () => (new SignupController())->show());
-$router->post('/members/signup', static fn () => (new SignupController())->store());
+$router->get('/members/signup',  static fn () => (new SignupController())->legacy());
+$router->post('/members/signup', static fn () => (new SignupController())->legacy());
 
 $m = static fn (string $method) => static fn () => (new MembersController())->$method();
 $router->get('/members',                 $m('overview'));
+$router->get('/members/profile',         $m('profile'));
 $router->get('/members/intake',          $m('intake'));
 $router->post('/members/intake',         $m('saveIntake'));
 $router->get('/members/leads',           $m('leads'));

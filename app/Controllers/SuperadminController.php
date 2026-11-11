@@ -107,7 +107,7 @@ final class SuperadminController
             'gallery' => Database::all('SELECT * FROM gallery_images WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
             'testimonials' => Database::all('SELECT * FROM testimonials WHERE account_id = :id ORDER BY sort_order, id', ['id' => $id]),
             'users' => Database::all(
-                'SELECT u.id, u.email, u.first_name, u.last_name, u.last_login_at FROM users u
+                'SELECT u.id, u.email, u.first_name, u.last_name, u.last_login_at, u.toutify_sub, u.toutify_status FROM users u
                    JOIN account_users au ON au.user_id = u.id WHERE au.account_id = :id',
                 ['id' => $id],
             ),

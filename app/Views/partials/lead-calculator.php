@@ -71,7 +71,7 @@ $fields = [
       <div><dt>Every lead is worth</dt><dd data-out="perLead"><?= $money($d['value'] * $d['close'] / 100 * $d['margin'] / 100) ?> profit</dd></div>
     </dl>
 
-    <a class="btn btn--primary btn--block btn--xl" href="/members/signup">Get My Free Lead Page &rarr;</a>
+    <a class="btn btn--primary btn--block btn--xl" href="/signup">Get My Free Lead Page &rarr;</a>
     <p class="lcalc__note">Estimates from the numbers you enter. Real results depend on your traffic, offers and how fast you follow up.</p>
   </div>
 </div>

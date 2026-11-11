@@ -28,7 +28,7 @@ use App\Support\View;
       <p class="hero-band__lede">Stop losing visitors who never call. Your lead page asks the right questions, leads with your best offer,
         and sends every ready-to-buy customer straight to your dashboard.</p>
       <div class="hero-band__cta">
-        <a class="btn btn--primary btn--xl" href="/members/signup">Free Lead Page &rarr;</a>
+        <a class="btn btn--primary btn--xl" href="/signup">Free Lead Page &rarr;</a>
         <a class="btn hero-band__ghost btn--xl" href="/how-it-works">Try it Now!</a>
       </div>
       <p class="hero-band__note">Takes about two minutes. Our team builds the page.</p>

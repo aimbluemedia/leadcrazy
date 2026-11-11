@@ -20,19 +20,18 @@ use App\Support\View;
 /**
  * The free lead form builder on /how-it-works, and publishing what it built.
  *
- * Submitting creates a Free account with the page pending approval. The
- * owner logs in to finish their account; staff approve it and it goes live.
+ * Submitting keeps the page in the session and sends the visitor to Toutify
+ * to create their account; the page is created, pending approval, when they
+ * come back signed in. Staff approve it and it goes live.
  *
  * The builder page has no session (it is a public marketing page), so the
  * publish form is protected by a signed FormToken rather than a session CSRF
  * token, plus a honeypot and a per-IP limit. The POST goes to /members/build,
- * which does have a session, so the new owner can be signed in on success.
+ * which does have a session to carry the page across the Toutify sign-up.
  */
 final class BuilderController
 {
     private const TOKEN_SCOPE = 'builder';
-
-    public const EMAIL_TAKEN = 'That email address is already in use, so it cannot be used for a new account. Sign in with it instead, or use a different email.';
 
     public function show(): void
     {
@@ -71,22 +70,20 @@ final class BuilderController
         exit;
     }
 
-    /** GET /members/pending -- shown once, right after submitting the builder. */
+    /** GET /members/pending -- kept for old links; the dashboard now shows the pending state. */
     public function pending(): void
     {
-        $info = $_SESSION['builder_pending'] ?? null;
-        unset($_SESSION['builder_pending']);
-        if (!is_array($info)) {
-            Request::redirect('/members/login');
-        }
-        echo View::render('auth/pending', ['title' => 'Your lead form is pending approval'] + $info);
+        Request::redirect('/members');
     }
 
+    /**
+     * POST /members/build. Checks the builder's page, keeps it in the session
+     * and sends the visitor to Toutify to create their account. The page is
+     * created when they come back signed in (ToutifyController::callback), so
+     * LeadCrazy never asks for or stores a password.
+     */
     public function publish(): void
     {
-        // The trap field is named and labelled so browser autofill leaves it
-        // alone (the old "company_website" got autofilled, silently turning
-        // real people away). Logged, so a false positive is visible.
         if (trim((string) ($_POST['lc_trap'] ?? '')) !== '') {
             \App\Support\ErrorHandler::note('builder', 'spam trap field was filled; submission dropped');
             Request::redirect('/how-it-works');
@@ -97,56 +94,53 @@ final class BuilderController
         if ($state === []) {
             \App\Support\ErrorHandler::note('builder', 'form arrived without the builder details (page script did not run)');
         }
-        $old = [
-            'first_name' => mb_substr(trim((string) ($_POST['first_name'] ?? '')), 0, 80),
-            'last_name' => mb_substr(trim((string) ($_POST['last_name'] ?? '')), 0, 80),
-            'email' => mb_strtolower(mb_substr(trim((string) ($_POST['email'] ?? '')), 0, 254)),
-        ];
 
         $problem = FormToken::problem(self::TOKEN_SCOPE, is_string($_POST['_ft'] ?? null) ? $_POST['_ft'] : null);
         if ($problem !== null && $problem !== 'too fast') {
-            $this->fail($state, $old, 'This page had been open a long time. Please check your details and submit again.');
+            $this->fail($state, [], 'This page had been open a long time. Please check your details and submit again.');
         }
         if (RateLimiter::tooManyAttempts('build:' . Request::ip(), 5, 3600)) {
-            $this->fail($state, $old, 'Too many new pages from your connection. Please try again in an hour.');
+            $this->fail($state, [], 'Too many new pages from your connection. Please try again in an hour.');
         }
 
         [$clean, $error] = $this->validate($state);
         if ($error !== null) {
-            $this->fail($state, $old, $error);
-        }
-
-        $password = (string) ($_POST['password'] ?? '');
-        if ($old['first_name'] === '') {
-            $this->fail($clean, $old, 'Enter your first name.');
-        }
-        if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
-            $this->fail($clean, $old, 'Enter a valid email address.');
-        }
-        if (strlen($password) < PasswordController::MIN_LENGTH) {
-            $this->fail($clean, $old, 'Use a password of at least ' . PasswordController::MIN_LENGTH . ' characters.');
+            $this->fail($state, [], $error);
         }
         if (empty($_POST['agree'])) {
-            $this->fail($clean, $old, 'Please agree to the terms to publish your page.');
+            $this->fail($clean, [], 'Please agree to the terms to publish your page.');
         }
-        if (Accounts::emailTaken($old['email'])) {
-            $old['email_taken'] = '1';
-            $this->fail($clean, $old, self::EMAIL_TAKEN);
+        if (\App\Support\Auth::account() !== null) {
+            $_SESSION['members_flash'] = 'You already have a lead page. Ask for changes from "Your page".';
+            Request::redirect('/members');
         }
-        if (Duplicates::find($old['email'], $clean['business'], $clean['website']) !== []) {
-            $this->exists($old['email'], $clean['business']);
+        if (Duplicates::find(null, $clean['business'], $clean['website']) !== []) {
+            $this->exists('', $clean['business']);
         }
 
-        $trade = Trades::get($clean['trade']);
-        $copy = Trades::copy($clean['trade']);
+        unset($clean['offerState']);
+        $_SESSION['builder_build'] = ['clean' => $clean, 'at' => time()];
+        Request::redirect('/auth/toutify/login?signup=1');
+    }
+
+    /**
+     * Creates the business account and page the builder described, for a
+     * member who has just signed in through Toutify.
+     *
+     * @param array<string,mixed> $clean  validated builder state (see validate())
+     * @param array<string,mixed> $user   the users row
+     * @return array{account_id:int,slug:string}
+     */
+    public static function createFromBuild(array $clean, array $user): array
+    {
+        $trade = Trades::get((string) $clean['trade']);
+        $copy = Trades::copy((string) $clean['trade']);
         $place = trim($clean['city'] . ($clean['state'] !== '' ? ', ' . $clean['state'] : ''));
         $json = static fn (array $list): string => json_encode(array_values($list), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]';
+        $email = (string) $user['email'];
 
         $created = Accounts::create(
-            [
-                'business' => $clean['business'], 'first' => $old['first_name'], 'last' => $old['last_name'] ?: null,
-                'email' => $old['email'], 'password' => $password, 'plan' => Plans::FREE, 'status' => 'building',
-            ],
+            ['user_id' => (int) $user['id'], 'business' => $clean['business'], 'plan' => Plans::FREE, 'status' => 'building'],
             [
                 'trade' => $clean['trade'],
                 'license_number' => $clean['license'] !== '' ? $clean['license'] : null,
@@ -157,7 +151,7 @@ final class BuilderController
                 'about' => $clean['business'] . ' provides ' . Trades::phrase($trade) . ' services in ' . $place
                     . ' and nearby areas. Fill in the quick form and we will get back to you quickly.',
                 'phone' => $clean['phone'],
-                'public_email' => $old['email'],
+                'public_email' => $email,
                 'city' => $clean['city'],
                 'state' => $clean['state'] ?: null,
                 'website' => $clean['website'] !== '' ? (preg_match('#^https?://#i', $clean['website']) ? $clean['website'] : 'https://' . $clean['website']) : null,
@@ -180,20 +174,12 @@ final class BuilderController
 
         Notify::team('New lead form to approve: ' . $clean['business'], $created['account_id'], [
             'Business' => $clean['business'], 'Trade' => $trade['label'], 'Place' => $place,
-            'Owner' => trim($old['first_name'] . ' ' . $old['last_name']) . ' <' . $old['email'] . '>',
+            'Owner' => trim((string) ($user['name'] ?? '')) . ' <' . $email . '>',
             'Phone' => $clean['phone'], 'Website' => $clean['website'], 'Address' => Pages::url($created['slug']),
         ]);
         Audit::log('account.created', 'account', $created['account_id'], null, ['via' => 'builder', 'trade' => $clean['trade'], 'slug' => $created['slug']]);
 
-        // Not signed in on purpose: the next step is to log in and finish the
-        // account, and the page waits for a person to approve it before it goes
-        // live. The pending page reads these once.
-        $_SESSION['builder_pending'] = [
-            'business' => $clean['business'],
-            'url' => Pages::url($created['slug']),
-            'email' => $old['email'],
-        ];
-        Request::redirect('/members/pending');
+        return ['account_id' => $created['account_id'], 'slug' => $created['slug']];
     }
 
     /**

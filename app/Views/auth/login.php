@@ -12,9 +12,8 @@
       <div><label for="password">Password</label><input id="password" name="password" type="password" required autocomplete="current-password"<?= empty($_GET['email']) ? '' : ' autofocus' ?>></div>
       <button class="btn btn--primary btn--block" type="submit">Sign in</button>
     </form>
-    <?php if ($area === 'members'): ?>
-      <p class="form__note" style="margin-top:16px"><a href="/members/forgot">Forgot your password?</a></p>
-      <p class="form__note">No account yet? <a href="/members/signup">Get your free page</a>.</p>
+    <?php if ($area !== 'superadmin'): ?>
+      <p class="form__note" style="margin-top:16px">Members <a href="/auth/toutify/login">log in with Toutify</a>.</p>
     <?php endif; ?>
   </div>
 <?= View::render('auth/_close') ?>

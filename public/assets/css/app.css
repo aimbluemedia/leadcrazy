@@ -206,6 +206,7 @@ code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monos
 .app__me a { color: var(--blue) !important; }
 .app__me form { margin-top: 8px; }
 .app__me button { background: #fff; border: 1px solid var(--line); color: var(--ink); border-radius: 980px; padding: 4px 12px; font: inherit; cursor: pointer; }
+.app__me .app__signout { display: inline-block; background: #fff; border: 1px solid var(--line); color: var(--ink) !important; border-radius: 980px; padding: 4px 12px; text-decoration: none; }
 .app__main { padding: 24px 16px 60px; min-width: 0; background: #fff; }
 @media (min-width: 960px) { .app__main { padding: 36px 40px 60px; } }
 .app__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 22px; }
@@ -672,3 +673,12 @@ input[aria-invalid="true"] { border-color: var(--red-ink) !important; }
 .legal__toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 8px; padding: 16px; background: var(--blue-soft); border-radius: 16px; }
 .legal__toc a { font-size: 14px; padding: 6px 12px; border-radius: 999px; background: #fff; color: var(--blue); }
 .legal__toc a:hover { background: var(--blue); color: #fff; }
+
+/* Sign-up page with Toutify's embedded form */
+.signup-page__grid { display: grid; gap: 40px; align-items: start; }
+@media (min-width: 900px) { .signup-page__grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+.signup-page__plan { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--blue-soft); color: var(--ink); font-size: 15px; }
+.signup-page__points { margin: 22px 0; padding: 0; list-style: none; }
+.signup-page__points li { position: relative; padding-left: 28px; margin: 0 0 10px; color: var(--ink); }
+.signup-page__points li::before { content: "\2713"; position: absolute; left: 0; top: 0; color: var(--blue); font-weight: 700; }
+.signup-page__form { min-height: 420px; }
