@@ -25,12 +25,11 @@ use App\Support\View;
       <p class="hero-band__eyebrow">Every Visitor Is Your Potential Next Client.</p>
       <h1 class="hero-band__title">The Million Dollar <em>Lead Form.</em></h1>
       <p class="hero-band__sub">Do You Have the Right Form to Close Them?</p>
-      <p class="hero-band__lede">Most local business websites make customers hunt for a phone number. LeadCrazy gives you a
-        lead page that asks the right questions &mdash; services, timeline, budget &mdash; and puts your best offer
-        right on top of the form. Every request lands in your dashboard, ready to call.</p>
+      <p class="hero-band__lede">Stop losing visitors who never call. Your lead page asks the right questions, leads with your best offer,
+        and sends every ready-to-buy customer straight to your dashboard.</p>
       <div class="hero-band__cta">
-        <a class="btn btn--primary btn--xl" href="/members/signup">Get My Free Lead Page &rarr;</a>
-        <a class="btn hero-band__ghost btn--xl" href="/how-it-works">&#9733; See How It Works</a>
+        <a class="btn btn--primary btn--xl" href="/members/signup">Free Lead Page &rarr;</a>
+        <a class="btn hero-band__ghost btn--xl" href="/how-it-works">Try it Now!</a>
       </div>
       <p class="hero-band__note">Takes about two minutes. Our team builds the page.</p>
       <div class="hero-band__chips">
@@ -107,16 +106,4 @@ use App\Support\View;
     </div>
   </div>
 
-</div>
-
-<div class="ticker" role="presentation">
-  <div class="ticker__track">
-    <?php for ($copy = 0; $copy < 2; $copy++): ?>
-      <div class="ticker__group"<?= $copy ? ' aria-hidden="true"' : '' ?>>
-        <?php foreach (['Built for you in a day', 'Offers on top of the form', 'Services, timeline &amp; budget on every lead', 'Listed on MonsterList', 'Embed on your own site', 'Start free, no card'] as $claim): ?>
-          <span><?= $claim ?></span>
-        <?php endforeach; ?>
-      </div>
-    <?php endfor; ?>
-  </div>
 </div>
