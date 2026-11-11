@@ -25,7 +25,7 @@ use App\Support\View;
       <p class="muted">Already have an account? <a href="/auth/toutify/login">Log in</a>.</p>
     </div>
     <div class="signup-page__form">
-      <div data-toutify-signup data-client-id="LeadCrazy" data-login-url="/auth/toutify/login"
+      <div data-toutify-signup data-client-id="leadcrazy" data-login-url="/auth/toutify/login"
            data-title="Create your free account" data-button="Create my free account" data-accent="#0071e3"></div>
       <script src="https://toutify.com/embed/signup.js" async></script>
       <noscript><p class="alert alert--info">The sign-up form needs JavaScript. You can also <a href="/auth/toutify/login?signup=1">sign up on Toutify</a>.</p></noscript>
