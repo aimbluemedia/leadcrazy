@@ -408,7 +408,10 @@ final class MembersController
     /** @param array<string,mixed> $data */
     private function render(string $view, array $data): void
     {
+        $id = (int) $this->account['id'];
         echo View::members($view, $data + [
+            'navNew' => (int) (Database::first("SELECT COUNT(*) AS n FROM leads WHERE account_id = :id AND status = 'new' AND is_locked = 0", ['id' => $id])['n'] ?? 0),
+            'navMonth' => Leads::countThisMonth($id),
             'account' => $this->account,
             'user' => Auth::user(),
             'flash' => View::flash('members_flash'),
