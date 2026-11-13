@@ -63,7 +63,7 @@ h3 { font-size: 19px; font-weight: 600; letter-spacing: -.015em; line-height: 1.
 p { margin: 0 0 1em; }
 code, pre { font: 13px/1.5 ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+.container { width: 100%; max-width: 1376px; margin: 0 auto; padding: 0 16px; }
 .muted { color: var(--muted); }
 .center { text-align: center; }
 .accent { color: var(--blue); }
