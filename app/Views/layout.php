@@ -19,13 +19,7 @@
   </div>
 </header>
 <main><?= $content ?></main>
-<footer class="site-footer">
-  <div class="container site-footer__in">
-    <div><?= View::render('partials/logo') ?><p class="muted" style="margin-top:8px">The Million Dollar Lead Form for local service businesses.</p></div>
-    <div><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/auth/toutify/login">Log in</a></div>
-  </div>
-  <div class="container"><p class="muted" style="font-size:12px;margin-top:16px">&copy; <?= date('Y') ?> LeadCrazy. Pages listed on MonsterList.</p></div>
-</footer>
+<?= View::render('partials/footer') ?>
 <script src="<?= View::e(View::asset('/assets/js/app.js')) ?>" defer></script>
 </body>
 </html>
